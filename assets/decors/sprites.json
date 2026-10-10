@@ -1,0 +1,548 @@
+[
+ {
+  "fichier": "fields-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 24,
+   "y": 104,
+   "w": 32,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "exemple-field.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 96,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 64,
+   "y": 104,
+   "w": 48,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "blur-sky.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 112,
+  "hauteur": 64,
+  "planche": "192722.png",
+  "source": {
+   "x": 120,
+   "y": 104,
+   "w": 56,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "diagonal-field.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 144,
+  "hauteur": 144,
+  "planche": "192722.png",
+  "source": {
+   "x": 184,
+   "y": 104,
+   "w": 72,
+   "h": 72
+  }
+ },
+ {
+  "fichier": "cyclone.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 64,
+  "planche": "192722.png",
+  "source": {
+   "x": 496,
+   "y": 104,
+   "w": 32,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "exemple-blue-sky.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 112,
+  "hauteur": 80,
+  "planche": "192722.png",
+  "source": {
+   "x": 120,
+   "y": 160,
+   "w": 56,
+   "h": 40
+  }
+ },
+ {
+  "fichier": "exemple-angle-field.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 188,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 264,
+   "y": 168,
+   "w": 94,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "clouds-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 8,
+   "y": 240,
+   "w": 32,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "clouds-01-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 160,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 48,
+   "y": 240,
+   "w": 80,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "clouds-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 128,
+  "hauteur": 160,
+  "planche": "192722.png",
+  "source": {
+   "x": 136,
+   "y": 240,
+   "w": 64,
+   "h": 80
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_11.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 128,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 208,
+   "y": 240,
+   "w": 64,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "corner-kick.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 48,
+  "hauteur": 112,
+  "planche": "192722.png",
+  "source": {
+   "x": 280,
+   "y": 240,
+   "w": 24,
+   "h": 56
+  }
+ },
+ {
+  "fichier": "goal-keepers-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 80,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 376,
+   "y": 240,
+   "w": 40,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "goal-keepers-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 80,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 432,
+   "y": 240,
+   "w": 40,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "goal-keepers-03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 128,
+  "hauteur": 80,
+  "planche": "192722.png",
+  "source": {
+   "x": 480,
+   "y": 240,
+   "w": 64,
+   "h": 40
+  }
+ },
+ {
+  "fichier": "clouds-03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 42,
+  "hauteur": 28,
+  "planche": "192722.png",
+  "source": {
+   "x": 16,
+   "y": 280,
+   "w": 21,
+   "h": 14
+  }
+ },
+ {
+  "fichier": "clouds-04.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 48,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 48,
+   "y": 272,
+   "w": 24,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "clouds-05.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 80,
+   "y": 272,
+   "w": 32,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "clouds-06.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 48,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 80,
+   "y": 296,
+   "w": 24,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "goal-keepers-04.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 552,
+   "y": 296,
+   "w": 32,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "goal-nets-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 256,
+  "hauteur": 224,
+  "planche": "192722.png",
+  "source": {
+   "x": 8,
+   "y": 344,
+   "w": 128,
+   "h": 112
+  }
+ },
+ {
+  "fichier": "goal-nets-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 80,
+  "hauteur": 64,
+  "planche": "192722.png",
+  "source": {
+   "x": 144,
+   "y": 344,
+   "w": 40,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "goal-nets-03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 128,
+  "hauteur": 64,
+  "planche": "192722.png",
+  "source": {
+   "x": 192,
+   "y": 344,
+   "w": 64,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "goal-nets-04.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 144,
+  "hauteur": 224,
+  "planche": "192722.png",
+  "source": {
+   "x": 264,
+   "y": 344,
+   "w": 72,
+   "h": 112
+  }
+ },
+ {
+  "fichier": "goal-nets-05.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 272,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 344,
+   "y": 344,
+   "w": 136,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "goal-nets-05-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 160,
+  "hauteur": 224,
+  "planche": "192722.png",
+  "source": {
+   "x": 488,
+   "y": 344,
+   "w": 80,
+   "h": 112
+  }
+ },
+ {
+  "fichier": "goal-nets-06.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 240,
+  "hauteur": 336,
+  "planche": "192722.png",
+  "source": {
+   "x": 576,
+   "y": 344,
+   "w": 120,
+   "h": 168
+  }
+ },
+ {
+  "fichier": "goal-nets-07.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 128,
+  "planche": "192722.png",
+  "source": {
+   "x": 344,
+   "y": 376,
+   "w": 32,
+   "h": 64
+  }
+ },
+ {
+  "fichier": "goal-nets-08.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 144,
+  "hauteur": 48,
+  "planche": "192722.png",
+  "source": {
+   "x": 384,
+   "y": 376,
+   "w": 72,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "stadium-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 32,
+  "hauteur": 32,
+  "planche": "192722.png",
+  "source": {
+   "x": 8,
+   "y": 536,
+   "w": 16,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "stadium-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 176,
+  "hauteur": 128,
+  "planche": "192722.png",
+  "source": {
+   "x": 32,
+   "y": 536,
+   "w": 88,
+   "h": 64
+  }
+ },
+ {
+  "fichier": "stadium-03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 64,
+  "hauteur": 272,
+  "planche": "192722.png",
+  "source": {
+   "x": 128,
+   "y": 536,
+   "w": 32,
+   "h": 136
+  }
+ },
+ {
+  "fichier": "action-effect.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 416,
+  "hauteur": 96,
+  "planche": "192722.png",
+  "source": {
+   "x": 168,
+   "y": 536,
+   "w": 208,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "surrounded.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 512,
+  "hauteur": 96,
+  "planche": "192722.png",
+  "source": {
+   "x": 384,
+   "y": 536,
+   "w": 256,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "goalie.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 96,
+  "hauteur": 64,
+  "planche": "192722.png",
+  "source": {
+   "x": 648,
+   "y": 536,
+   "w": 48,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "angle-fields-03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 462,
+  "hauteur": 30,
+  "planche": "192722.png",
+  "source": {
+   "x": 262,
+   "y": 133,
+   "w": 231,
+   "h": 15
+  }
+ },
+ {
+  "fichier": "fields-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 34,
+  "hauteur": 132,
+  "planche": "192722.png",
+  "source": {
+   "x": 5,
+   "y": 98,
+   "w": 17,
+   "h": 66
+  }
+ },
+ {
+  "fichier": "angle-fields-01.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 456,
+  "hauteur": 40,
+  "planche": "192722.png",
+  "source": {
+   "x": 260,
+   "y": 96,
+   "w": 228,
+   "h": 20
+  }
+ },
+ {
+  "fichier": "angle-fields-02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 460,
+  "hauteur": 26,
+  "planche": "192722.png",
+  "source": {
+   "x": 261,
+   "y": 118,
+   "w": 230,
+   "h": 13
+  }
+ }
+]
