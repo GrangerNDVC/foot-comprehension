@@ -1,0 +1,576 @@
+[
+ {
+  "fichier": "ballon-flying-10.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 36,
+  "hauteur": 28,
+  "planche": "191821.png",
+  "source": {
+   "x": 268,
+   "y": 25,
+   "w": 18,
+   "h": 14
+  }
+ },
+ {
+  "fichier": "ballon-flying-11.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 44,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 298,
+   "y": 24,
+   "w": 22,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon-flying-12.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 50,
+  "hauteur": 42,
+  "planche": "191821.png",
+  "source": {
+   "x": 331,
+   "y": 27,
+   "w": 25,
+   "h": 21
+  }
+ },
+ {
+  "fichier": "ballon-flying-13.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 64,
+  "hauteur": 52,
+  "planche": "191821.png",
+  "source": {
+   "x": 368,
+   "y": 27,
+   "w": 32,
+   "h": 26
+  }
+ },
+ {
+  "fichier": "ballon-flying-14.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 74,
+  "hauteur": 60,
+  "planche": "191821.png",
+  "source": {
+   "x": 413,
+   "y": 25,
+   "w": 37,
+   "h": 30
+  }
+ },
+ {
+  "fichier": "ballon-burst-1.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 86,
+  "hauteur": 76,
+  "planche": "191821.png",
+  "source": {
+   "x": 466,
+   "y": 29,
+   "w": 43,
+   "h": 38
+  }
+ },
+ {
+  "fichier": "ballon-burst-2.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 88,
+  "hauteur": 68,
+  "planche": "191821.png",
+  "source": {
+   "x": 529,
+   "y": 29,
+   "w": 44,
+   "h": 34
+  }
+ },
+ {
+  "fichier": "ballon_ballon_08.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 26,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 105,
+   "y": 99,
+   "w": 13,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon_ballon_09.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 30,
+  "hauteur": 30,
+  "planche": "191821.png",
+  "source": {
+   "x": 128,
+   "y": 96,
+   "w": 15,
+   "h": 15
+  }
+ },
+ {
+  "fichier": "ballon_ballon_10.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 34,
+  "hauteur": 34,
+  "planche": "191821.png",
+  "source": {
+   "x": 159,
+   "y": 102,
+   "w": 17,
+   "h": 17
+  }
+ },
+ {
+  "fichier": "ballon_ballon_11.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 38,
+  "hauteur": 38,
+  "planche": "191821.png",
+  "source": {
+   "x": 190,
+   "y": 99,
+   "w": 19,
+   "h": 19
+  }
+ },
+ {
+  "fichier": "ballon_ballon_12.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 44,
+  "hauteur": 44,
+  "planche": "191821.png",
+  "source": {
+   "x": 221,
+   "y": 101,
+   "w": 22,
+   "h": 22
+  }
+ },
+ {
+  "fichier": "ballon-cyclone-1.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 32,
+  "hauteur": 60,
+  "planche": "191821.png",
+  "source": {
+   "x": 256,
+   "y": 97,
+   "w": 16,
+   "h": 30
+  }
+ },
+ {
+  "fichier": "ballon-cyclone-2.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 32,
+  "hauteur": 56,
+  "planche": "191821.png",
+  "source": {
+   "x": 280,
+   "y": 99,
+   "w": 16,
+   "h": 28
+  }
+ },
+ {
+  "fichier": "ballon_ballon_15.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 60,
+  "hauteur": 64,
+  "planche": "191821.png",
+  "source": {
+   "x": 306,
+   "y": 96,
+   "w": 30,
+   "h": 32
+  }
+ },
+ {
+  "fichier": "ballon_ballon_17.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 26,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 11,
+   "y": 155,
+   "w": 13,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon_ballon_18.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 28,
+  "hauteur": 28,
+  "planche": "191821.png",
+  "source": {
+   "x": 33,
+   "y": 153,
+   "w": 14,
+   "h": 14
+  }
+ },
+ {
+  "fichier": "ballon_ballon_19.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 28,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 57,
+   "y": 152,
+   "w": 14,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon_ballon_20.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 30,
+  "hauteur": 30,
+  "planche": "191821.png",
+  "source": {
+   "x": 80,
+   "y": 152,
+   "w": 15,
+   "h": 15
+  }
+ },
+ {
+  "fichier": "ballon_ballon_21.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 32,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 104,
+   "y": 152,
+   "w": 16,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon_ballon_22.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 32,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 128,
+   "y": 152,
+   "w": 16,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon_ballon_23.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 36,
+  "hauteur": 36,
+  "planche": "191821.png",
+  "source": {
+   "x": 152,
+   "y": 155,
+   "w": 18,
+   "h": 18
+  }
+ },
+ {
+  "fichier": "ballon_ballon_24.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 36,
+  "hauteur": 36,
+  "planche": "191821.png",
+  "source": {
+   "x": 184,
+   "y": 152,
+   "w": 18,
+   "h": 18
+  }
+ },
+ {
+  "fichier": "ballon_ballon_25.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 36,
+  "hauteur": 36,
+  "planche": "191821.png",
+  "source": {
+   "x": 222,
+   "y": 158,
+   "w": 18,
+   "h": 18
+  }
+ },
+ {
+  "fichier": "ballon_ballon_26.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 44,
+  "hauteur": 44,
+  "planche": "191821.png",
+  "source": {
+   "x": 248,
+   "y": 154,
+   "w": 22,
+   "h": 22
+  }
+ },
+ {
+  "fichier": "ballon_ballon_27.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 48,
+  "hauteur": 48,
+  "planche": "191821.png",
+  "source": {
+   "x": 280,
+   "y": 152,
+   "w": 24,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "ballon_ballon_28.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 48,
+  "hauteur": 48,
+  "planche": "191821.png",
+  "source": {
+   "x": 316,
+   "y": 156,
+   "w": 24,
+   "h": 24
+  }
+ },
+ {
+  "fichier": "ballon-curseur-01.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 36,
+  "hauteur": 24,
+  "planche": "191821.png",
+  "source": {
+   "x": 1,
+   "y": 23,
+   "w": 18,
+   "h": 12
+  }
+ },
+ {
+  "fichier": "ballon-curseur-02.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 22,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 22,
+   "y": 21,
+   "w": 11,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon-curseur-03.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 22,
+  "hauteur": 30,
+  "planche": "191821.png",
+  "source": {
+   "x": 37,
+   "y": 21,
+   "w": 11,
+   "h": 15
+  }
+ },
+ {
+  "fichier": "ballon-curseur-04.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 26,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 53,
+   "y": 20,
+   "w": 13,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon-curseur-05.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 28,
+  "hauteur": 36,
+  "planche": "191821.png",
+  "source": {
+   "x": 67,
+   "y": 19,
+   "w": 14,
+   "h": 18
+  }
+ },
+ {
+  "fichier": "ballon-flying-01.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 24,
+  "hauteur": 28,
+  "planche": "191821.png",
+  "source": {
+   "x": 84,
+   "y": 21,
+   "w": 12,
+   "h": 14
+  }
+ },
+ {
+  "fichier": "ballon-flying-02.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 26,
+  "hauteur": 32,
+  "planche": "191821.png",
+  "source": {
+   "x": 103,
+   "y": 21,
+   "w": 13,
+   "h": 16
+  }
+ },
+ {
+  "fichier": "ballon-flying-03.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 26,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 118,
+   "y": 21,
+   "w": 13,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon-flying-04.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 20,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 134,
+   "y": 22,
+   "w": 10,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon-flying-05.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 22,
+  "hauteur": 26,
+  "planche": "191821.png",
+  "source": {
+   "x": 150,
+   "y": 22,
+   "w": 11,
+   "h": 13
+  }
+ },
+ {
+  "fichier": "ballon-flying-06.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 30,
+  "hauteur": 36,
+  "planche": "191821.png",
+  "source": {
+   "x": 166,
+   "y": 22,
+   "w": 15,
+   "h": 18
+  }
+ },
+ {
+  "fichier": "ballon-flying-07.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 34,
+  "hauteur": 34,
+  "planche": "191821.png",
+  "source": {
+   "x": 191,
+   "y": 23,
+   "w": 17,
+   "h": 17
+  }
+ },
+ {
+  "fichier": "ballon-flying-08.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 32,
+  "hauteur": 40,
+  "planche": "191821.png",
+  "source": {
+   "x": 217,
+   "y": 21,
+   "w": 16,
+   "h": 20
+  }
+ },
+ {
+  "fichier": "ballon-flying-09.png",
+  "personnage": "ballon",
+  "type": "ballon",
+  "largeur": 40,
+  "hauteur": 52,
+  "planche": "191821.png",
+  "source": {
+   "x": 240,
+   "y": 20,
+   "w": 20,
+   "h": 26
+  }
+ }
+]
