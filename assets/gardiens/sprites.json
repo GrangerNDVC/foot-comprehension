@@ -1,0 +1,142 @@
+[
+ {
+  "fichier": "gardien-arret-01.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 132,
+  "hauteur": 134,
+  "planche": "189775.png",
+  "source": {
+   "x": 1,
+   "y": 263,
+   "w": 66,
+   "h": 67
+  }
+ },
+ {
+  "fichier": "gardien-arret-02.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 130,
+  "hauteur": 142,
+  "planche": "189775.png",
+  "source": {
+   "x": 70,
+   "y": 260,
+   "w": 65,
+   "h": 71
+  }
+ },
+ {
+  "fichier": "gardien-arret-03.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 120,
+  "hauteur": 156,
+  "planche": "189775.png",
+  "source": {
+   "x": 140,
+   "y": 260,
+   "w": 60,
+   "h": 78
+  }
+ },
+ {
+  "fichier": "gardien-arret-04.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 118,
+  "hauteur": 152,
+  "planche": "189775.png",
+  "source": {
+   "x": 204,
+   "y": 262,
+   "w": 59,
+   "h": 76
+  }
+ },
+ {
+  "fichier": "gardien-saut.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 136,
+  "hauteur": 154,
+  "planche": "189775.png",
+  "source": {
+   "x": 535,
+   "y": 258,
+   "w": 68,
+   "h": 77
+  }
+ },
+ {
+  "fichier": "gardien-hurt.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 108,
+  "hauteur": 114,
+  "planche": "189775.png",
+  "source": {
+   "x": 618,
+   "y": 262,
+   "w": 54,
+   "h": 57
+  }
+ },
+ {
+  "fichier": "gardien-penalty-1.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 56,
+  "hauteur": 84,
+  "planche": "189775.png",
+  "source": {
+   "x": 678,
+   "y": 263,
+   "w": 28,
+   "h": 42
+  }
+ },
+ {
+  "fichier": "gardien-penalty-2.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 90,
+  "hauteur": 94,
+  "planche": "189775.png",
+  "source": {
+   "x": 713,
+   "y": 263,
+   "w": 45,
+   "h": 47
+  }
+ },
+ {
+  "fichier": "gardien-degagement-1.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 74,
+  "hauteur": 116,
+  "planche": "189775.png",
+  "source": {
+   "x": 763,
+   "y": 261,
+   "w": 37,
+   "h": 58
+  }
+ },
+ {
+  "fichier": "gardien-degagement-2.png",
+  "personnage": "gardien",
+  "type": "gardien-arret",
+  "largeur": 76,
+  "hauteur": 122,
+  "planche": "189775.png",
+  "source": {
+   "x": 802,
+   "y": 260,
+   "w": 38,
+   "h": 61
+  }
+ }
+]
