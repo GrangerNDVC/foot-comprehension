@@ -1,0 +1,632 @@
+[
+ {
+  "fichier": "tsubasa_tir_02.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 126,
+  "hauteur": 150,
+  "planche": "189769.png",
+  "source": {
+   "x": 8,
+   "y": 37,
+   "w": 63,
+   "h": 75
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_03.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 110,
+  "hauteur": 152,
+  "planche": "189769.png",
+  "source": {
+   "x": 80,
+   "y": 36,
+   "w": 55,
+   "h": 76
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_04.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 102,
+  "hauteur": 150,
+  "planche": "189769.png",
+  "source": {
+   "x": 144,
+   "y": 37,
+   "w": 51,
+   "h": 75
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_05.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 106,
+  "hauteur": 152,
+  "planche": "189769.png",
+  "source": {
+   "x": 210,
+   "y": 36,
+   "w": 53,
+   "h": 76
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_06.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 58,
+  "hauteur": 96,
+  "planche": "189769.png",
+  "source": {
+   "x": 272,
+   "y": 32,
+   "w": 29,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_07.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 58,
+  "hauteur": 96,
+  "planche": "189769.png",
+  "source": {
+   "x": 312,
+   "y": 32,
+   "w": 29,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_08.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 58,
+  "hauteur": 90,
+  "planche": "189769.png",
+  "source": {
+   "x": 353,
+   "y": 35,
+   "w": 29,
+   "h": 45
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_09.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 58,
+  "hauteur": 96,
+  "planche": "189769.png",
+  "source": {
+   "x": 395,
+   "y": 40,
+   "w": 29,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_10.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 58,
+  "hauteur": 94,
+  "planche": "189769.png",
+  "source": {
+   "x": 435,
+   "y": 40,
+   "w": 29,
+   "h": 47
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_11.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 52,
+  "hauteur": 74,
+  "planche": "189769.png",
+  "source": {
+   "x": 490,
+   "y": 40,
+   "w": 26,
+   "h": 37
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_12.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 202,
+  "hauteur": 176,
+  "planche": "189769.png",
+  "source": {
+   "x": 529,
+   "y": 32,
+   "w": 101,
+   "h": 88
+  }
+ },
+ {
+  "fichier": "tsubasa_tir_13.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 62,
+  "hauteur": 82,
+  "planche": "189769.png",
+  "source": {
+   "x": 641,
+   "y": 44,
+   "w": 31,
+   "h": 41
+  }
+ },
+ {
+  "fichier": "tsubasa-tacle-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 190,
+  "planche": "189769.png",
+  "source": {
+   "x": 8,
+   "y": 520,
+   "w": 60,
+   "h": 95
+  }
+ },
+ {
+  "fichier": "tsubasa-tacle-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 190,
+  "planche": "189769.png",
+  "source": {
+   "x": 80,
+   "y": 520,
+   "w": 60,
+   "h": 95
+  }
+ },
+ {
+  "fichier": "tsubasa-tacle-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 190,
+  "planche": "189769.png",
+  "source": {
+   "x": 152,
+   "y": 520,
+   "w": 60,
+   "h": 95
+  }
+ },
+ {
+  "fichier": "tsubasa-tacle-4.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 190,
+  "planche": "189769.png",
+  "source": {
+   "x": 224,
+   "y": 520,
+   "w": 60,
+   "h": 95
+  }
+ },
+ {
+  "fichier": "tsubasa-tombe-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 128,
+  "hauteur": 150,
+  "planche": "189769.png",
+  "source": {
+   "x": 296,
+   "y": 522,
+   "w": 64,
+   "h": 75
+  }
+ },
+ {
+  "fichier": "tsubasa-tir-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 132,
+  "hauteur": 96,
+  "planche": "189769.png",
+  "source": {
+   "x": 369,
+   "y": 528,
+   "w": 66,
+   "h": 48
+  }
+ },
+ {
+  "fichier": "tsubasa-run-tete-tournee-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 104,
+  "hauteur": 170,
+  "planche": "189769.png",
+  "source": {
+   "x": 4,
+   "y": 279,
+   "w": 52,
+   "h": 85
+  }
+ },
+ {
+  "fichier": "tsubasa-run-tete-tournee-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 116,
+  "hauteur": 168,
+  "planche": "189769.png",
+  "source": {
+   "x": 60,
+   "y": 280,
+   "w": 58,
+   "h": 84
+  }
+ },
+ {
+  "fichier": "tsubasa-run-tete-tournee-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 166,
+  "planche": "189769.png",
+  "source": {
+   "x": 180,
+   "y": 278,
+   "w": 60,
+   "h": 83
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 112,
+  "hauteur": 172,
+  "planche": "189769.png",
+  "source": {
+   "x": 121,
+   "y": 278,
+   "w": 56,
+   "h": 86
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 130,
+  "hauteur": 170,
+  "planche": "189769.png",
+  "source": {
+   "x": 243,
+   "y": 279,
+   "w": 65,
+   "h": 85
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 140,
+  "hauteur": 166,
+  "planche": "189769.png",
+  "source": {
+   "x": 310,
+   "y": 279,
+   "w": 70,
+   "h": 83
+  }
+ },
+ {
+  "fichier": "tsubasa-torse-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 118,
+  "hauteur": 182,
+  "planche": "189769.png",
+  "source": {
+   "x": 383,
+   "y": 279,
+   "w": 59,
+   "h": 91
+  }
+ },
+ {
+  "fichier": "tsubasa-torse-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 114,
+  "hauteur": 180,
+  "planche": "189769.png",
+  "source": {
+   "x": 447,
+   "y": 279,
+   "w": 57,
+   "h": 90
+  }
+ },
+ {
+  "fichier": "tsubasa-tete-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 122,
+  "hauteur": 178,
+  "planche": "189769.png",
+  "source": {
+   "x": 507,
+   "y": 279,
+   "w": 61,
+   "h": 89
+  }
+ },
+ {
+  "fichier": "tsubasa-tete-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 120,
+  "hauteur": 176,
+  "planche": "189769.png",
+  "source": {
+   "x": 571,
+   "y": 279,
+   "w": 60,
+   "h": 88
+  }
+ },
+ {
+  "fichier": "tsubasa-attente-reception.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 82,
+  "hauteur": 102,
+  "planche": "189769.png",
+  "source": {
+   "x": 13,
+   "y": 415,
+   "w": 41,
+   "h": 51
+  }
+ },
+ {
+  "fichier": "tsubasa-block-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 140,
+  "hauteur": 206,
+  "planche": "189769.png",
+  "source": {
+   "x": 69,
+   "y": 390,
+   "w": 70,
+   "h": 103
+  }
+ },
+ {
+  "fichier": "tsubasa-block-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 134,
+  "hauteur": 208,
+  "planche": "189769.png",
+  "source": {
+   "x": 144,
+   "y": 390,
+   "w": 67,
+   "h": 104
+  }
+ },
+ {
+  "fichier": "tsubasa-block-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 130,
+  "hauteur": 208,
+  "planche": "189769.png",
+  "source": {
+   "x": 216,
+   "y": 390,
+   "w": 65,
+   "h": 104
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-passe-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 140,
+  "hauteur": 208,
+  "planche": "189769.png",
+  "source": {
+   "x": 284,
+   "y": 389,
+   "w": 70,
+   "h": 104
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-passe-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 138,
+  "hauteur": 210,
+  "planche": "189769.png",
+  "source": {
+   "x": 357,
+   "y": 388,
+   "w": 69,
+   "h": 105
+  }
+ },
+ {
+  "fichier": "tsubasa-reception-passe-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 146,
+  "hauteur": 206,
+  "planche": "189769.png",
+  "source": {
+   "x": 431,
+   "y": 388,
+   "w": 73,
+   "h": 103
+  }
+ },
+ {
+  "fichier": "tsubasa-ball-clear.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 192,
+  "hauteur": 196,
+  "planche": "189769.png",
+  "source": {
+   "x": 510,
+   "y": 390,
+   "w": 96,
+   "h": 98
+  }
+ },
+ {
+  "fichier": "tsubasa-run-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 110,
+  "hauteur": 180,
+  "planche": "189769.png",
+  "source": {
+   "x": 4,
+   "y": 152,
+   "w": 55,
+   "h": 90
+  }
+ },
+ {
+  "fichier": "tsubasa-run-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 110,
+  "hauteur": 182,
+  "planche": "189769.png",
+  "source": {
+   "x": 61,
+   "y": 152,
+   "w": 55,
+   "h": 91
+  }
+ },
+ {
+  "fichier": "tsubasa-run-3.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 108,
+  "hauteur": 172,
+  "planche": "189769.png",
+  "source": {
+   "x": 125,
+   "y": 152,
+   "w": 54,
+   "h": 86
+  }
+ },
+ {
+  "fichier": "tsubasa-run-4.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 118,
+  "hauteur": 170,
+  "planche": "189769.png",
+  "source": {
+   "x": 180,
+   "y": 151,
+   "w": 59,
+   "h": 85
+  }
+ },
+ {
+  "fichier": "tsubasa-ground-shot-foot-blur-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 194,
+  "hauteur": 206,
+  "planche": "189769.png",
+  "source": {
+   "x": 247,
+   "y": 150,
+   "w": 97,
+   "h": 103
+  }
+ },
+ {
+  "fichier": "tsubasa-ground-shot-foot-blur-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 60,
+  "hauteur": 140,
+  "planche": "189769.png",
+  "source": {
+   "x": 353,
+   "y": 172,
+   "w": 30,
+   "h": 70
+  }
+ },
+ {
+  "fichier": "tsubasa-saute.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 82,
+  "hauteur": 172,
+  "planche": "189769.png",
+  "source": {
+   "x": 393,
+   "y": 150,
+   "w": 41,
+   "h": 86
+  }
+ },
+ {
+  "fichier": "tsubasa-tir-byciclette-1.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 154,
+  "hauteur": 180,
+  "planche": "189769.png",
+  "source": {
+   "x": 438,
+   "y": 150,
+   "w": 77,
+   "h": 90
+  }
+ },
+ {
+  "fichier": "tsubasa-tir-byciclette-2.png",
+  "personnage": "tsubasa",
+  "type": "tir",
+  "largeur": 156,
+  "hauteur": 186,
+  "planche": "189769.png",
+  "source": {
+   "x": 519,
+   "y": 149,
+   "w": 78,
+   "h": 93
+  }
+ }
+]
