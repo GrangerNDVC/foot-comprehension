@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Match de compréhension</title>
+<link rel="stylesheet" href="css/jeu.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- MENU -->
+  <section id="ecran-menu" class="ecran">
+    <h1>⚽ Match de compréhension</h1>
+    <p class="intro">Lis bien, réfléchis, puis tire ! Chaque palier est un peu plus fin que le précédent.</p>
+    <div id="cartes"></div>
+    <div class="menu-actions">
+      <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
+      <button id="btn-reset" class="petit discret">Effacer mes scores</button>
+    </div>
+  </section>
+
+  <!-- JEU -->
+  <section id="ecran-jeu" class="ecran" hidden>
+    <header id="barre">
+      <button id="btn-menu" class="petit">☰ Menu</button>
+      <div id="titre-palier"></div>
+      <div id="score">⚽ <span id="pts">0</span> pts</div>
+      <div id="avancement"></div>
+    </header>
+    <div id="zone">
+      <div id="scene-bloc"><canvas id="scene" width="320" height="200"></canvas></div>
+      <div id="panneau">
+        <div id="bloc-consigne"></div>
+        <div id="bloc-indices"></div>
+        <div id="options"></div>
+        <div id="feedback"></div>
+        <button id="btn-suite" class="gros" hidden>Continuer ▶</button>
+        <div id="outils">
+          <button id="btn-ecouter" class="petit">🔊 Écouter</button>
+          <button id="btn-indice" class="petit">💡 Indice suivant</button>
+          <button id="btn-var" class="petit">📺 Aide VAR</button>
+          <button id="btn-vestiaire" class="petit">🎽 Vestiaire</button>
+          <button id="btn-super" class="petit" disabled>⭐ Super-tir</button>
+          <div id="jauge" title="Jauge d'énergie : 3 buts = 1 Super-tir"><div id="jauge-rempli"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIN -->
+  <section id="ecran-fin" class="ecran" hidden>
+    <h1>🏆 Fin du match !</h1>
+    <div id="fin-score"></div>
+    <p id="fin-message"></p>
+    <div class="menu-actions">
+      <button id="btn-rejouer" class="gros">🔁 Rejouer</button>
+      <button id="btn-retour-menu" class="petit">☰ Menu</button>
+    </div>
+  </section>
+
+  <!-- FENÊTRES -->
+  <div class="modal" id="modal-var" hidden>
+    <div class="carte-modal">
+      <h2>📺 Aide VAR</h2>
+      <ul id="liste-methode"></ul>
+      <button class="gros" data-fermer>Fermer</button>
+    </div>
+  </div>
+  <div class="modal" id="modal-vestiaire" hidden>
+    <div class="carte-modal">
+      <h2>🎽 Le Vestiaire : les petits mots importants</h2>
+      <table id="table-vestiaire"></table>
+      <button class="gros" data-fermer>Fermer</button>
+    </div>
+  </div>
+
+  <footer id="credits">Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement.</footer>
+</div>
+
+<!-- données -->
+<script src="data/paliers.js"></script>
+<script src="data/palier1.js"></script>
+<script src="data/palier2.js"></script>
+<script src="data/palier3.js"></script>
+<script src="data/palier4.js"></script>
+<script src="assets/manifest.js"></script>
+<script src="assets/anims.js"></script>
+<!-- moteur -->
+<script src="js/assets.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/progression.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/moteur.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
