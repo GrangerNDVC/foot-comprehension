@@ -9,51 +9,66 @@
 <body>
 <div id="app">
 
-  <!-- MENU -->
+  <!-- MENU : les matchs du championnat -->
   <section id="ecran-menu" class="ecran">
-    <h1>⚽ Match de compréhension</h1>
-    <p class="intro">Lis bien, réfléchis, puis tire ! Chaque palier est un peu plus fin que le précédent.</p>
+    <h1>⚽ Le Tournoi National</h1>
+    <p class="intro">Lis bien, réfléchis, puis joue ! Gagne chaque match pour ouvrir le suivant.</p>
     <div id="cartes"></div>
     <div class="menu-actions">
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
-      <button id="btn-reset" class="petit discret">Effacer mes scores</button>
+      <button id="btn-carnet-menu" class="petit">📒 Carnet de règles</button>
+      <button id="btn-reset" class="petit discret">Effacer ma progression</button>
     </div>
   </section>
 
-  <!-- JEU -->
-  <section id="ecran-jeu" class="ecran" hidden>
-    <header id="barre">
-      <button id="btn-menu" class="petit">☰ Menu</button>
-      <div id="titre-palier"></div>
-      <div id="score">⚽ <span id="pts">0</span> pts</div>
-      <div id="avancement"></div>
-    </header>
-    <div id="zone">
-      <div id="scene-bloc"><canvas id="scene" width="320" height="200"></canvas></div>
-      <div id="panneau">
-        <div id="bloc-consigne"></div>
-        <div id="bloc-indices"></div>
-        <div id="options"></div>
-        <div id="feedback"></div>
-        <button id="btn-suite" class="gros" hidden>Continuer ▶</button>
-        <div id="outils">
-          <button id="btn-ecouter" class="petit">🔊 Écouter</button>
-          <button id="btn-indice" class="petit">💡 Indice suivant</button>
-          <button id="btn-var" class="petit">📺 Aide VAR</button>
-          <button id="btn-vestiaire" class="petit">🎽 Vestiaire</button>
-          <button id="btn-super" class="petit" disabled>⭐ Super-tir</button>
-          <div id="jauge" title="Jauge d'énergie : 3 buts = 1 Super-tir"><div id="jauge-rempli"></div></div>
-        </div>
+  <!-- AVANT LE MATCH -->
+  <section id="ecran-avant" class="ecran" hidden>
+    <h1 id="av-titre"></h1>
+    <div class="boite-avant">
+      <div id="av-prologue"></div>
+      <p id="av-contexte" class="contexte"></p>
+      <ul id="av-regle"></ul>
+    </div>
+    <div class="menu-actions">
+      <button id="btn-ecouter-avant" class="petit">🔊 Écouter</button>
+      <button id="btn-coup-envoi" class="gros">⚽ Coup d'envoi !</button>
+      <button id="btn-retour-avant" class="petit discret">↩ Retour</button>
+    </div>
+  </section>
+
+  <!-- MATCH -->
+  <section id="ecran-match" class="ecran" hidden>
+    <header id="m-hud">
+      <button id="btn-menu" class="petit">☰</button>
+      <div id="hud-score"></div>
+      <div id="hud-temps"></div>
+      <div id="hud-guts" title="Guts : l'énergie pour les actions fortes">
+        <span>⚡ Guts <b id="hud-guts-nombre">0</b></span>
+        <div id="hud-guts-cadre"><div id="hud-guts-barre"></div></div>
       </div>
+    </header>
+    <div id="m-zone">
+      <div id="m-scene">
+        <div id="m-bandeau"></div>
+        <canvas id="m-canvas" width="480" height="300"></canvas>
+        <div id="m-narration"></div>
+      </div>
+      <div id="m-panneau"></div>
     </div>
   </section>
 
-  <!-- FIN -->
+  <!-- FIN DU MATCH -->
   <section id="ecran-fin" class="ecran" hidden>
-    <h1>🏆 Fin du match !</h1>
+    <h1 id="fin-titre"></h1>
     <div id="fin-score"></div>
     <p id="fin-message"></p>
+    <ul id="fin-details"></ul>
+    <div id="fin-regles-bloc" class="boite-avant" hidden>
+      <strong>📒 À retenir pour la prochaine fois :</strong>
+      <ul id="fin-regles"></ul>
+    </div>
     <div class="menu-actions">
+      <button id="btn-suivant" class="gros" hidden>Match suivant ▶</button>
       <button id="btn-rejouer" class="gros">🔁 Rejouer</button>
       <button id="btn-retour-menu" class="petit">☰ Menu</button>
     </div>
@@ -74,24 +89,60 @@
       <button class="gros" data-fermer>Fermer</button>
     </div>
   </div>
+  <div class="modal" id="modal-carnet" hidden>
+    <div class="carte-modal">
+      <h2>📒 Mon carnet de règles</h2>
+      <p id="carnet-vide">Rien pour l'instant : quand tu te trompes, la règle à retenir arrive ici.</p>
+      <ul id="liste-carnet"></ul>
+      <button class="gros" data-fermer>Fermer</button>
+    </div>
+  </div>
 
   <footer id="credits">Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement.</footer>
 </div>
 
-<!-- données -->
+<!-- moteur et données (dans cet ordre) -->
+<script src="js/banque.js"></script>
+<script src="data/config.js"></script>
+<script src="data/regles.js"></script>
+<script src="data/championnat.js"></script>
 <script src="data/paliers.js"></script>
 <script src="data/palier1.js"></script>
 <script src="data/palier2.js"></script>
 <script src="data/palier3.js"></script>
 <script src="data/palier4.js"></script>
-<script src="assets/manifest.js"></script>
-<script src="assets/anims.js"></script>
-<!-- moteur -->
-<script src="js/assets.js"></script>
+<script src="data/essai-formats.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/progression.js"></script>
-<script src="js/scene.js"></script>
-<script src="js/moteur.js"></script>
+<script src="js/regles.js"></script>
+<script src="js/terrain.js"></script>
+<!-- gros plans : sprites (atlas des chantiers 1 et 2), équipes, décor, réglages des scènes -->
+<script src="assets/atlas/joueur-01-atlas.js"></script>
+<script src="assets/atlas/joueur-02-atlas.js"></script>
+<script src="assets/atlas/joueur-03-atlas.js"></script>
+<script src="assets/atlas/joueur-04-atlas.js"></script>
+<script src="assets/atlas/joueur-05-atlas.js"></script>
+<script src="assets/atlas/joueur-06-atlas.js"></script>
+<script src="assets/atlas/joueur-07-atlas.js"></script>
+<script src="assets/atlas/joueur-08-atlas.js"></script>
+<script src="assets/atlas/joueur-09-atlas.js"></script>
+<script src="assets/atlas/joueur-10-atlas.js"></script>
+<script src="assets/atlas/joueur-11-atlas.js"></script>
+<script src="assets/atlas/joueur-12-atlas.js"></script>
+<script src="assets/atlas/gardiens-atlas.js"></script>
+<script src="js/sprites-recolor.js"></script>
+<script src="data/equipes/equipe-nankatsu.js"></script>
+<script src="data/equipes/equipe-azumaichi.js"></script>
+<script src="data/equipes/equipe-nishikigaoka.js"></script>
+<script src="data/equipes/equipe-hanawa.js"></script>
+<script src="data/equipes/equipe-hirado.js"></script>
+<script src="data/equipes/equipe-furano.js"></script>
+<script src="data/equipes/equipe-toho.js"></script>
+<script src="assets/manifest.js"></script>
+<script src="js/assets.js"></script>
+<script src="data/grosplan-reglages.js"></script>
+<script src="js/grosplan.js"></script>
+<script src="js/match.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

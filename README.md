@@ -1,39 +1,60 @@
 # Match de compréhension
 
-Serious game de foot : lire finement une phrase, une consigne, un texte, puis tirer au but.
-4 paliers, du grossier au fin. Aucun serveur, aucun compte : tout tourne dans le navigateur.
+Serious game de foot : lire finement un commentaire, une consigne, un petit texte, puis jouer l'action.
+Un championnat de 6 matchs (Nankatsu). Aucun serveur, aucun compte : tout tourne dans le navigateur.
 
 ## Lancer
-- Ouvrir `index.html` (double-clic) ou, dans VS Code, « Live Server ».
-- Sur Netlify : publier le dossier tel quel (pas de build).
+- Ouvrir `index.html` (double-clic) ou, dans VS Code, « Live Server ». Sur Netlify : publier le dossier tel quel.
+- Pour tout débloquer pendant tes essais : ajouter `?tout` à l'adresse (ex. `index.html?tout`).
 
-## Où ranger les images
-Voir `assets/RANGEMENT.md` : un tableau dossier par dossier avec les noms exacts.
-Sans images, le jeu fonctionne quand même (formes simples à la place).
+## Comment se joue un match (chantiers 3 et 4)
+- Mini-carte du terrain, joueurs numérotés (Nankatsu en bleu, l'adversaire en blanc), ballon chez un joueur.
+- À chaque action : un choix (passer / dribbler / tirer ; couper / tacler / bloquer / dégager), puis une question.
+- Bonne réponse : l'action réussit. Première erreur : indice (mot surligné) et deuxième chance. Deuxième erreur : ballon perdu.
+- **Match 1 = match d'essai** : pas de choix, une question par action ; le jeu règle le niveau de départ pour la suite.
+  Match 2 : passer ou tirer ; match 3 : le dribble arrive ; match 4 : toutes les commandes.
+- **Guts** (⚡) : les actions fortes en coûtent, les bonnes réponses en redonnent ; 25 guts = éliminer une mauvaise réponse.
+- Le niveau des questions s'ajuste pendant le match (2 erreurs d'affilée : plus facile ; 3 réussites d'affilée : plus dur).
+- Correction en 3 lignes maximum : ✔ bonne réponse · 🔑 le mot qui décide · ✖ le piège. Chaque erreur va dans le **carnet de règles** ;
+  une règle ratée revient plus tard dans une autre question.
+- Mi-temps, prolongation (le premier but gagne), fin de match, rejouer.
+- Gros plans (chantier 4) : une scène animée avec les vrais sprites, les couleurs et les joueurs de chaque équipe ; le tir change avec le niveau de la question (sol, volée, tête, ciseau). Si une image manque : formes simples.
 
 ## Organisation
 ```
 index.html
 css/jeu.css
-js/            le moteur (assets, audio, progression, scene, moteur, main)
-data/          les exercices : un fichier par palier  (palier1.js … palier4.js)
-assets/
-  manifest.js  le catalogue des images (id, dossier, fichier, rôle, taille)
-  anims.js     quelles images pour quelles animations + position des éléments de la scène
-  ballon/ joueurs/ gardiens/ decors/
+js/banque.js       rassemble les questions et choisit la suivante ; contrôle des questions
+js/regles.js       la logique du match (ballon, score, guts, niveaux, temps) - sans écran
+js/match.js        les écrans : menu, avant-match, match, mi-temps, fin
+js/terrain.js      la mini-carte
+js/grosplan.js     les gros plans (sprites, décor, repli en formes simples)
+js/sprites-recolor.js  recoloration des sprites par équipe
+js/assets.js       chargement des images de décor
+js/progression.js  résultats, niveau de départ, carnet de règles (localStorage)
+js/audio.js        lecture à voix haute
+data/config.js     TOUS LES RÉGLAGES (guts, niveaux, durée et règles de chaque match)
+data/championnat.js  les 6 matchs, l'histoire, les joueurs de Nankatsu
+data/regles.js     les règles du carnet (une phrase chacune)
+data/palier1..4.js les 30 questions de départ (provisoires)
+data/essai-formats.js  3 questions pour tester les formats « barrer » et « vrai-faux-nsp »
+data/paliers.js    les conseils de l'Aide VAR et le Vestiaire
+assets/atlas/      les 12 coupes de joueurs + les gardiens (PNG incorporé dans le .js)
+assets/decors, assets/ballon, manifest.js   images du décor (tribune, effet de vitesse)
+data/equipes/      couleurs et joueurs des 7 équipes (modifiable : une ligne par joueur)
+data/grosplan-reglages.js  TOUTES les scènes : positions, durées, poses, style de tir par niveau
+outils-test/galerie.html   page de test : affiche toutes les scènes (ex. galerie.html?types=tir&niveaux=3,5)
 ```
 
-## Ajouter ou modifier des exercices
-Ouvrir `data/palierN.js`, copier un bloc `{ ... }`, changer les textes.
-- `niveau` : 1 (grossier) à 5 (fin). Le jeu les présente du plus facile au plus fin.
-- `options` : les réponses ; `bonne` : le numéro de la bonne (0 = la première).
-- Palier 1 : `indices` (du plus général au plus précis). Paliers 2 à 4 : `consigne` (+ `situation` facultative).
+## Ajouter ou modifier des questions
+Format complet décrit en tête de `data/palier1.js`. Pour une nouvelle banque : un fichier `data/xxx.js` qui commence par
+`JEU.ajouterQuestions([ {...}, {...} ]);`, puis une ligne `<script>` dans `index.html`.
+Champs : `id, niveau (1-5), type (passe|dribble|tir|defense), format (choix|barrer|vrai-faux-nsp), consigne, situation?, question,
+indices?, options[], bonne, mot, regle, explication: {bonne, cle, piege}`.
+Champs réservés (acceptés mais pas encore utilisés par le moteur) : `scene` (description de la situation affichée, pour illustrer au chantier 4)
+et `repere` (temps, lieu, cause, intention, personnage, reprise, condition, consigne : pour équilibrer les banques).
+Pour contrôler une banque (doublons, `bonne` valide, règle connue, explication courte) : voir `outils-test/verifier-questions.js` (Node).
 
-## Régler la scène
-`assets/anims.js` : positions du tireur, du gardien, du but, des 3 zones de tir ; images de chaque animation.
-Si le gardien plonge du mauvais côté : changer `sensPlongeon` (« droite » ou « gauche »).
-
-## Pistes pour la suite
-- Palier hors foot : mêmes types de consignes dans des contextes scolaires (maths, SVT, recettes).
-- Plusieurs équipes adverses, décors variés (tribunes, ciel, filets en gros plan).
-- Mode « Défi » avec timer, bilan par type d'erreur (mots de négation, ordre, quantité…).
+## Régler la difficulté et le rythme
+Tout est dans `data/config.js` : durée des mi-temps, commandes de chaque match, coût en guts, niveau des actions,
+dangerosité de l'adversaire (`departAdv`, `contre`, `defenseBonus`, `defenseRequise`).
