@@ -1,18 +1,20 @@
 /* Chargement des images décrites dans assets/manifest.js.
+   J.assets.charger(["id1", "id2"]) ne charge que celles-là (par défaut : toutes).
    Si une image manque, le jeu continue avec des formes simples. */
 (function () {
   var J = window.JEU = window.JEU || {};
-  var A = J.assets = { images: {}, defs: {}, nbOk: 0, nbTotal: 0 };
+  var A = J.assets = { images: {}, defs: {}, nbOk: 0, nbTotal: 0, base: "" };      // base : préfixe du dossier (pour les pages de test)
 
-  A.charger = function () {
+  A.charger = function (ids) {
     var liste = J.manifest || [];
-    A.nbTotal = liste.length;
     liste.forEach(function (e) {
-      A.defs[e.id] = e;
+      if (ids && ids.indexOf(e.id) < 0) { return; }
+      if (A.defs[e.id]) { return; }                 // déjà demandée
+      A.defs[e.id] = e; A.nbTotal++;
       var im = new Image();
       im.onload = function () { A.images[e.id] = im; A.nbOk++; };
       im.onerror = function () { /* image absente : on ignore */ };
-      im.src = "assets/" + e.dossier + "/" + e.fichier;
+      im.src = A.base + "assets/" + e.dossier + "/" + e.fichier;
     });
   };
 
