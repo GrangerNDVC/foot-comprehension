@@ -42,6 +42,16 @@ window.EQUIPES["nankatsu"] = {
  },
  "joueurs": [
   {
+   "n": 11,
+   "nom": "Misaki",
+   "poste": "milieu",
+   "coupe": "joueur-09",
+   "profil": "asie",
+   "peau": [254, 204, 197],
+   "cheveux": [0, 0, 0],
+   "cheveuxNom": "noir"
+  },
+  {
    "n": 2,
    "nom": "Nakazato",
    "poste": "défenseur",

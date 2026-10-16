@@ -35,6 +35,7 @@ JEU.championnat = {
     { n: 8,  nom: "Izawa",     poste: "milieu" },
     { n: 9,  nom: "Kisugi",    poste: "attaquant" },
     { n: 10, nom: "Tsubasa",   poste: "milieu", capitaine: true },
+    { n: 11, nom: "Misaki",    poste: "milieu" },
     { n: 14, nom: "Ishizaki",  poste: "défenseur" },
     { n: 15, nom: "Okawa",     poste: "défenseur" },
     { n: 16, nom: "Yamamori",  poste: "milieu" }

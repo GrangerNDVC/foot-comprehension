@@ -73,9 +73,13 @@
       return sortie;
     },
 
+    // Prénoms : "manga" ou "francais" (choix de l'élève)
+    modeNoms: function () { return lire().noms === "francais" ? "francais" : "manga"; },
+    fixerModeNoms: function (m) { lire().noms = m; ecrire(); },
+
     prologueVu: function () { return !!lire().prologue; },
     marquerPrologue: function () { lire().prologue = true; ecrire(); },
 
-    effacer: function () { memoire = { matchs: {}, carnet: {}, calibrage: 0 }; ecrire(); }
+    effacer: function () { var m = lire().noms; memoire = { matchs: {}, carnet: {}, calibrage: 0, noms: m }; ecrire(); }
   };
 })(typeof window !== "undefined" ? window : this);

@@ -36,7 +36,9 @@
   }
   function tout() { return /[?&]tout\b/.test(root.location.search || ""); }
   function matchs() { return J.championnat.matchs; }
-  function nomEquipe() { return J.championnat.equipe; }
+  function nomEquipe() { return R.eq(J.championnat.equipe); }
+  function adv() { return R.eq(S.def.adversaire); }
+  function tx(t) { return J.noms ? J.noms.texte(t) : t; }
 
   // Écrit un texte dans un élément ; si `mot` est donné, le surligne (sans accent ni casse)
   function remplirTexte(parent, texte, mot, surligne) {
@@ -59,7 +61,7 @@
       var meilleur = J.progression.match(m.id);
       var carte = el("div", "carte" + (ouvert ? "" : " verrou"));
       carte.appendChild(el("div", "carte-num", p.auto ? "Match d'essai" : m.tour));
-      carte.appendChild(el("h2", "", nomEquipe() + " – " + m.adversaire));
+      carte.appendChild(el("h2", "", nomEquipe() + " – " + R.eq(m.adversaire)));
       var etoiles = ""; var k;
       for (k = 1; k <= 5; k++) { etoiles += (k <= m.niveau ? "★" : "☆"); }
       carte.appendChild(el("p", "carte-niveau", "Difficulté " + etoiles));
@@ -72,30 +74,40 @@
       carte.appendChild(b);
       zone.appendChild(carte);
     });
+    majBoutonNoms();
     ecran("ecran-menu");
   };
+
+  // Choix des noms : prénoms du manga ou d'« Olive et Tom »
+  function majBoutonNoms() {
+    var b = $("btn-noms"); if (!b) { return; }
+    var fr = J.noms.mode() === "francais";
+    b.textContent = "🔤 Noms : " + (fr ? "Olivier, Ben… (Olive et Tom)" : "Tsubasa, Misaki… (manga)") + " — changer";
+    b.onclick = function () { J.noms.fixer(fr ? "manga" : "francais"); M.menu(); };
+  }
 
   /* ---------- avant le match ---------- */
   M.avant = function (i) {
     IDX = i;
     var m = matchs()[i], p = J.config.matchs[m.id] || {};
     if (J.grosplan && J.grosplan.preparer) { J.grosplan.preparer(m); }      // décode les images pendant que l'élève lit
-    $("av-titre").textContent = (p.auto ? "Match d'essai" : m.tour) + " : " + nomEquipe() + " – " + m.adversaire;
+    $("av-titre").textContent = (p.auto ? "Match d'essai" : m.tour) + " : " + nomEquipe() + " – " + R.eq(m.adversaire);
     var pro = $("av-prologue"); vider(pro);
     if (i === 0 && !J.progression.prologueVu()) {
-      J.championnat.prologue.texte.forEach(function (t) { pro.appendChild(el("p", "", t)); });
+      J.championnat.prologue.texte.forEach(function (t) { pro.appendChild(el("p", "", tx(t))); });
     }
-    $("av-contexte").textContent = m.contexte;
+    $("av-contexte").textContent = tx(m.contexte);
     var regle = $("av-regle"); vider(regle);
     var lignes = p.auto ?
       ["C'est un match d'essai : à chaque action, tu réponds à une question. Pas de choix à faire.",
        "Le jeu regarde comment tu lis, puis règle la difficulté pour la suite.",
        "Si tu te trompes, tu as une deuxième chance avec un indice."] :
-      ["À chaque action, tu choisis quoi faire, puis tu réponds à une question.",
+      ["À chaque action, tu choisis ton geste : une passe, un lob, un dribble… Plus le geste est risqué, plus la question est difficile.",
        "Une bonne réponse fait avancer le ballon. Deux erreurs : ballon perdu.",
-       "Les guts (⚡) donnent de l'énergie pour les actions fortes. Les bonnes réponses en redonnent."];
+       "L'énergie (⚡) permet les gestes forts. Les bonnes réponses en redonnent." +
+         ((p.sanctions && p.sanctions.length) ? " Attention : trop de questions ratées, et l'arbitre sanctionne ton équipe !" : "")];
     lignes.forEach(function (t) { regle.appendChild(el("li", "", t)); });
-    $("btn-ecouter-avant").onclick = function () { J.audio.lire((i === 0 ? J.championnat.prologue.texte.join(" ") + " " : "") + m.contexte); };
+    $("btn-ecouter-avant").onclick = function () { J.audio.lire(tx((i === 0 ? J.championnat.prologue.texte.join(" ") + " " : "") + m.contexte)); };
     $("btn-coup-envoi").onclick = function () { J.audio.stop(); J.progression.marquerPrologue(); M.demarrer(i); };
     $("btn-retour-avant").onclick = function () { J.audio.stop(); M.menu(); };
     ecran("ecran-avant");
@@ -116,10 +128,19 @@
     return S.mi === 1 ? "1re mi-temps" : (S.mi === 2 ? "2e mi-temps" : "Prolongation");
   }
   function majHud() {
-    $("hud-score").textContent = nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + S.def.adversaire;
+    $("hud-score").textContent = nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + adv();
     $("hud-temps").textContent = libelleMi() + " · " + R.minute(S) + "'";
-    var g = $("hud-guts-barre"); g.style.width = Math.round(100 * S.guts / J.config.guts.max) + "%";
-    $("hud-guts-nombre").textContent = String(S.guts);
+    var g = $("hud-energie-barre"); g.style.width = Math.round(100 * S.energie / J.config.energie.max) + "%";
+    $("hud-energie-nombre").textContent = String(S.energie);
+    var sa = $("hud-sanctions");
+    if (sa) {
+      var t = "";
+      if (S.jaunes) { t += "🟨".repeat(S.jaunes) + " "; }
+      if (S.blesses) { t += "🩹".repeat(S.blesses) + " "; }
+      if (S.rouges) { t += "🟥".repeat(S.rouges) + " "; }
+      if (S.equipe.length < 11) { t += S.equipe.length + " joueurs"; }
+      sa.textContent = t; sa.hidden = !t;
+    }
   }
   function bandeau() {
     var b = $("m-bandeau");
@@ -151,19 +172,23 @@
                 a === "tir" ? "Face au but : " + R.nom(S.porteur) + " va tirer !" :
                 a === "bloquer" ? R.nomAdv(S, S.adv) + " va tirer : il faut le bloquer !" :
                 R.nomAdv(S, S.adv) + " a le ballon et attaque.");
-      return engager(a, a === "passe" ? R.candidatsPasse(S)[0] : null);
+      return engager(a, a === "passe" ? R.candidats(S)[0] : null);
     }
-    narration(ph === "attaque" ? nomEquipe() + " a le ballon." : S.def.adversaire + " attaque !");
+    narration(ph === "attaque" ? nomEquipe() + " a le ballon." : adv() + " attaque !");
     menu(ph);
   }
 
+  // Le menu d'actions « en contexte » : les gestes avec le vrai nom du partenaire.
+  // Plus le geste est risqué (étoiles), plus la question sera difficile.
   function menu(ph) {
     var p = $("m-panneau"); vider(p);
     $("ecran-match").className = "ecran etat-menu";
-    p.appendChild(el("div", "titre-menu", "Que fais-tu ?"));
+    p.appendChild(el("div", "titre-menu", ph === "attaque" ? "Que fais-tu avec le ballon ?" : "Comment reprendre le ballon ?"));
     p.appendChild(el("div", "sous-titre-menu", ph === "attaque" ?
-      R.nom(S.porteur) + " a le ballon face à " + R.nomAdv(S, S.adv) + "." :
-      R.nomAdv(S, S.adv) + " attaque. Tu défends avec " + R.nom(S.porteur) + "."));
+      R.nomNum(S.porteur) + " a le ballon face à " + R.nomAdv(S, S.adv) + ". Choisis ton geste." :
+      R.nomAdv(S, S.adv) + " attaque. Tu défends avec " + R.nomNum(S.porteur) + ". Récupérer le ballon est plus difficile que de le garder."));
+    var cands = (ph === "attaque") ? R.candidats(S) : null;
+    dessinerCarte(cands);
     var liste = el("div", "actions");
     R.actionsDisponibles(S).forEach(function (a) {
       var b = el("button", "action");
@@ -171,35 +196,18 @@
       b.appendChild(el("span", "action-icone", a.icone));
       var t = el("span", "action-texte");
       t.appendChild(el("strong", "", a.texte));
-      t.appendChild(el("small", "", a.dispo ? a.aide : a.raison));
+      var info = a.dispo ? a.aide : a.raison;
+      t.appendChild(el("small", "", info));
       b.appendChild(t);
-      if (a.cout) { b.appendChild(el("span", "action-cout", "⚡ " + a.cout)); }
-      b.onclick = function () {
-        if (a.id === "passe") { choisirCible(); } else { engager(a.id, null); }
-      };
+      var d = el("span", "action-cout");
+      d.textContent = "★".repeat(a.etoiles) + "☆".repeat(3 - a.etoiles) + (a.cout ? "  ⚡ " + a.cout : "");
+      d.title = "Difficulté du geste" + (a.cout ? " et énergie dépensée" : "");
+      b.appendChild(d);
+      b.onclick = function () { engager(a.id, a.cible); };
       liste.appendChild(b);
     });
     p.appendChild(liste);
-  }
-
-  function choisirCible() {
-    var p = $("m-panneau"); vider(p);
-    var cands = R.candidatsPasse(S);
-    dessinerCarte(cands);
-    p.appendChild(el("div", "titre-menu", "Passer à qui ?"));
-    var liste = el("div", "actions");
-    cands.forEach(function (n) {
-      var b = el("button", "action");
-      b.appendChild(el("span", "action-icone num", String(n)));
-      var t = el("span", "action-texte"); t.appendChild(el("strong", "", R.nom(n).replace(/^\d+ /, "")));
-      b.appendChild(t);
-      b.onclick = function () { engager("passe", n); };
-      liste.appendChild(b);
-    });
-    p.appendChild(liste);
-    var retour = el("button", "petit discret", "↩ Changer d'action");
-    retour.onclick = function () { dessinerCarte(); menu(R.phase(S)); };
-    p.appendChild(retour);
+    p.appendChild(el("div", "aide-etoiles", "★ = difficulté de la question · ⚡ = énergie dépensée"));
   }
 
   /* ---------- une question ---------- */
@@ -210,11 +218,14 @@
     return "Texte";
   }
 
-  function engager(action, cible) {
-    R.engager(S, action);
-    var niveau = R.niveau(S, action);
-    var item = J.banque.choisir(R.typeQuestion(action), niveau, {
-      exclus: S.exclus, revoir: J.progression.revoir(), dernierRate: S.dernierRate
+  function engager(geste, cible) {
+    var action = geste;
+    R.engager(S, geste, cible);
+    var niveau = R.niveau(S, geste);
+    var g = R.geste(geste);
+    var item = J.banque.choisir(R.typeQuestion(geste), niveau, {
+      exclus: S.exclus, revoir: J.progression.revoir(), dernierRate: S.dernierRate,
+      base: R.base(S, cible), special: g.special || null
     });
     S.exclus.push(item.id);
     var ordre = [], k;
@@ -253,7 +264,7 @@
     $("ecran-match").className = "ecran etat-question";
     var lib = R.libelle(Q.action);
     var puce = el("div", "puce-action");
-    puce.appendChild(el("span", "", lib.icone + " " + lib.texte));
+    puce.appendChild(el("span", "", lib.icone + " " + lib.texte + (Q.cible ? " : " + R.nom(Q.cible) : "")));
     puce.appendChild(el("span", "puce-niveau", "niveau " + Q.niveau));
     p.appendChild(puce);
 
@@ -285,6 +296,7 @@
         if (Q.verrou) { return; }
         Q.barre[k] = !Q.barre[k];
         ligne.className = "opt-ligne" + (Q.barre[k] ? " barree" : "");
+        if (Q.barre[k]) { indiceCroix(k); }
       };
       ligne.appendChild(b); ligne.appendChild(x);
       zone.appendChild(ligne);
@@ -310,6 +322,21 @@
     majOutils();
   }
 
+  /* Barrer une réponse donne un coup de pouce gratuit : le mot clé s'allume dans le texte.
+     Réglage « croix » de data/config.js : "neutre" = toujours la même réaction (la solution ne se devine pas) ;
+     "reactif" = on est averti si on barre la bonne réponse. */
+  function indiceCroix(k) {
+    if (Q.hint) { return; }
+    if (J.config.croix === "reactif" && estBonne(Q.ordre[k]) && Q.item.format !== "barrer") {
+      Q.elFeedback.className = "feedback ko";
+      Q.elFeedback.textContent = "🤔 Es-tu sûr de vouloir barrer celle-là ? Relis le mot en jaune.";
+      Q.hint = true; remplirTextes(true); return;
+    }
+    Q.hint = true; remplirTextes(true);
+    Q.elFeedback.className = "feedback ok";
+    Q.elFeedback.textContent = "💡 Coup de pouce : le mot important est en jaune. Cherche-le dans chaque réponse.";
+  }
+
   /* ---------- boutons d'aide ---------- */
   function outils() {
     var o = el("div", "outils");
@@ -317,22 +344,22 @@
     var va = el("button", "petit", "📺 Aide VAR"); va.onclick = ouvrirVAR;
     var ve = el("button", "petit", "🎽 Vestiaire"); ve.onclick = ouvrirVestiaire;
     var ca = el("button", "petit", "📒 Carnet"); ca.onclick = ouvrirCarnet;
-    Q.btnGuts = el("button", "petit guts", "⭐ Éliminer une erreur (⚡ " + J.config.guts.aideEliminer + ")");
-    Q.btnGuts.onclick = aideGuts;
+    Q.btnGuts = el("button", "petit guts", "⭐ Éliminer une erreur (⚡ " + J.config.energie.aideEliminer + ")");
+    Q.btnGuts.onclick = aideEnergie;
     [ec, va, ve, ca, Q.btnGuts].forEach(function (b) { o.appendChild(b); });
     return o;
   }
   function majOutils() {
     if (!Q.btnGuts) { return; }
-    var ok = !Q.verrou && !Q.aide && Q.item.format !== "barrer" && S.guts >= J.config.guts.aideEliminer;
+    var ok = !Q.verrou && !Q.aide && Q.item.format !== "barrer" && S.energie >= J.config.energie.aideEliminer;
     Q.btnGuts.disabled = !ok;
   }
-  function aideGuts() {
+  function aideEnergie() {
     if (Q.verrou || Q.aide || Q.item.format === "barrer") { return; }
     var restants = [];
     Q.ordre.forEach(function (reel, k) { if (reel !== Q.item.bonne && !Q.off[k]) { restants.push(k); } });
     if (restants.length < 2) { return; }          // il doit rester au moins 2 choix
-    if (!R.aideGuts(S)) { return; }
+    if (!R.aideEnergie(S)) { return; }
     var k = restants[Math.floor(J.alea() * restants.length)];
     Q.off[k] = true; Q.aide = true;
     marquerFausse(k);
@@ -461,6 +488,11 @@
     majOutils();
 
     narration(ev.texte);
+    if (ev.sanction) {
+      var sa = el("div", "sanction sanction-" + ev.sanction.type, ev.sanction.texte);
+      Q.elRemede.appendChild(sa);
+      majHud(); dessinerCarte();
+    }
     // petit écran : la scène est empilée au-dessus des questions, on la ramène à l'écran
     var scn = $("m-scene");
     if (root.innerWidth < 880 && scn && scn.getBoundingClientRect().top < 0 && scn.scrollIntoView) { scn.scrollIntoView(true); }
@@ -492,7 +524,7 @@
     var p = $("m-panneau"); vider(p);
     $("ecran-match").className = "ecran etat-pause";
     p.appendChild(el("div", "titre-menu", "⏸ Mi-temps"));
-    p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + S.def.adversaire));
+    p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + adv()));
     p.appendChild(el("p", "texte-pause", "Du premier coup, tu as bien répondu à " + S.stats.premier + " question" +
       (S.stats.premier > 1 ? "s" : "") + " sur " + S.stats.q + "."));
     var d = el("p", "texte-pause",
@@ -508,7 +540,7 @@
     var p = $("m-panneau"); vider(p);
     $("ecran-match").className = "ecran etat-pause";
     p.appendChild(el("div", "titre-menu", "⏱ Prolongation !"));
-    p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + S.def.adversaire));
+    p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + adv()));
     p.appendChild(el("p", "texte-pause", "Égalité ! Le premier qui marque gagne le match."));
     var b = el("button", "gros", "C'est parti ▶");
     b.onclick = function () { R.prolongation(S); tour(); };
@@ -526,7 +558,7 @@
     if (p.auto) { calib = R.calibrer(res); J.progression.fixerCalibrage(calib); }
 
     $("fin-titre").textContent = res.gagne ? "🏆 Victoire !" : (res.nul ? "🤝 Égalité" : "Match perdu");
-    $("fin-score").textContent = nomEquipe() + " " + res.nous + " – " + res.eux + " " + m.adversaire;
+    $("fin-score").textContent = nomEquipe() + " " + res.nous + " – " + res.eux + " " + R.eq(m.adversaire);
     var pct = res.total ? Math.round(100 * res.premier / res.total) : 0;
     var msg = p.auto ? "Match d'essai terminé : le jeu a réglé le niveau. Le championnat commence !" :
               res.gagne ? "Bravo, tu as gagné ce match !" :

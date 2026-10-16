@@ -46,9 +46,9 @@ button:disabled { opacity: .35; cursor: default; }
          background: #0a0f24; border: 2px solid #3a4280; border-radius: 12px; padding: 6px 10px; margin-bottom: 8px; }
 #hud-score { -webkit-box-flex: 1; flex: 1; font-size: 22px; font-weight: bold; text-align: center; min-width: 260px; margin: 0 8px; }
 #hud-temps { color: #ffd23f; font-weight: bold; margin: 0 10px; white-space: nowrap; }
-#hud-guts { min-width: 150px; font-size: 16px; }
-#hud-guts-cadre { height: 12px; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background: #222; margin-top: 3px; }
-#hud-guts-barre { height: 100%; width: 50%; background: linear-gradient(90deg, #ff9a00, #ffe600); }
+#hud-energie { min-width: 150px; font-size: 16px; }
+#hud-energie-cadre { height: 12px; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background: #222; margin-top: 3px; }
+#hud-energie-barre { height: 100%; width: 50%; background: linear-gradient(90deg, #ff9a00, #ffe600); }
 
 /* ===== scène + panneau ===== */
 #m-zone { display: -webkit-box; display: flex; flex-wrap: wrap; -webkit-box-align: start; align-items: flex-start; }
@@ -165,7 +165,7 @@ button, .option, .action { touch-action: manipulation; }
   #m-hud { padding: 4px 8px; margin-bottom: 6px; }
   #hud-score { font-size: 17px; min-width: 0; margin: 0 4px; }
   #hud-temps { font-size: 14px; margin: 0 4px; }
-  #hud-guts { min-width: 110px; font-size: 14px; }
+  #hud-energie { min-width: 110px; font-size: 14px; }
   #m-bandeau { font-size: 14px; padding: 4px 8px; }
   #m-canvas { max-height: 25vh; }
   #m-narration { min-height: 2.4em; font-size: 15px; padding: 4px 8px; }
@@ -183,7 +183,7 @@ button, .option, .action { touch-action: manipulation; }
   #app { padding: 4px 8px; }
   #m-hud { padding: 2px 8px; margin-bottom: 4px; }
   #hud-score { font-size: 16px; min-width: 0; }
-  #hud-temps, #hud-guts { font-size: 13px; }
+  #hud-temps, #hud-energie { font-size: 13px; }
   #m-zone { -webkit-box-align: start; align-items: flex-start; }
   #m-scene { width: 46%; max-width: 46%; margin: 0 10px 0 0; position: -webkit-sticky; position: sticky; top: 4px; }
   #m-canvas { max-height: calc(100vh - 118px); }
@@ -193,3 +193,11 @@ button, .option, .action { touch-action: manipulation; }
   .texte-consigne, .question-grosse { font-size: 17px; margin: 4px 0; }
   .option { font-size: 16px; padding: 8px 10px; }
 }
+
+/* gestes en contexte, sanctions */
+.aide-etoiles { margin-top: 8px; font-size: 13px; opacity: .8; }
+.action-cout { white-space: nowrap; }
+#hud-sanctions { font-size: 15px; }
+.sanction { margin-top: 8px; padding: 8px 10px; border-radius: 10px; font-weight: bold; background: #333; border: 2px solid #ffe600; }
+.sanction-rouge { border-color: #ff4d4d; }
+.sanction-blessure { border-color: #7ad0ff; }

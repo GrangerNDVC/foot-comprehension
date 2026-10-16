@@ -14,7 +14,7 @@
   var NOUS = {
     1: [0.06, 0.50],
     2: [0.22, 0.17], 4: [0.22, 0.39], 6: [0.22, 0.61], 14: [0.22, 0.83],
-    8: [0.42, 0.27], 10: [0.44, 0.50], 5: [0.42, 0.73],
+    8: [0.42, 0.27], 10: [0.44, 0.50], 5: [0.42, 0.73], 11: [0.42, 0.73],
     7: [0.62, 0.20], 9: [0.64, 0.50], 3: [0.62, 0.80]
   };
   // Adversaires, numérotés 1 à 11 (ils attaquent vers la gauche)
@@ -73,21 +73,22 @@
       if (!enAttaque && Number(k) === s.adv) { x = bx; }
       pion(ctx, X(x), Y(y), (Number(k) === 1) ? "#d9a400" : "#f4f4f4", k, "#222", 12);
     }
-    // nous
-    for (k in NOUS) {
-      if (!NOUS.hasOwnProperty(k)) { continue; }
-      p = NOUS[k]; x = Math.max(0.03, Math.min(0.97, p[0] + decal)); y = p[1];
-      if (enAttaque && Number(k) === s.porteur) { x = bx; }
-      var cand = opts.candidats && opts.candidats.indexOf(Number(k)) >= 0;
+    // nous : seulement les joueurs qui sont sur le terrain (un joueur expulsé disparaît, un remplaçant prend la place du blessé)
+    var sur = s.equipe || Object.keys(NOUS).map(Number);
+    sur.forEach(function (k) {
+      p = NOUS[k] || NOUS[(s.place || {})[k]]; if (!p) { return; }
+      x = Math.max(0.03, Math.min(0.97, p[0] + decal)); y = p[1];
+      if (enAttaque && k === s.porteur) { x = bx; }
+      var cand = opts.candidats && opts.candidats.indexOf(k) >= 0;
       if (cand) {
         ctx.beginPath(); ctx.arc(X(x), Y(y), 19, 0, Math.PI * 2);
         ctx.strokeStyle = "#ffe600"; ctx.lineWidth = 4; ctx.stroke();
       }
-      pion(ctx, X(x), Y(y), (Number(k) === 1) ? "#e08a00" : "#2f6fe0", k, "#fff", 12);
-    }
+      pion(ctx, X(x), Y(y), (k === 1) ? "#e08a00" : "#2f6fe0", k, "#fff", 12);
+    });
     // porteur : anneau jaune + ballon
     var hx, hy;
-    if (enAttaque) { hx = bx; hy = NOUS[s.porteur] ? NOUS[s.porteur][1] : 0.5; }
+    if (enAttaque) { hx = bx; hy = (NOUS[s.porteur] || NOUS[(s.place || {})[s.porteur]] || [0, 0.5])[1]; }
     else { hx = bx; hy = ADV[s.adv] ? ADV[s.adv][1] : 0.5; }
     ctx.beginPath(); ctx.arc(X(hx), Y(hy), 17, 0, Math.PI * 2);
     ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = 3; ctx.stroke();
@@ -97,6 +98,6 @@
     // flèche « on attaque vers la droite »
     ctx.fillStyle = "rgba(255,255,255,0.35)"; ctx.font = "bold 12px Verdana, sans-serif";
     ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
-    ctx.fillText("Nankatsu attaque ▶", L - MX - 4, H - 3);
+    ctx.fillText((J.noms ? J.noms.equipe("Nankatsu") : "Nankatsu") + " attaque ▶", L - MX - 4, H - 3);
   };
 })(typeof window !== "undefined" ? window : this);

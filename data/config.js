@@ -6,8 +6,12 @@ window.JEU = window.JEU || {};
 
 JEU.config = {
 
-  /* Les 11 joueurs de Nankatsu sur le terrain (numéros de maillot de championnat.js) */
-  titulaires: [1, 2, 4, 6, 14, 5, 8, 10, 3, 7, 9],
+  /* Les 11 joueurs de Nankatsu sur le terrain (numéros de maillot de championnat.js).
+     Le n°11 (Misaki / Ben) joue à la place du n°5 (Iwami / David), qui passe sur le banc. */
+  titulaires: [1, 2, 4, 6, 14, 11, 8, 10, 3, 7, 9],
+  banc: [5, 15, 16],              // remplaçants (blessure d'un joueur)
+  /* Les duos : deux joueurs dont l'échange de passes (le une-deux) est la spécialité. */
+  duos: [[10, 11]],
 
   /* Le terrain est une ligne de positions 0 … zones.
      0 = devant notre but, zones = devant le but adverse.
@@ -18,24 +22,51 @@ JEU.config = {
     // Tir normal à partir de la position zones-1, tir lointain (plus difficile) à zones-2.
   },
 
-  /* Guts = énergie. Les actions fortes en consomment ; les bonnes réponses en redonnent. */
-  guts: {
+  /* Énergie : les gestes forts en consomment ; les bonnes réponses en redonnent. */
+  energie: {
     max: 100,
     depart: 50,
     gainPremierEssai: 10,     // bonne réponse du premier coup
     gainDeuxiemeEssai: 5,     // bonne réponse à la deuxième chance
-    cout: { passe: 0, dribble: 10, tir: 20, couper: 0, tacler: 10, bloquer: 10, degager: 0, gardien: 0 },
-    aideEliminer: 25          // dépenser des guts pour éliminer une mauvaise réponse
+    aideEliminer: 25          // dépenser de l'énergie pour éliminer une mauvaise réponse
   },
 
-  /* Niveau de la question = niveau du match + réglage + ce décalage selon l'action (1 à 5). */
-  niveauAction: {
-    passe: 0,
-    dribble: 0, dribbleProche: 1,   // dribble près du but : +1
-    tir: 1, tirLointain: 2,         // tir depuis la surface : +1 ; tir lointain : +2
-    couper: 0, tacler: 1, bloquer: 0, degager: -1,
-    gardien: 1
+  /* LES GESTES : ce que l'élève choisit « en contexte ».
+     action : la mécanique utilisée (passe, dribble, tir, couper, tacler, bloquer, degager, gardien)
+     avance : crans gagnés par le ballon si la réponse est bonne
+     niveau : décalage de difficulté de la question (plus le geste est risqué et rapide, plus la question est difficile)
+     cout   : énergie dépensée       gain : crans gagnés en récupérant le ballon (défense)
+     cible  : on choisit un partenaire    special : banque de questions réservée (échange de passes) */
+  gestes: {
+    passe:   { action: "passe",   texte: "Passe courte", avance: 1, niveau: 0, cout: 0,  cible: true,  aide: "Sûr : le ballon avance d'un cran" },
+    lob:     { action: "passe",   texte: "Lob",          avance: 2, niveau: 1, cout: 10, cible: true,  aide: "Le ballon avance de deux crans" },
+    uneDeux: { action: "passe",   texte: "Une-deux",     avance: 2, niveau: 1, cout: 0,  cible: true,  special: "une-deux", aide: "Leur spécialité : deux crans d'un coup" },
+    dribble: { action: "dribble", texte: "Dribbler",     avance: 2, niveau: 0, cout: 10, aide: "Le ballon avance de deux crans" },
+    tir:     { action: "tir",     texte: "Tirer",        niveau: 1, cout: 20, aide: "Marque si tu réponds bien" },
+    couper:  { action: "couper",  texte: "Couper la passe", niveau: 0, cout: 0,  aide: "Récupère le ballon" },
+    tacler:  { action: "tacler",  texte: "Tacler",       niveau: 1, cout: 10, gain: 1, aide: "Récupère le ballon et avance d'un cran" },
+    contre:  { action: "tacler",  texte: "Contre",       niveau: 2, cout: 15, gain: 2, aide: "Très difficile : récupère le ballon et file en avant" },
+    bloquer: { action: "bloquer", texte: "Bloquer le tir", niveau: 0, cout: 10, aide: "Seulement quand l'adversaire va tirer" },
+    degager: { action: "degager", texte: "Dégager",      niveau: -1, cout: 0, aide: "Éloigne le danger" },
+    gardien: { action: "gardien", texte: "Arrêt du gardien", niveau: 1, cout: 0, aide: "" }
   },
+  /* Suppléments de niveau : dribble près du but, tir de loin */
+  niveauAction: { dribbleProche: 1, tirLointain: 1 },
+
+  /* Sanctions : à chaque question RATÉE (deux erreurs), le compteur monte.
+     Les sanctions ne touchent que le terrain (jamais de note ni de perte de progression).
+     Chaque match choisit lesquelles sont actives (sanctions: ["jaune","blessure","rouge"]). */
+  sanctions: {
+    suite: [ { a: 3, t: "jaune" }, { a: 4, t: "blessure" }, { a: 5, t: "rouge" },
+             { a: 7, t: "jaune" }, { a: 8, t: "blessure" }, { a: 9, t: "rouge" } ],
+    jauneEnergie: 15,      // énergie perdue après un carton jaune
+    blessureEnergie: 10,
+    minJoueurs: 8          // on ne descend jamais sous ce nombre de joueurs
+  },
+
+  /* Que fait le ✖ sur une réponse ?  "neutre" : il montre le mot clé (toujours pareil, sans révéler la bonne réponse)
+     "reactif" : en plus, avertit si on barre la bonne réponse (règle d'origine, mais la réaction trahit la solution) */
+  croix: "neutre",
 
   /* Réglage automatique de la difficulté pendant le match */
   adaptatif: {
@@ -66,14 +97,14 @@ JEU.config = {
   matchs: {
     m1: { nom: "Match d'essai", auto: true,  niveauBase: 2, actionsParMiTemps: 5,  prolongation: 0 },
     m2: { auto: false, actionsAttaque: ["passe", "tir"],
-          actionsDefense: ["couper", "tacler"],            actionsParMiTemps: 8,  prolongation: 4 },
-    m3: { auto: false, actionsAttaque: ["passe", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "degager"], actionsParMiTemps: 9,  prolongation: 4 },
-    m4: { auto: false, actionsAttaque: ["passe", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "bloquer", "degager"], actionsParMiTemps: 10, prolongation: 4 },
-    m5: { auto: false, defenseBonus: 1, actionsAttaque: ["passe", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "bloquer", "degager"], actionsParMiTemps: 10, prolongation: 4 },
-    m6: { auto: false, defenseBonus: 1, departAdv: 1, actionsAttaque: ["passe", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "bloquer", "degager"], actionsParMiTemps: 12, prolongation: 6 }
+          actionsDefense: ["couper", "tacler"], sanctions: [],                      actionsParMiTemps: 8,  prolongation: 4 },
+    m3: { auto: false, departAdv: 1, actionsAttaque: ["passe", "lob", "dribble", "tir"],
+          actionsDefense: ["couper", "tacler", "degager"], sanctions: ["jaune"],      actionsParMiTemps: 9,  prolongation: 4 },
+    m4: { auto: false, departAdv: 1, defenseRequise: 2, defenseBonus: 1, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure"], actionsParMiTemps: 10, prolongation: 4 },
+    m5: { auto: false, defenseBonus: 1, departAdv: 1, defenseRequise: 2, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 10, prolongation: 4 },
+    m6: { auto: false, defenseBonus: 1, departAdv: 1, defenseRequise: 2, contre: 0, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 12, prolongation: 6 }
   }
 };

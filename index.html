@@ -16,6 +16,7 @@
     <div id="cartes"></div>
     <div class="menu-actions">
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
+      <button id="btn-noms" class="petit"></button>
       <button id="btn-carnet-menu" class="petit">📒 Carnet de règles</button>
       <button id="btn-reset" class="petit discret">Effacer ma progression</button>
     </div>
@@ -42,9 +43,10 @@
       <button id="btn-menu" class="petit">☰</button>
       <div id="hud-score"></div>
       <div id="hud-temps"></div>
-      <div id="hud-guts" title="Guts : l'énergie pour les actions fortes">
-        <span>⚡ Guts <b id="hud-guts-nombre">0</b></span>
-        <div id="hud-guts-cadre"><div id="hud-guts-barre"></div></div>
+      <div id="hud-sanctions" hidden title="Cartons et blessures"></div>
+      <div id="hud-energie" title="Énergie : pour les gestes forts">
+        <span>⚡ Énergie <b id="hud-energie-nombre">0</b></span>
+        <div id="hud-energie-cadre"><div id="hud-energie-barre"></div></div>
       </div>
     </header>
     <div id="m-zone">
@@ -107,13 +109,13 @@
 <script src="data/regles.js"></script>
 <script src="data/championnat.js"></script>
 <script src="data/paliers.js"></script>
-<script src="data/palier1.js"></script>
-<script src="data/palier2.js"></script>
-<script src="data/palier3.js"></script>
-<script src="data/palier4.js"></script>
-<script src="data/essai-formats.js"></script>
+<script src="data/regles-attaque.js"></script>
+<script src="data/attaque.js"></script>
+<script src="data/provisoire.js"></script>
+<script src="data/noms.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/progression.js"></script>
+<script src="js/noms.js"></script>
 <script src="js/regles.js"></script>
 <script src="js/terrain.js"></script>
 <!-- gros plans : sprites (atlas des chantiers 1 et 2), équipes, décor, réglages des scènes -->
