@@ -38,6 +38,7 @@ data/championnat.js  les 6 matchs, l'histoire, les joueurs de Nankatsu
 data/regles.js     les règles du carnet (une phrase chacune)
 data/attaque.js    80 questions d'attaque (passe, dribble), niveaux 1 à 5 (chantier 5) ; ses règles : data/regles-attaque.js
 data/defense.js    40 questions de défense (consignes de l'entraîneur), niveaux 1 à 5 (chantier 6) ; ses règles : data/regles-defense.js
+data/tirs.js       40 petits textes de tir (type tir), niveaux 1 à 5 (chantier 7) ; ses règles : data/regles-tirs.js
 data/palier1..4.js les 30 questions de départ (provisoires)
 data/essai-formats.js  3 questions pour tester les formats « barrer » et « vrai-faux-nsp »
 data/paliers.js    les conseils de l'Aide VAR et le Vestiaire

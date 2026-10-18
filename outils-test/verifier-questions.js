@@ -5,7 +5,7 @@ var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8");
 var scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|provisoire|noms|defense|tirs)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { window: {}, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } }; ctx.window = ctx; ctx.JEU = undefined; vm.createContext(ctx);
 ctx.JEU = ctx.JEU; scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });
 var J = ctx.JEU, pb = J.banque.verifier();
@@ -16,7 +16,7 @@ tous.forEach(function (q) {
   var bonnes = [].concat(q.bonne);
   if (q.format === "vrai-faux-nsp" && q.options.join("|") !== "Oui|Non|On ne peut pas savoir") { pb.push(q.id + " : options vrai-faux-nsp inattendues"); }
 });
-Object.keys(J.regles_texte).forEach(function (k) { if (/^(att|def)_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
+Object.keys(J.regles_texte).forEach(function (k) { if (/^(att|def|tir)_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
 console.log("Fichiers chargés : " + scripts.join(", "));
 console.log("Questions : " + tous.length);
 var stat = {};
@@ -48,5 +48,21 @@ dfs.forEach(function (q) {
 var dvf = [0, 0, 0]; dfs.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { dvf[q.bonne]++; });
 console.log("Banque de défense : " + dfs.length + " questions ; position de la bonne (choix) " + dpos.join("/") + " ; la plus longue : " + dlongue + "/" + dnChoix + " ; consignes scolaires : " + dscol);
 console.log("Défense, « On ne peut pas savoir » : bonne réponse " + dnspBonne + " fois (" + Math.round(100 * dnspBonne / dfs.length) + " %), mauvaise réponse " + dnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + dvf.join("/"));
+/* Banque de tirs (chantier 7) : 8 par niveau, formats, équilibre, textes scolaires */
+var trs = tous.filter(function (q) { return /^tir-/.test(q.id); });
+for (var nt = 1; nt <= 5; nt++) { var n8t = trs.filter(function (q) { return q.niveau === nt; }).length; if (n8t !== 8) { console.log("PROBLÈME : niveau " + nt + " a " + n8t + " questions de tir (8 attendues)"); pb.push("niveau " + nt + " tir : " + n8t); } }
+if (tous.filter(function (q) { return q.type === "tir"; }).length !== trs.length) { pb.push("des questions de type tir ne sont pas dans data/tirs.js (provisoires restantes ?)"); }
+var tpos = [0, 0, 0, 0], tlongue = 0, tnChoix = 0, tnspBonne = 0, tnspMauvaise = 0, tscol = 0, ttexte = [];
+trs.forEach(function (q) {
+  if (q.type !== "tir") { pb.push(q.id + " : type tir attendu"); }
+  var nsp = q.options.map(function (o) { return /On ne peut pas savoir/.test(o); });
+  if (q.format === "choix") { tnChoix++; tpos[q.bonne]++; var L = q.options.map(function (o) { return o.length; }); if (L[q.bonne] === Math.max.apply(null, L) && L.filter(function (x) { return x === L[q.bonne]; }).length === 1 && !/^\d+$/.test(q.options[q.bonne])) { tlongue++; } }
+  if (q.format !== "barrer" && nsp[q.bonne]) { tnspBonne++; } else if (nsp.some(Boolean)) { tnspMauvaise++; }
+  if (q.tags && q.tags.indexOf("ecole") >= 0) { tscol++; }
+  var mots = q.consigne.split(/\s+/).length; ttexte.push(mots);
+});
+var tvf = [0, 0, 0]; trs.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { tvf[q.bonne]++; });
+console.log("Banque de tirs : " + trs.length + " questions ; position de la bonne (choix) " + tpos.join("/") + " ; la plus longue : " + tlongue + "/" + tnChoix + " ; textes scolaires : " + tscol + " ; longueur des textes " + Math.min.apply(null, ttexte) + " à " + Math.max.apply(null, ttexte) + " mots");
+console.log("Tirs, « On ne peut pas savoir » : bonne réponse " + tnspBonne + " fois (" + Math.round(100 * tnspBonne / trs.length) + " %), mauvaise réponse " + tnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + tvf.join("/"));
 console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ")" : "Contrôle complet : aucun problème.");
 process.exit(pb.length ? 1 : 0);
