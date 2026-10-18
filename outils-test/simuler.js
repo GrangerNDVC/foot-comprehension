@@ -3,7 +3,7 @@
 var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8"), scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/(banque|noms|regles|progression)|data\/(config|regles|championnat|paliers|attaque|provisoire|noms|regles-attaque))/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { if (/^(js\/(banque|noms|regles|progression)|data\/(config|regles|championnat|paliers|attaque|defense|provisoire|noms|regles-attaque))/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } };
 ctx.window = ctx; vm.createContext(ctx);
 scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });

@@ -37,6 +37,7 @@ data/config.js     TOUS LES RÉGLAGES (guts, niveaux, durée et règles de chaqu
 data/championnat.js  les 6 matchs, l'histoire, les joueurs de Nankatsu
 data/regles.js     les règles du carnet (une phrase chacune)
 data/attaque.js    80 questions d'attaque (passe, dribble), niveaux 1 à 5 (chantier 5) ; ses règles : data/regles-attaque.js
+data/defense.js    40 questions de défense (consignes de l'entraîneur), niveaux 1 à 5 (chantier 6) ; ses règles : data/regles-defense.js
 data/palier1..4.js les 30 questions de départ (provisoires)
 data/essai-formats.js  3 questions pour tester les formats « barrer » et « vrai-faux-nsp »
 data/paliers.js    les conseils de l'Aide VAR et le Vestiaire
@@ -59,6 +60,9 @@ Pour contrôler une banque (doublons, `bonne` valide, règle connue, explication
 ## Régler la difficulté et le rythme
 Tout est dans `data/config.js` : durée des mi-temps, commandes de chaque match, coût en guts, niveau des actions,
 dangerosité de l'adversaire (`departAdv`, `contre`, `defenseBonus`, `defenseRequise`).
+
+## Chantier 6 (17/10/2026)
+Banque de défense : data/defense.js (40 questions) et data/regles-defense.js. Voir 15-CHANTIER6-RESULTATS.md.
 
 ## Chantier 5 bis (16/10/2026)
 Noms au choix (manga / Olive et Tom), gestes en contexte, énergie, sanctions, Misaki n°11. Voir 14-CHANTIER5B-GESTES-NOMS.md.

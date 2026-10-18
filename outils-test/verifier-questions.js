@@ -16,7 +16,7 @@ tous.forEach(function (q) {
   var bonnes = [].concat(q.bonne);
   if (q.format === "vrai-faux-nsp" && q.options.join("|") !== "Oui|Non|On ne peut pas savoir") { pb.push(q.id + " : options vrai-faux-nsp inattendues"); }
 });
-Object.keys(J.regles_texte).forEach(function (k) { if (/^att_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
+Object.keys(J.regles_texte).forEach(function (k) { if (/^(att|def)_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
 console.log("Fichiers chargés : " + scripts.join(", "));
 console.log("Questions : " + tous.length);
 var stat = {};
@@ -33,4 +33,20 @@ att.forEach(function (q) {
 var vf = {0: 0, 1: 0, 2: 0}; att.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { vf[q.bonne]++; });
 console.log("Banque d'attaque : " + att.length + " questions ; position de la bonne (choix) " + pos.join("/") + " ; la plus longue : " + plusLongue + "/" + nChoix);
 console.log("« On ne peut pas savoir » : bonne réponse " + nspBonne + " fois, mauvaise réponse " + nspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + vf[0] + "/" + vf[1] + "/" + vf[2]);
+
+/* Banque de défense (chantier 6) : 8 par niveau, formats, équilibre */
+var dfs = tous.filter(function (q) { return /^def-/.test(q.id); });
+for (var nv = 1; nv <= 5; nv++) { var n8 = dfs.filter(function (q) { return q.niveau === nv; }).length; if (n8 !== 8) { console.log("PROBLÈME : niveau " + nv + " a " + n8 + " questions de défense (8 attendues)"); pb.push("niveau " + nv + " défense : " + n8); } }
+dfs.forEach(function (q) { if (q.type !== "defense") { pb.push(q.id + " : type defense attendu"); } });
+var dpos = [0, 0, 0, 0], dlongue = 0, dnChoix = 0, dnspBonne = 0, dnspMauvaise = 0, dscol = 0;
+dfs.forEach(function (q) {
+  var nsp = q.options.map(function (o) { return /On ne peut pas savoir/.test(o); });
+  if (q.format === "choix") { dnChoix++; dpos[q.bonne]++; var L = q.options.map(function (o) { return o.length; }); if (L[q.bonne] === Math.max.apply(null, L) && L.filter(function (x) { return x === L[q.bonne]; }).length === 1) { dlongue++; } }
+  if (q.format !== "barrer" && nsp[q.bonne]) { dnspBonne++; } else if (nsp.some(Boolean)) { dnspMauvaise++; }
+  if (q.tags && q.tags.indexOf("ecole") >= 0) { dscol++; }
+});
+var dvf = [0, 0, 0]; dfs.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { dvf[q.bonne]++; });
+console.log("Banque de défense : " + dfs.length + " questions ; position de la bonne (choix) " + dpos.join("/") + " ; la plus longue : " + dlongue + "/" + dnChoix + " ; consignes scolaires : " + dscol);
+console.log("Défense, « On ne peut pas savoir » : bonne réponse " + dnspBonne + " fois (" + Math.round(100 * dnspBonne / dfs.length) + " %), mauvaise réponse " + dnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + dvf.join("/"));
+console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ")" : "Contrôle complet : aucun problème.");
 process.exit(pb.length ? 1 : 0);
