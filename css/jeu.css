@@ -34,6 +34,13 @@ button:disabled { opacity: .35; cursor: default; }
 .carte.verrou { opacity: .55; }
 .carte-niveau { min-height: 0 !important; margin: 4px 0; color: #ffd23f; letter-spacing: 2px; }
 
+/* ===== images d'histoire (scènes composées, ou ta propre image dans assets/histoire/) ===== */
+.histoire { max-width: 512px; margin: 8px auto; }
+.histoire-canvas { width: 100%; height: auto; display: block; border: 3px solid #000; border-radius: 4px;
+                   image-rendering: pixelated; image-rendering: -moz-crisp-edges; -ms-interpolation-mode: nearest-neighbor; background: #0c7a25; }
+#fin-histoire { max-width: 720px; margin: 8px auto; font-size: 20px; text-align: center; }
+#ch-bilan ul { margin: 6px 0 0; padding-left: 22px; }
+
 /* ===== avant le match ===== */
 .boite-avant { max-width: 720px; margin: 10px auto; padding: 14px 18px; background: #1b2350; border: 2px solid #3a4280; border-radius: 14px; }
 .boite-avant p { margin: 8px 0; }

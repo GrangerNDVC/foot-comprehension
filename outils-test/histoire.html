@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Galerie des écrans d'histoire</title>
+<style>body{background:#10163a;color:#fff;font-family:sans-serif;margin:8px}.g{display:flex;flex-wrap:wrap}.c{margin:6px}canvas{width:384px;height:336px;image-rendering:pixelated;display:block;border:2px solid #3a4280}</style></head><body>
+<h3>Écrans d'histoire (chantier 8) : toutes les scènes</h3><div class="g" id="g"></div>
+<script src="../data/championnat.js"></script><script src="../data/noms.js"></script>
+<script src="../data/config.js"></script>
+<script src="../assets/atlas/joueur-01-atlas.js"></script><script src="../assets/atlas/joueur-02-atlas.js"></script><script src="../assets/atlas/joueur-03-atlas.js"></script><script src="../assets/atlas/joueur-04-atlas.js"></script><script src="../assets/atlas/joueur-05-atlas.js"></script><script src="../assets/atlas/joueur-06-atlas.js"></script><script src="../assets/atlas/joueur-07-atlas.js"></script><script src="../assets/atlas/joueur-08-atlas.js"></script><script src="../assets/atlas/joueur-09-atlas.js"></script><script src="../assets/atlas/joueur-10-atlas.js"></script><script src="../assets/atlas/joueur-11-atlas.js"></script><script src="../assets/atlas/joueur-12-atlas.js"></script><script src="../assets/atlas/gardiens-atlas.js"></script>
+<script src="../js/sprites-recolor.js"></script>
+<script src="../data/equipes/equipe-nankatsu.js"></script><script src="../data/equipes/equipe-azumaichi.js"></script><script src="../data/equipes/equipe-nishikigaoka.js"></script><script src="../data/equipes/equipe-hanawa.js"></script><script src="../data/equipes/equipe-hirado.js"></script><script src="../data/equipes/equipe-furano.js"></script><script src="../data/equipes/equipe-toho.js"></script>
+<script src="../assets/manifest.js"></script><script src="../js/assets.js"></script>
+<script src="../data/grosplan-reglages.js"></script><script src="../data/histoire-reglages.js"></script><script src="../js/histoire.js"></script>
+<script>
+JEU.assets.base = "../";
+var liste = [["prologue","avant"],["m1","avant"],["m1","apres"],["m2","avant"],["m2","apres"],["m3","avant"],["m3","apres"],["m4","avant"],["m4","apres"],["m5","avant"],["m5","apres"],["m6","avant"],["m6","apres"],["fin","apres"]];
+var g = document.getElementById("g"), cvs = [];
+JEU.assets.charger(JEU.histoireReglages.images);
+liste.forEach(function (x) {
+  var d = document.createElement("div"); d.className = "c"; d.textContent = x[0] + " / " + x[1];
+  var c = document.createElement("canvas"); c.width = 512; c.height = 448; d.appendChild(c); g.appendChild(d); cvs.push([c, x]);
+});
+// attendre les images puis tout dessiner (plusieurs fois : les atlas se décodent à la demande)
+var n = 0; (function boucle() {
+  cvs.forEach(function (o) { JEU.histoire.preparer(o[1][0], function () { JEU.histoire.dessiner(o[0], o[1][0], o[1][1], 300); }); });
+  if (n++ < 8) { setTimeout(boucle, 250); } else { document.title = "pret"; }
+})();
+</script></body></html>

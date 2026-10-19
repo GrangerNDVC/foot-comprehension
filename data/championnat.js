@@ -41,24 +41,41 @@ JEU.championnat = {
     { n: 16, nom: "Yamamori",  poste: "milieu" }
   ],
 
+  /* Écran de fin du tournoi (après la victoire en finale) */
+  fin: {
+    titre: "🏆 Nankatsu est champion !",
+    texte: [
+      "Bravo ! Tu as gagné les six matchs du Tournoi National.",
+      "Tu as lu chaque action avec attention, et c'est comme ça qu'on gagne.",
+      "Tu peux recommencer le championnat pour faire encore mieux. Ton carnet de règles reste avec toi."
+    ]
+  },
+
+  /* matchs : « apres » = petit texte après la victoire ; « tags » = thèmes des questions du match (pluie, triche, ecole) */
   matchs: [
     { id: "m1", tour: "1er tour", adversaire: "Azumaichi", niveau: 1, scoreHistoire: "2-1",
+      apres: "Victoire ! Nankatsu a battu Azumaichi. Les joueurs sont soulagés : le tournoi commence bien.",
       image: "histoire-01-azumaichi",
       contexte: "C'est le premier match du tournoi. Les joueurs de Nankatsu sont un peu stressés. L'équipe d'Azumaichi n'est pas très connue, mais elle se bat de toutes ses forces." },
     { id: "m2", tour: "2e tour", adversaire: "Nishikigaoka", niveau: 2, scoreHistoire: "6-0",
+      apres: "Quel match ! Nankatsu a battu Nishikigaoka et marqué beaucoup de buts. Maintenant, le tournoi devient sérieux.",
       image: "histoire-02-nishikigaoka",
       contexte: "Nankatsu a gagné son premier match. Maintenant, il joue contre Nishikigaoka. Les joueurs ont plus confiance en eux : ils veulent marquer beaucoup de buts." },
     { id: "m3", tour: "3e tour", adversaire: "Hanawa", niveau: 2, scoreHistoire: "3-2",
+      apres: "Nankatsu a gagné de justesse contre Hanawa. Les joueurs sont fatigués, mais ils ne lâchent rien.",
       image: "histoire-03-hanawa",
       contexte: "Hanawa joue bien et ne se laisse pas faire. Le match est serré. Nankatsu doit rester concentré jusqu'à la dernière minute." },
-    { id: "m4", tour: "Quart de finale", adversaire: "Hirado", niveau: 3, scoreHistoire: "4-3",
+    { id: "m4", tour: "Quart de finale", adversaire: "Hirado", niveau: 3, scoreHistoire: "4-3", tags: ["pluie"],
+      apres: "Nankatsu est en demi-finale ! Hirado a bien résisté. Il ne reste que quatre équipes.",
       image: "histoire-04-hirado",
-      contexte: "Il ne reste que huit équipes. Un seul faux pas et c'est fini. Face à Hirado, les deux équipes marquent beaucoup : il faudra lire chaque action avec attention." },
-    { id: "m5", tour: "Demi-finale", adversaire: "Furano", niveau: 4, scoreHistoire: "3-2",
+      contexte: "Il ne reste que huit équipes. Un seul faux pas et c'est fini. Face à Hirado, les deux équipes marquent beaucoup : il faudra lire chaque action avec attention. Il pleut sur le stade." },
+    { id: "m5", tour: "Demi-finale", adversaire: "Furano", niveau: 4, scoreHistoire: "3-2", tags: ["pluie"],
+      apres: "Nankatsu a battu Furano. Matsuyama est un joueur très fort, mais c'est Nankatsu qui jouera la finale !",
       image: "histoire-05-furano",
-      contexte: "Furano vient du nord du pays et son joueur Matsuyama est très fort. Il ne reste que quatre équipes. Qui jouera la finale ?" },
-    { id: "m6", tour: "Finale", adversaire: "Toho Academy", niveau: 5, scoreHistoire: "4-4",
+      contexte: "Furano vient du nord du pays et son joueur Matsuyama est très fort. Il ne reste que quatre équipes. Qui jouera la finale ? Il pleut aussi." },
+    { id: "m6", tour: "Finale", adversaire: "Toho Academy", niveau: 5, scoreHistoire: "4-4", tags: ["triche"],
+      apres: "Après un match incroyable, Nankatsu a battu Toho Academy. Hyuga et Wakashimazu ont tout donné, mais Nankatsu est champion !",
       image: "histoire-06-toho",
-      contexte: "C'est la finale ! En face, il y a Toho Academy, avec Hyuga et Wakashimazu, deux grands joueurs. Le match va être très, très serré. Chaque mot compte." }
+      contexte: "C'est la finale ! En face, il y a Toho Academy, avec Hyuga et Wakashimazu, deux grands joueurs. Le match va être très, très serré. Chaque mot compte. Toho joue très dur : l'arbitre doit rester attentif." }
   ]
 };

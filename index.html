@@ -15,9 +15,11 @@
     <p class="intro">Lis bien, réfléchis, puis joue ! Gagne chaque match pour ouvrir le suivant.</p>
     <div id="cartes"></div>
     <div class="menu-actions">
+      <button id="btn-fin-tournoi" class="gros" hidden>🏆 Voir la fin du tournoi</button>
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
       <button id="btn-noms" class="petit"></button>
       <button id="btn-carnet-menu" class="petit">📒 Carnet de règles</button>
+      <button id="btn-recommencer" class="petit discret">🔄 Recommencer le championnat</button>
       <button id="btn-reset" class="petit discret">Effacer ma progression</button>
     </div>
   </section>
@@ -25,6 +27,7 @@
   <!-- AVANT LE MATCH -->
   <section id="ecran-avant" class="ecran" hidden>
     <h1 id="av-titre"></h1>
+    <div id="av-image" class="histoire" hidden></div>
     <div class="boite-avant">
       <div id="av-prologue"></div>
       <p id="av-contexte" class="contexte"></p>
@@ -63,6 +66,8 @@
   <section id="ecran-fin" class="ecran" hidden>
     <h1 id="fin-titre"></h1>
     <div id="fin-score"></div>
+    <div id="fin-image" class="histoire" hidden></div>
+    <p id="fin-histoire" class="contexte" hidden></p>
     <p id="fin-message"></p>
     <ul id="fin-details"></ul>
     <div id="fin-regles-bloc" class="boite-avant" hidden>
@@ -71,8 +76,22 @@
     </div>
     <div class="menu-actions">
       <button id="btn-suivant" class="gros" hidden>Match suivant ▶</button>
+      <button id="btn-fin-championnat" class="gros" hidden>🏆 La fin du tournoi ▶</button>
       <button id="btn-rejouer" class="gros">🔁 Rejouer</button>
       <button id="btn-retour-menu" class="petit">☰ Menu</button>
+    </div>
+  </section>
+
+  <!-- FIN DU CHAMPIONNAT -->
+  <section id="ecran-championnat" class="ecran" hidden>
+    <h1 id="ch-titre"></h1>
+    <div id="ch-image" class="histoire"></div>
+    <div class="boite-avant" id="ch-texte"></div>
+    <div id="ch-bilan" class="boite-avant"></div>
+    <div class="menu-actions">
+      <button id="btn-ecouter-fin" class="petit">🔊 Écouter</button>
+      <button id="btn-ch-recommencer" class="gros">🔄 Recommencer le championnat</button>
+      <button id="btn-ch-menu" class="petit">☰ Menu</button>
     </div>
   </section>
 
@@ -146,7 +165,9 @@
 <script src="assets/manifest.js"></script>
 <script src="js/assets.js"></script>
 <script src="data/grosplan-reglages.js"></script>
+<script src="data/histoire-reglages.js"></script>
 <script src="js/grosplan.js"></script>
+<script src="js/histoire.js"></script>
 <script src="js/match.js"></script>
 <script src="js/main.js"></script>
 </body>

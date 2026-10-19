@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><body style="background:#0c9300;margin:4px"><canvas id="c" width="1400" height="900"></canvas>
+<script src="../assets/atlas/joueur-08-atlas.js"></script><script src="../assets/atlas/gardiens-atlas.js"></script><script src="../js/sprites-recolor.js"></script>
+<script>
+SPRITES_RECOLOR.pret(["joueur-08","gardiens"],function(){
+ var c=document.getElementById("c").getContext("2d"),x=4,y=4,rh=0;c.font="10px sans-serif";c.fillStyle="#fff";
+ function planche(nom,cv){var S=SPRITES[nom].sprites;Object.keys(S).forEach(function(k){var s=S[k];if(x+s.w+4>1400){x=4;y+=rh+14;rh=0}
+  c.drawImage(cv,s.x,s.y,s.w,s.h,x,y+10,s.w,s.h);c.fillStyle="#fff";c.fillText(k.replace(/^[a-z0-9-]+__/,""),x,y+8);x+=Math.max(s.w,46)+6;rh=Math.max(rh,s.h+10)})}
+ planche("joueur-08",SPRITES_RECOLOR.joueur("joueur-08",{maillot:[255,255,255],short:[21,95,217],cheveux:[0,0,0],peau:[254,204,197]}));
+ x=4;y+=rh+20;rh=0;
+ planche("gardiens",SPRITES_RECOLOR.gardien({maillot:[255,214,0],maillotClair:[255,240,120],cheveux:[0,0,0],peau:[254,204,197]}));
+ document.title="pret"});
+</script></body></html>

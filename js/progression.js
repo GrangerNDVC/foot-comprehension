@@ -80,6 +80,17 @@
     prologueVu: function () { return !!lire().prologue; },
     marquerPrologue: function () { lire().prologue = true; ecrire(); },
 
+    // Tous les matchs du championnat sont gagnés ? (liste = J.championnat.matchs)
+    termine: function (matchs) {
+      var d = lire(), i;
+      for (i = 0; i < matchs.length; i++) { if (!d.matchs[matchs[i].id] || !d.matchs[matchs[i].id].gagne) { return false; } }
+      return matchs.length > 0;
+    },
+    // Recommencer le championnat : les matchs et le prologue repartent à zéro ; le carnet de règles, le réglage de niveau et le choix des noms restent
+    recommencerChampionnat: function () {
+      var d = lire(); d.matchs = {}; d.prologue = false; ecrire();
+    },
+
     effacer: function () { var m = lire().noms; memoire = { matchs: {}, carnet: {}, calibrage: 0, noms: m }; ecrire(); }
   };
 })(typeof window !== "undefined" ? window : this);

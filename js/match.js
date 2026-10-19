@@ -31,7 +31,8 @@
     return a;
   }
   function ecran(id) {
-    ["ecran-menu", "ecran-avant", "ecran-match", "ecran-fin"].forEach(function (x) { $(x).hidden = (x !== id); });
+    ["ecran-menu", "ecran-avant", "ecran-match", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
+    if (J.histoire && id !== "ecran-avant" && id !== "ecran-fin" && id !== "ecran-championnat") { J.histoire.arreter(); }
     root.scrollTo(0, 0);
   }
   function tout() { return /[?&]tout\b/.test(root.location.search || ""); }
@@ -75,6 +76,7 @@
       zone.appendChild(carte);
     });
     majBoutonNoms();
+    $("btn-fin-tournoi").hidden = !J.progression.termine(matchs());
     ecran("ecran-menu");
   };
 
@@ -93,7 +95,12 @@
     if (J.grosplan && J.grosplan.preparer) { J.grosplan.preparer(m); }      // décode les images pendant que l'élève lit
     $("av-titre").textContent = (p.auto ? "Match d'essai" : m.tour) + " : " + nomEquipe() + " – " + R.eq(m.adversaire);
     var pro = $("av-prologue"); vider(pro);
-    if (i === 0 && !J.progression.prologueVu()) {
+    var prologue = (i === 0 && !J.progression.prologueVu());
+    if (J.histoire) {
+      if (prologue) { J.histoire.afficher($("av-image"), "prologue", "avant", J.championnat.prologue.image); }
+      else { J.histoire.afficher($("av-image"), m.id, "avant", m.image); }
+    }
+    if (prologue) {
       J.championnat.prologue.texte.forEach(function (t) { pro.appendChild(el("p", "", tx(t))); });
     }
     $("av-contexte").textContent = tx(m.contexte);
@@ -224,7 +231,7 @@
     var niveau = R.niveau(S, geste);
     var g = R.geste(geste);
     var item = J.banque.choisir(R.typeQuestion(geste), niveau, {
-      exclus: S.exclus, revoir: J.progression.revoir(), dernierRate: S.dernierRate,
+      tags: S.def.tags || [], exclus: S.exclus, revoir: J.progression.revoir(), dernierRate: S.dernierRate,
       base: R.base(S, cible), special: g.special || null
     });
     S.exclus.push(item.id);
@@ -577,12 +584,47 @@
     $("fin-regles-bloc").hidden = !S.reglesRatees.length;
     S.reglesRatees.slice(0, 3).forEach(function (r) { rev.appendChild(el("li", "", J.regles_texte[r] || r)); });
 
+    // Intermède après une victoire : image + petit texte d'histoire
+    var victoire = !!(res.gagne || p.auto), histoire = $("fin-histoire"), derniere = (IDX === matchs().length - 1);
+    if (victoire && J.histoire && m.apres) {
+      J.histoire.afficher($("fin-image"), m.id, "apres", m.image + "-victoire");
+      histoire.textContent = tx(m.apres); histoire.hidden = false;
+    } else {
+      if (J.histoire) { J.histoire.arreter(); }
+      $("fin-image").hidden = true; histoire.hidden = true;
+    }
     var suivant = matchs()[IDX + 1];
-    $("btn-suivant").hidden = !((res.gagne || p.auto) && suivant);
+    $("btn-suivant").hidden = !(victoire && suivant);
+    $("btn-fin-championnat").hidden = !(res.gagne && derniere);
+    $("btn-fin-championnat").onclick = function () { M.finChampionnat(); };
     $("btn-suivant").onclick = function () { M.avant(IDX + 1); };
     $("btn-rejouer").onclick = function () { M.demarrer(IDX); };
     $("btn-retour-menu").onclick = function () { M.menu(); };
     ecran("ecran-fin");
+  }
+
+  /* ---------- fin du championnat ---------- */
+  M.finChampionnat = function () {
+    var f = J.championnat.fin, texte = $("ch-texte"), bilan = $("ch-bilan"), tous = [];
+    J.audio.stop();
+    $("ch-titre").textContent = f.titre;
+    if (J.histoire) { J.histoire.afficher($("ch-image"), "fin", "apres", "histoire-07-fin"); }
+    vider(texte); f.texte.forEach(function (t) { texte.appendChild(el("p", "", tx(t))); tous.push(tx(t)); });
+    vider(bilan); bilan.appendChild(el("strong", "", "Ton parcours :"));
+    var ul = el("ul"); bilan.appendChild(ul);
+    matchs().forEach(function (m) {
+      var r = J.progression.match(m.id);
+      ul.appendChild(el("li", "", R.eq(m.adversaire) + " : " + (r ? (r.nous + " – " + r.eux) : "—")));
+    });
+    $("btn-ecouter-fin").onclick = function () { J.audio.lire(tous.join(" ")); };
+    $("btn-ch-recommencer").onclick = function () { recommencer(); };
+    $("btn-ch-menu").onclick = function () { M.menu(); };
+    ecran("ecran-championnat");
+  };
+  function recommencer() {
+    if (root.confirm("Recommencer le championnat depuis le premier match ? Ton carnet de règles est gardé.")) {
+      J.progression.recommencerChampionnat(); M.menu();
+    }
   }
 
   /* ---------- branchements fixes ---------- */
@@ -591,6 +633,8 @@
       if (root.confirm("Quitter le match ? Il sera perdu.")) { J.grosplan.arreter(); J.audio.stop(); M.menu(); }
     };
     $("btn-vestiaire-menu").onclick = ouvrirVestiaire;
+    $("btn-recommencer").onclick = recommencer;
+    $("btn-fin-tournoi").onclick = function () { M.finChampionnat(); };
     $("btn-carnet-menu").onclick = ouvrirCarnet;
     $("btn-reset").onclick = function () {
       if (root.confirm("Effacer toute ma progression ?")) { J.progression.effacer(); M.menu(); }
@@ -605,4 +649,5 @@
 
   // pour les tests automatiques
   M._etat = function () { return { S: S, Q: Q }; };
+  M._finMatch = function () { return finMatch(); };
 })(typeof window !== "undefined" ? window : this);

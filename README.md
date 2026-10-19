@@ -46,6 +46,9 @@ assets/atlas/      les 12 coupes de joueurs + les gardiens (PNG incorporé dans 
 assets/decors, assets/ballon, manifest.js   images du décor (tribune, effet de vitesse)
 data/equipes/      couleurs et joueurs des 7 équipes (modifiable : une ligne par joueur)
 data/grosplan-reglages.js  TOUTES les scènes : positions, durées, poses, style de tir par niveau
+js/histoire.js     les écrans d'histoire : scènes composées avec les décors et les sprites (chantier 8)
+data/histoire-reglages.js  les 7 scènes d'histoire (+ version « après victoire ») : ambiance, décor, joueurs, poses
+outils-test/histoire.html  page de test : affiche toutes les scènes d'histoire
 outils-test/galerie.html   page de test : affiche toutes les scènes (ex. galerie.html?types=tir&niveaux=3,5)
 ```
 
@@ -68,3 +71,10 @@ Banque de défense : data/defense.js (40 questions) et data/regles-defense.js. V
 ## Chantier 5 bis (16/10/2026)
 Noms au choix (manga / Olive et Tom), gestes en contexte, énergie, sanctions, Misaki n°11. Voir 14-CHANTIER5B-GESTES-NOMS.md.
 Contrôle des questions : `node outils-test/verifier-questions.js`. Simulation d'équilibre : `node outils-test/simuler.js 0.6`.
+
+## Chantier 8 (18/10/2026)
+Championnat et histoire. Image d'histoire avant chaque match et au prologue, petit texte et image après une victoire,
+écran de fin du tournoi, boutons « Recommencer le championnat » (garde le carnet) et « Voir la fin du tournoi » (menu).
+Les images sont composées par le jeu (aucune image à fournir) ; pour mettre ta propre image : `assets/histoire/<nom>.png`
+(noms dans `data/championnat.js`, champ `image` ; `-victoire` ajouté pour l'image d'après victoire ; `histoire-07-fin` pour la fin).
+Tags de match (pluie, triche) : champ `tags` de chaque match dans `data/championnat.js`. Voir 18-CHANTIER8-RESULTATS.md.
