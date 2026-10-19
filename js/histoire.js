@@ -169,13 +169,14 @@
     ctx.fillStyle = "#ffffff"; ctx.fillRect(x - 16, y - 8 + 8, 32, 2);
   }
 
-  H.dessiner = function (canvas, idScene, mode, ms) {
+  H.dessiner = function (canvas, idScene, mode, ms, opts) {
     var r = Rg(), d = def(idScene, mode || "avant"), s = r && r.scenes[idScene];
     if (!r || !d || !s) { return false; }
     ms = ms || 0;
     var amb = r.ambiances[d.ambiance] || r.ambiances.jour, L = r.largeur, Ht = r.hauteur, hor = 108;
     var E = canvas.width / L, ctx = canvas.getContext("2d"), acts = [], i, a, eq, j, ap;
-    ctx.setTransform(E, 0, 0, E, 0, 0); ctx.imageSmoothingEnabled = false;
+    var haut = (opts && opts.haut) || 0;                          // vignette : on ne montre que le bas de la scène
+    ctx.setTransform(E, 0, 0, E, 0, -haut * E); ctx.imageSmoothingEnabled = false;
     ciel(ctx, amb, L, hor);
     if (amb.etoiles) { etoiles(ctx, ms); }
     nuages(ctx, amb);                    // (facultatif : amb.nuages ; aucun par défaut)
@@ -205,6 +206,17 @@
     });
     if (d.confettis || amb.confettis) { confettis(ctx, ms, L, Ht); }
     return true;
+  };
+
+  /* ---------- petite vignette (cartes du menu) : le bas de la scène, redessiné quand les images sont arrivées ---------- */
+  H.vignette = function (canvas, idScene, mode, haut) {
+    var n = 0;
+    H.preparer(idScene, function () {
+      (function redessiner() {
+        H.dessiner(canvas, idScene, mode, 0, { haut: haut || 0 });
+        if (n++ < 3) { root.setTimeout(redessiner, 350 * n); }       // les images de décor peuvent arriver après coup
+      })();
+    });
   };
 
   /* ---------- affichage dans la page ---------- */

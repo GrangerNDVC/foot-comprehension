@@ -33,7 +33,7 @@ function match(def, calib) {
     s.exclus.push(q.id);
     var ok1 = Math.random() < bonnePar(n), issue;
     if (ok1) { issue = "premier"; R.reponse(s, 1, true); }
-    else { R.reponse(s, 1, false); var ok2 = Math.random() < 0.5; if (ok2) { issue = "second"; R.reponse(s, 2, true); } else { issue = "rate"; R.reponse(s, 2, false); } }
+    else { R.reponse(s, 1, false); var ok2 = R.secondeChance(s, choix.id) && Math.random() < 0.5; if (ok2) { issue = "second"; R.reponse(s, 2, true); } else { issue = "rate"; R.reponse(s, 2, false); } }
     var att = (ph === "attaque"); (att ? garde : recup)[issue === "rate" ? 1 : 0]++; niv.push(n);
     R.conclure(s, choix.id, issue, choix.cible);
   }

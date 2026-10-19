@@ -112,7 +112,9 @@
       contre: (p.contre != null) ? p.contre : 1,            // position du ballon quand on perd la balle en attaquant (contre-attaque)
       contreTir: (p.contreTir != null) ? p.contreTir : 2,   // position après un tir raté (remise en jeu du gardien)
       sanctions: p.sanctions || [],
-      defenseBonus: p.defenseBonus || 0                     // niveau en plus pour les questions de défense et de gardien
+      defenseBonus: p.defenseBonus || 0,                    // niveau en plus pour les questions de défense
+      tirNiveau: (p.tirNiveau != null) ? p.tirNiveau : null,        // difficulté du geste « tir » (et de l'arrêt du gardien) dans ce match
+      montee: (p.montee != null) ? p.montee : (cfg().montee || 0)   // niveaux gagnés entre le début et la fin du match
     };
   }
 
@@ -230,11 +232,28 @@
   /* ---------- niveau de la question ---------- */
   // Le niveau = niveau du match + réglage + niveau du geste (plus il est risqué, plus la question est difficile)
   R.niveau = function (s, id) {
-    var g = R.geste(id), a = cfg().niveauAction, n = s.p.niveauBase + s.calibrage + s.ajust + (g.niveau || 0);
+    var g = R.geste(id), a = cfg().niveauAction, gn = g.niveau || 0;
+    if (g.action === "tir" || g.action === "gardien") {                                // le gardien : exactement aussi difficile que notre tir
+      gn = (s.p.tirNiveau != null) ? s.p.tirNiveau : (R.geste("tir").niveau || 0);
+    }
+    if (s.p.auto) { gn = Math.min(gn, 1); }                                           // match d'essai : jamais très dur
+    var n = s.p.niveauBase + s.calibrage + s.ajust + gn + R.montee(s);
     if (g.action === "dribble" && s.pos >= s.N - 2) { n += a.dribbleProche; }
     if (g.action === "tir" && s.pos < s.N - 1) { n += a.tirLointain; }
-    if (R.typeQuestion(id) === "defense") { n += s.p.defenseBonus; }
+    if (R.typeQuestion(id) === "defense" && g.action !== "gardien") { n += s.p.defenseBonus; }
     return borne(n, 1, 5);
+  };
+  // Niveaux gagnés grâce à l'avancée du match (0 au début, jusqu'à s.p.montee à la fin) : les textes s'allongent, les phrases se compliquent
+  R.montee = function (s) {
+    var m = s.p.montee || 0, total = 2 * s.p.actionsParMiTemps;
+    if (!m || !total) { return 0; }
+    var avance = Math.min(1, (s.stats.q || 0) / total);
+    return Math.min(m, Math.floor(avance * (m + 1)));
+  };
+  // Y a-t-il une deuxième chance pour cette action ? (tir et gardien : non, sauf au match d'essai)
+  R.secondeChance = function (s, id) {
+    var action = R.geste(id).action, l = cfg().sansSecondeChance || [];
+    return s.p.auto || l.indexOf(action) < 0;
   };
 
   // type de question (banque) pour chaque action
@@ -337,7 +356,7 @@
         ev.texte = contre ? "Quel contre de " + nomP + " ! " + nous + " récupère le ballon et file en avant !" :
                             "Beau tacle de " + nomP + " ! " + nous + " récupère le ballon.";
         gagner(s, g.gain || 1);
-      } else { ev.texte = contre ? nomA + " passe en force : le contre de " + nomP + " échoue !" : nomA + " évite le tacle !"; avancerAdversaire(s, ev); }
+      } else { ev.texte = contre ? nomA + " passe en force : le contre de " + nomP + " échoue, " + eux + " fonce vers notre but !" : nomA + " évite le tacle !"; avancerAdversaire(s, ev, g.recul); }
     } else if (action === "bloquer") {
       if (ok) {
         ev.texte = nomP + " bloque le tir !";
@@ -418,10 +437,11 @@
     R.placer(s);
   }
   // Défense ratée : l'adversaire avance, ou tire s'il est déjà tout près
-  function avancerAdversaire(s, ev) {
+  function avancerAdversaire(s, ev, crans) {
+    var n = crans || 1;
     s.defOk = 0;
-    if (s.pos <= 1) { s.tirAdverse = true; ev.texte += " Il tire !"; }
-    else { s.pos = s.pos - 1; s.adv = R.choisirAdv(s); }
+    if (s.pos <= 1 || s.pos - n < 1) { s.tirAdverse = true; ev.texte += " Il tire !"; }
+    else { s.pos = s.pos - n; s.adv = R.choisirAdv(s); }
   }
 
   /* ---------- le temps ---------- */

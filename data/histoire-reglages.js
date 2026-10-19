@@ -15,11 +15,16 @@
    - acteurs : { eq: "nous" | "adv", n: numéro de maillot, pose, x, y, flip, gardien }
        flip : true = le joueur regarde vers la GAUCHE (les adversaires le sont presque toujours)
        pose : une pose de l'atlas des joueurs (course__1 à 4, course-balle__1 à 4, saut__1, tir-sol__1,
-              reception-sol__1, tacle__1, arret__1 ...) ; pour un gardien : attrape__1, saut-haut__1, poing__1 ...
+              saut__1, tir-sol__1, tacle__1 ... ; attention : les poses « course-balle », « reception-sol », « tir-sol » contiennent un ballon) ; pour un gardien : attrape__1, saut-haut__1, poing__1 ...
        pose peut être une liste [p1, p2...] : la pose change 6 fois par seconde (course animée)
    - balle : { x, y } (centre du ballon), facultatif
    ============================================================ */
 window.JEU = window.JEU || {};
+
+/* Poses : « courir(k) » = course animée sans ballon, départ décalé (k = 0 à 3) pour que les joueurs ne bougent pas tous pareil.
+   Règle de cohérence : UN SEUL ballon par scène. Seule la pose « course-balle__1 » (ou une pose de tir) contient un ballon ;
+   toutes les autres poses ci-dessous n'en ont pas. N'ajoute un « balle: { x, y } » que si personne n'a de ballon dans sa pose. */
+function courir(k) { var c = ["course__1", "course__2", "course__3", "course__4"]; return c.slice(k).concat(c.slice(0, k)); }
 
 JEU.histoireReglages = {
   largeur: 256, hauteur: 224,
@@ -41,10 +46,10 @@ JEU.histoireReglages = {
       equipesBanniere: ["nankatsu"],
       avant: { ambiance: "matin", decor: "tribune",
         acteurs: [
-          { eq: "nous", n: 7,  pose: ["course__1", "course__2", "course__3", "course__4"], x: 44,  y: 182 },
-          { eq: "nous", n: 8,  pose: "reception-sol__1", x: 98,  y: 180 },
-          { eq: "nous", n: 9,  pose: "reception-sol__2", x: 158, y: 180 },
-          { eq: "nous", n: 11, pose: ["course__2", "course__3", "course__4", "course__1"], x: 212, y: 182 },
+          { eq: "nous", n: 7,  pose: courir(0), x: 44,  y: 182 },
+          { eq: "nous", n: 8,  pose: courir(1), x: 98,  y: 180 },
+          { eq: "nous", n: 9,  pose: courir(2), x: 158, y: 180 },
+          { eq: "nous", n: 11, pose: courir(1), x: 212, y: 182 },
           { eq: "nous", n: 10, pose: "course-balle__1", x: 128, y: 214 }
         ] }
     },
@@ -52,11 +57,11 @@ JEU.histoireReglages = {
     m1: { equipesBanniere: ["azumaichi"],
       avant: { ambiance: "jour", decor: "tribune",
         acteurs: [
-          { eq: "nous", n: 2,  pose: "reception-sol__1", x: 40,  y: 182 },
+          { eq: "nous", n: 2,  pose: courir(3), x: 40,  y: 182 },
           { eq: "nous", n: 10, pose: "course-balle__1", x: 92,  y: 212 },
-          { eq: "adv",  n: 9,  pose: "reception-sol__1", x: 214, y: 182, flip: true },
-          { eq: "adv",  n: 10, pose: "course__2", x: 166, y: 212, flip: true }
-        ], balle: { x: 132, y: 208 } },
+          { eq: "adv",  n: 9,  pose: courir(0), x: 214, y: 182, flip: true },
+          { eq: "adv",  n: 10, pose: courir(1), x: 166, y: 212, flip: true }
+        ] },
       apres: { ambiance: "fete", decor: "tribune",
         acteurs: [
           { eq: "nous", n: 10, pose: "saut__1", x: 64,  y: 206 },
@@ -67,8 +72,8 @@ JEU.histoireReglages = {
     m2: { equipesBanniere: ["nishikigaoka"],
       avant: { ambiance: "jour", decor: "but",
         acteurs: [
-          { eq: "nous", n: 10, pose: ["course-balle__1", "course-balle__2", "course-balle__3", "course-balle__4"], x: 70, y: 210 },
-          { eq: "nous", n: 9,  pose: ["course__1", "course__2", "course__3", "course__4"], x: 36, y: 186 },
+          { eq: "nous", n: 10, pose: "course-balle__1", x: 70, y: 210 },
+          { eq: "nous", n: 9,  pose: courir(0), x: 36, y: 186 },
           { eq: "adv",  n: 1,  gardien: true, pose: "attrape__1", x: 192, y: 196, flip: false }
         ] },
       apres: { ambiance: "fete", decor: "but",
@@ -81,9 +86,9 @@ JEU.histoireReglages = {
       avant: { ambiance: "jour", decor: "tableau",
         acteurs: [
           { eq: "nous", n: 10, pose: "course-balle__1", x: 76,  y: 212 },
-          { eq: "adv",  n: 10, pose: "course__3", x: 150, y: 212, flip: true },
-          { eq: "adv",  n: 9,  pose: "reception-sol__1", x: 214, y: 184, flip: true },
-          { eq: "nous", n: 2,  pose: "reception-sol__2", x: 28,  y: 184 }
+          { eq: "adv",  n: 10, pose: courir(2), x: 150, y: 212, flip: true },
+          { eq: "adv",  n: 9,  pose: courir(1), x: 214, y: 184, flip: true },
+          { eq: "nous", n: 2,  pose: courir(2), x: 28,  y: 184 }
         ] },
       apres: { ambiance: "fete", decor: "tableau",
         acteurs: [
@@ -95,9 +100,9 @@ JEU.histoireReglages = {
       avant: { ambiance: "soir", decor: "tribune",
         acteurs: [
           { eq: "nous", n: 10, pose: "course-balle__1", x: 84,  y: 212 },
-          { eq: "nous", n: 11, pose: "reception-sol__1", x: 34, y: 184 },
-          { eq: "adv",  n: 10, pose: "reception-sol__1", x: 174, y: 212, flip: true },
-          { eq: "adv",  n: 9,  pose: "course__2", x: 222, y: 184, flip: true }
+          { eq: "nous", n: 11, pose: courir(3), x: 34, y: 184 },
+          { eq: "adv",  n: 10, pose: courir(0), x: 174, y: 212, flip: true },
+          { eq: "adv",  n: 9,  pose: courir(1), x: 222, y: 184, flip: true }
         ] },
       apres: { ambiance: "fete", decor: "tribune",
         acteurs: [
@@ -110,9 +115,9 @@ JEU.histoireReglages = {
       avant: { ambiance: "gris", decor: "tribune",
         acteurs: [
           { eq: "nous", n: 11, pose: "course-balle__1", x: 74,  y: 212 },
-          { eq: "nous", n: 10, pose: "reception-sol__1", x: 30, y: 184 },
-          { eq: "adv",  n: 10, pose: "reception-sol__1", x: 176, y: 212, flip: true },
-          { eq: "adv",  n: 7,  pose: "course__2", x: 226, y: 184, flip: true }
+          { eq: "nous", n: 10, pose: courir(1), x: 30, y: 184 },
+          { eq: "adv",  n: 10, pose: courir(2), x: 176, y: 212, flip: true },
+          { eq: "adv",  n: 7,  pose: courir(1), x: 226, y: 184, flip: true }
         ] },
       apres: { ambiance: "fete", decor: "tribune",
         acteurs: [
@@ -125,9 +130,9 @@ JEU.histoireReglages = {
       avant: { ambiance: "nuit", decor: "tableau",
         acteurs: [
           { eq: "nous", n: 10, pose: "course-balle__1", x: 82,  y: 214 },
-          { eq: "adv",  n: 10, pose: "reception-sol__1", x: 176, y: 214, flip: true },
-          { eq: "adv",  n: 9,  pose: "course__2", x: 226, y: 190, flip: true },
-          { eq: "nous", n: 2,  pose: "reception-sol__2", x: 26, y: 186 }
+          { eq: "adv",  n: 10, pose: courir(3), x: 176, y: 214, flip: true },
+          { eq: "adv",  n: 9,  pose: courir(1), x: 226, y: 190, flip: true },
+          { eq: "nous", n: 2,  pose: courir(0), x: 26, y: 186 }
         ] },
       apres: { ambiance: "nuit", decor: "tableau", confettis: true,
         acteurs: [
@@ -135,6 +140,16 @@ JEU.histoireReglages = {
           { eq: "nous", n: 11, pose: "saut__1", x: 118, y: 192 },
           { eq: "nous", n: 9,  pose: "saut__1", x: 176, y: 210 },
           { eq: "nous", n: 7,  pose: "saut__1", x: 224, y: 192 }
+        ] } },
+
+    /* Écran d'accueil (menu) : l'équipe de Nankatsu, de nuit, devant la coupe */
+    accueil: { equipesBanniere: ["nankatsu"],
+      avant: { ambiance: "nuit", decor: "tableau", coupe: { x: 128, y: 206 },
+        acteurs: [
+          { eq: "nous", n: 7,  pose: courir(0), x: 40,  y: 192 },
+          { eq: "nous", n: 9,  pose: courir(2), x: 92,  y: 210 },
+          { eq: "nous", n: 10, pose: "course-balle__1", x: 178, y: 214 },
+          { eq: "nous", n: 11, pose: courir(1), x: 222, y: 194 }
         ] } },
 
     /* Écran de fin du championnat : la coupe, l'équipe qui saute de joie */

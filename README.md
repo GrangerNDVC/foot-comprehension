@@ -78,3 +78,8 @@ Championnat et histoire. Image d'histoire avant chaque match et au prologue, pet
 Les images sont composées par le jeu (aucune image à fournir) ; pour mettre ta propre image : `assets/histoire/<nom>.png`
 (noms dans `data/championnat.js`, champ `image` ; `-victoire` ajouté pour l'image d'après victoire ; `histoire-07-fin` pour la fin).
 Tags de match (pluie, triche) : champ `tags` de chaque match dans `data/championnat.js`. Voir 18-CHANTIER8-RESULTATS.md.
+
+## Réglages du 19/10/2026 (chantier 8 bis)
+Tir et arrêt du gardien : une seule chance (le match d'essai garde la deuxième). Contre raté : l'adversaire avance de 2 crans.
+Les questions montent en difficulté pendant le match (`montee`). Accueil refait. Un seul ballon par scène d'histoire.
+Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `recul`. Voir 18-CHANTIER8-RESULTATS.md et les « Règles de jeu validées » du plan.

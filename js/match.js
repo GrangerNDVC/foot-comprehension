@@ -56,11 +56,24 @@
   M.menu = function () {
     J.audio.stop(); if (J.grosplan) { J.grosplan.arreter(); }
     var zone = $("cartes"); vider(zone);
+    if (J.histoire) { J.histoire.afficher($("accueil-image"), "accueil", "avant", "histoire-accueil"); }
+    var gagnes = matchs().filter(function (m) { var r = J.progression.match(m.id); return r && r.gagne; }).length;
+    $("menu-progres").textContent = gagnes ? ("🏆 " + gagnes + " match" + (gagnes > 1 ? "s" : "") + " gagné" + (gagnes > 1 ? "s" : "") + " sur " + matchs().length) : "Six matchs t'attendent. Prêt ?";
     matchs().forEach(function (m, i) {
       var p = J.config.matchs[m.id] || {};
       var ouvert = tout() || J.progression.ouvert(i, matchs());
       var meilleur = J.progression.match(m.id);
-      var carte = el("div", "carte" + (ouvert ? "" : " verrou"));
+      var carte = el("div", "carte" + (ouvert ? "" : " verrou") + (meilleur && meilleur.gagne ? " gagne" : ""));
+      var eqAdv = root.EQUIPES && J.grosplanReglages && root.EQUIPES[J.grosplanReglages.equipeParMatch[m.id]];
+      if (eqAdv) { carte.style.borderColor = "rgb(" + eqAdv.maillot.join(",") + ")"; }
+      if (J.histoire) {
+        var vig = el("div", "vignette");
+        var cv = doc.createElement("canvas"); cv.width = 512; cv.height = 256; vig.appendChild(cv);
+        if (!ouvert) { vig.appendChild(el("div", "vignette-cadenas", "🔒")); }
+        if (meilleur && meilleur.gagne) { vig.appendChild(el("div", "vignette-coupe", "🏆")); }
+        carte.appendChild(vig);
+        J.histoire.vignette(cv, m.id, "avant", 96);
+      }
       carte.appendChild(el("div", "carte-num", p.auto ? "Match d'essai" : m.tour));
       carte.appendChild(el("h2", "", nomEquipe() + " – " + R.eq(m.adversaire)));
       var etoiles = ""; var k;
@@ -273,6 +286,7 @@
     var puce = el("div", "puce-action");
     puce.appendChild(el("span", "", lib.icone + " " + lib.texte + (Q.cible ? " : " + R.nom(Q.cible) : "")));
     puce.appendChild(el("span", "puce-niveau", "niveau " + Q.niveau));
+    if (!R.secondeChance(S, Q.action)) { puce.appendChild(el("span", "puce-unique", "⚠ Une seule chance !")); }
     p.appendChild(puce);
 
     Q.elConsigne = Q.elSituation = Q.elIndices = null;
@@ -448,7 +462,7 @@
     R.reponse(S, Q.essai, ok);
     majHud();
     if (ok) { return terminer(Q.essai === 1 ? "premier" : "second"); }
-    if (Q.essai === 1) {
+    if (Q.essai === 1 && R.secondeChance(S, Q.action)) {
       Q.essai = 2; Q.hint = true;
       if (k !== null) { Q.off[k] = true; marquerFausse(k); }
       remplirTextes(true);
@@ -650,4 +664,5 @@
   // pour les tests automatiques
   M._etat = function () { return { S: S, Q: Q }; };
   M._finMatch = function () { return finMatch(); };
+  M._tour = function () { return tour(); };
 })(typeof window !== "undefined" ? window : this);

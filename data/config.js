@@ -42,14 +42,22 @@ JEU.config = {
     lob:     { action: "passe",   texte: "Lob",          avance: 2, niveau: 1, cout: 10, cible: true,  aide: "Le ballon avance de deux crans" },
     uneDeux: { action: "passe",   texte: "Une-deux",     avance: 2, niveau: 1, cout: 0,  cible: true,  special: "une-deux", aide: "Leur spécialité : deux crans d'un coup" },
     dribble: { action: "dribble", texte: "Dribbler",     avance: 2, niveau: 0, cout: 10, aide: "Le ballon avance de deux crans" },
-    tir:     { action: "tir",     texte: "Tirer",        niveau: 1, cout: 20, aide: "Marque si tu réponds bien" },
-    couper:  { action: "couper",  texte: "Couper la passe", niveau: 0, cout: 0,  aide: "Récupère le ballon" },
+    tir:     { action: "tir",     texte: "Tirer",        niveau: 2, cout: 20, aide: "Question difficile, UNE SEULE chance : si tu rates, le ballon repart de l'autre côté" },
+    couper:  { action: "couper",  texte: "Couper la passe", niveau: 0, cout: 0,  aide: "Récupère le ballon. Si tu rates : ils avancent d'un cran" },
     tacler:  { action: "tacler",  texte: "Tacler",       niveau: 1, cout: 10, gain: 1, aide: "Récupère le ballon et avance d'un cran" },
-    contre:  { action: "tacler",  texte: "Contre",       niveau: 2, cout: 15, gain: 2, aide: "Très difficile : récupère le ballon et file en avant" },
+    contre:  { action: "tacler",  texte: "Contre",       niveau: 2, cout: 15, gain: 2, recul: 2, aide: "Très difficile : récupère le ballon et file en avant. Si tu rates : ils avancent de DEUX crans" },
     bloquer: { action: "bloquer", texte: "Bloquer le tir", niveau: 0, cout: 10, aide: "Seulement quand l'adversaire va tirer" },
     degager: { action: "degager", texte: "Dégager",      niveau: -1, cout: 0, aide: "Éloigne le danger" },
-    gardien: { action: "gardien", texte: "Arrêt du gardien", niveau: 1, cout: 0, aide: "" }
+    gardien: { action: "gardien", texte: "Arrêt du gardien", niveau: 2, cout: 0, aide: "" }      // même difficulté que notre tir (voir R.niveau)
   },
+  /* recul : crans perdus (ballon qui avance vers notre but) quand le geste de défense est raté ; 1 par défaut */
+
+  /* Une seule chance (pas de deuxième essai) pour ces actions. Le match d'essai garde toujours la deuxième chance. */
+  sansSecondeChance: ["tir", "gardien"],
+
+  /* Montée en difficulté pendant le match : la question gagne jusqu'à « montee » niveaux entre le début et la fin du match
+     (progressivement : textes plus longs et phrases plus complexes). Valeur par défaut ; chaque match peut avoir la sienne. */
+  montee: 2,
   /* Suppléments de niveau : dribble près du but, tir de loin */
   niveauAction: { dribbleProche: 1, tirLointain: 1 },
 
@@ -93,10 +101,12 @@ JEU.config = {
        defenseRequise : bonnes réponses de suite pour récupérer le ballon en « coupant » (1 par défaut)
        departAdv : où l'adversaire engage (0 = devant notre but, 2 par défaut) : plus c'est bas, plus c'est dangereux
        contre : où l'adversaire se retrouve quand on perd le ballon en attaquant (1 par défaut)
-       defenseBonus : niveau en plus pour les questions de défense et de gardien (0 par défaut) */
+       defenseBonus : niveau en plus pour les questions de défense (0 par défaut ; le gardien a la même difficulté que le tir)
+       tirNiveau : difficulté du tir et de l'arrêt du gardien dans ce match (par défaut celle du geste « tir » : 2) ; m2 = 1 pour un premier tir plus doux
+       montee : niveaux gagnés par les questions entre le début et la fin du match (voir plus haut) */
   matchs: {
-    m1: { nom: "Match d'essai", auto: true,  niveauBase: 2, actionsParMiTemps: 5,  prolongation: 0 },
-    m2: { auto: false, actionsAttaque: ["passe", "tir"],
+    m1: { nom: "Match d'essai", auto: true,  niveauBase: 2, montee: 0, actionsParMiTemps: 5,  prolongation: 0 },
+    m2: { auto: false, montee: 1, tirNiveau: 1, actionsAttaque: ["passe", "tir"],
           actionsDefense: ["couper", "tacler"], sanctions: [],                      actionsParMiTemps: 8,  prolongation: 4 },
     m3: { auto: false, departAdv: 1, actionsAttaque: ["passe", "lob", "dribble", "tir"],
           actionsDefense: ["couper", "tacler", "degager"], sanctions: ["jaune"],      actionsParMiTemps: 9,  prolongation: 4 },
