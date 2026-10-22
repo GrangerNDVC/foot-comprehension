@@ -5,7 +5,7 @@ var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8");
 var scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { window: {}, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } }; ctx.window = ctx; ctx.JEU = undefined; vm.createContext(ctx);
 ctx.JEU = ctx.JEU; scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });
 var J = ctx.JEU, pb = J.banque.verifier();
@@ -34,9 +34,9 @@ var vf = {0: 0, 1: 0, 2: 0}; att.filter(function (q) { return q.format === "vrai
 console.log("Banque d'attaque : " + att.length + " questions ; position de la bonne (choix) " + pos.join("/") + " ; la plus longue : " + plusLongue + "/" + nChoix);
 console.log("« On ne peut pas savoir » : bonne réponse " + nspBonne + " fois, mauvaise réponse " + nspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + vf[0] + "/" + vf[1] + "/" + vf[2]);
 
-/* Banque de défense (chantier 6) : 8 par niveau, formats, équilibre */
+/* Banque de défense (chantier 6) : 12 par niveau au moins, formats, équilibre */
 var dfs = tous.filter(function (q) { return /^def-/.test(q.id); });
-for (var nv = 1; nv <= 5; nv++) { var n8 = dfs.filter(function (q) { return q.niveau === nv; }).length; if (n8 !== 8) { console.log("PROBLÈME : niveau " + nv + " a " + n8 + " questions de défense (8 attendues)"); pb.push("niveau " + nv + " défense : " + n8); } }
+for (var nv = 1; nv <= 5; nv++) { var n8 = dfs.filter(function (q) { return q.niveau === nv; }).length; if (n8 < 12) { console.log("PROBLÈME : niveau " + nv + " a " + n8 + " questions de défense (12 au moins attendues)"); pb.push("niveau " + nv + " défense : " + n8); } }
 dfs.forEach(function (q) { if (q.type !== "defense") { pb.push(q.id + " : type defense attendu"); } });
 var dpos = [0, 0, 0, 0], dlongue = 0, dnChoix = 0, dnspBonne = 0, dnspMauvaise = 0, dscol = 0;
 dfs.forEach(function (q) {
@@ -48,9 +48,9 @@ dfs.forEach(function (q) {
 var dvf = [0, 0, 0]; dfs.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { dvf[q.bonne]++; });
 console.log("Banque de défense : " + dfs.length + " questions ; position de la bonne (choix) " + dpos.join("/") + " ; la plus longue : " + dlongue + "/" + dnChoix + " ; consignes scolaires : " + dscol);
 console.log("Défense, « On ne peut pas savoir » : bonne réponse " + dnspBonne + " fois (" + Math.round(100 * dnspBonne / dfs.length) + " %), mauvaise réponse " + dnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + dvf.join("/"));
-/* Banque de tirs (chantier 7) : 8 par niveau, formats, équilibre, textes scolaires */
+/* Banque de tirs (chantiers 7 et 9c) : 12 par niveau au moins, formats, équilibre, textes scolaires */
 var trs = tous.filter(function (q) { return /^tir-/.test(q.id); });
-for (var nt = 1; nt <= 5; nt++) { var n8t = trs.filter(function (q) { return q.niveau === nt; }).length; if (n8t !== 8) { console.log("PROBLÈME : niveau " + nt + " a " + n8t + " questions de tir (8 attendues)"); pb.push("niveau " + nt + " tir : " + n8t); } }
+for (var nt = 1; nt <= 5; nt++) { var n8t = trs.filter(function (q) { return q.niveau === nt; }).length; if (n8t < 12) { console.log("PROBLÈME : niveau " + nt + " a " + n8t + " questions de tir (12 au moins attendues)"); pb.push("niveau " + nt + " tir : " + n8t); } }
 if (tous.filter(function (q) { return q.type === "tir"; }).length !== trs.length) { pb.push("des questions de type tir ne sont pas dans data/tirs.js (provisoires restantes ?)"); }
 var tpos = [0, 0, 0, 0], tlongue = 0, tnChoix = 0, tnspBonne = 0, tnspMauvaise = 0, tscol = 0, ttexte = [];
 trs.forEach(function (q) {
@@ -64,5 +64,21 @@ trs.forEach(function (q) {
 var tvf = [0, 0, 0]; trs.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { tvf[q.bonne]++; });
 console.log("Banque de tirs : " + trs.length + " questions ; position de la bonne (choix) " + tpos.join("/") + " ; la plus longue : " + tlongue + "/" + tnChoix + " ; textes scolaires : " + tscol + " ; longueur des textes " + Math.min.apply(null, ttexte) + " à " + Math.max.apply(null, ttexte) + " mots");
 console.log("Tirs, « On ne peut pas savoir » : bonne réponse " + tnspBonne + " fois (" + Math.round(100 * tnspBonne / trs.length) + " %), mauvaise réponse " + tnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + tvf.join("/"));
+/* Banque de gardien (chantier 9b) : 12 par niveau au moins, type gardien, formats, équilibre */
+var gds = tous.filter(function (q) { return /^gar-/.test(q.id); });
+for (var ng = 1; ng <= 5; ng++) { var n12 = gds.filter(function (q) { return q.niveau === ng; }).length; if (n12 < 12) { console.log("PROBLÈME : niveau " + ng + " a " + n12 + " questions de gardien (12 au moins attendues)"); pb.push("niveau " + ng + " gardien : " + n12); } }
+if (tous.filter(function (q) { return q.type === "gardien"; }).length !== gds.length) { pb.push("des questions de type gardien ne sont pas dans data/gardien.js"); }
+var gpos = [0, 0, 0, 0], gnChoix = 0, gnspBonne = 0, gnspMauvaise = 0, gmots = {};
+gds.forEach(function (q) {
+  if (q.type !== "gardien") { pb.push(q.id + " : type gardien attendu"); }
+  var nsp = q.options.map(function (o) { return /On ne peut pas savoir/.test(o); });
+  if (q.format === "choix") { gnChoix++; gpos[q.bonne]++; }
+  if (q.format !== "barrer" && nsp[q.bonne]) { gnspBonne++; } else if (nsp.some(Boolean)) { gnspMauvaise++; }
+  var m = (q.consigne + " " + (q.situation || "")).replace(/\{[^}]*\}/g, "x").split(/\s+/).filter(Boolean).length;
+  (gmots[q.niveau] = gmots[q.niveau] || []).push(m);
+});
+var gvf = [0, 0, 0]; gds.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { gvf[q.bonne]++; });
+console.log("Banque de gardien : " + gds.length + " questions ; position de la bonne (choix) " + gpos.join("/") + " ; longueur consigne+situation par niveau (min-max) " + Object.keys(gmots).map(function (k) { return k + ":" + Math.min.apply(null, gmots[k]) + "-" + Math.max.apply(null, gmots[k]); }).join(" "));
+console.log("Gardien, « On ne peut pas savoir » : bonne réponse " + gnspBonne + " fois (" + Math.round(100 * gnspBonne / Math.max(1, gds.length)) + " %), mauvaise réponse " + gnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + gvf.join("/"));
 console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ")" : "Contrôle complet : aucun problème.");
 process.exit(pb.length ? 1 : 0);

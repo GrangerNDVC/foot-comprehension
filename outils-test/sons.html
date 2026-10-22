@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test des sons</title>
+<style>
+body { font-family: sans-serif; margin: 12px; max-width: 760px; }
+h1 { font-size: 22px; } h2 { font-size: 18px; margin-top: 22px; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border-bottom: 1px solid #ccc; padding: 8px 6px; text-align: left; }
+button { font-size: 18px; padding: 8px 14px; margin: 2px; }
+.ok { color: #0a7d2c; font-weight: bold; } .syn { color: #b36b00; font-weight: bold; } .non { color: #b00020; font-weight: bold; }
+</style></head><body>
+<h1>🔊 Test des sons du jeu</h1>
+<p>Appuie d'abord sur « Activer le son » (obligatoire sur iPad), puis sur ▶ à côté de chaque son.
+<b>✔ fichier</b> = ton fichier .mp3 est trouvé et lu. <b>⚠ synthèse</b> = fichier absent : le jeu utilise le bruit fabriqué.</p>
+<p><button id="activer">Activer le son</button> <button id="rafraichir">Actualiser les états</button></p>
+<h2>Bruitages (assets/audio/sfx/)</h2><table id="t-effets"></table>
+<h2>Musiques (assets/audio/musique/)</h2><table id="t-musiques"></table>
+<p><button id="stop">⏹ Arrêter la musique</button></p>
+<script src="../data/sons-reglages.js"></script>
+<script src="../js/sons.js"></script>
+<script>
+(function () {
+  var J = window.JEU, R = J.sonsReglages;
+  R.dossier = "../" + R.dossier;                                // cette page est dans outils-test/
+  function $(i) { return document.getElementById(i); }
+  function ligne(t, nom, joue) {
+    var tr = document.createElement("tr"), a = document.createElement("td"), b = document.createElement("td"), c = document.createElement("td");
+    a.textContent = nom; c.id = "e-" + t + "-" + nom; c.textContent = "…";
+    var bt = document.createElement("button"); bt.textContent = "▶"; bt.onclick = function () { J.sons.deverrouiller(); joue(nom); };
+    b.appendChild(bt); tr.appendChild(a); tr.appendChild(b); tr.appendChild(c); $("t-" + t).appendChild(tr);
+  }
+  Object.keys(R.effets).forEach(function (n) { ligne("effets", n, function (x) { J.sons.jouer(x); }); });
+  Object.keys(R.musiques).forEach(function (n) { ligne("musiques", n, function (x) { J.sons.musique(x, { boucle: false }); }); });
+  function maj() {
+    var e = J.sons.etat();
+    Object.keys(e).forEach(function (n) {
+      var c = $("e-effets-" + n), s = e[n];
+      c.className = s === "fichier" ? "ok" : (s === "synthese" ? "syn" : "");
+      c.textContent = s === "fichier" ? "✔ fichier ." + J.sons.formatDe(n) : (s === "synthese" ? "⚠ synthèse (pas de fichier)" : "… " + s);
+    });
+    Object.keys(R.musiques).forEach(function (n) {
+      J.sons.tester(n, function (r) {
+        var c = $("e-musiques-" + n); c.className = /^fichier/.test(r) ? "ok" : "non";
+        c.textContent = /^fichier/.test(r) ? "✔ " + r : "✖ " + r + " (silence dans le jeu)";
+      });
+    });
+  }
+  $("activer").onclick = function () { J.sons.deverrouiller(); setTimeout(maj, 1200); };
+  $("rafraichir").onclick = maj;
+  $("stop").onclick = function () { J.sons.arreterMusique(); };
+})();
+</script></body></html>

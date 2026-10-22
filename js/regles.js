@@ -262,6 +262,7 @@
     if (action === "passe") { return "passe"; }
     if (action === "dribble") { return "dribble"; }
     if (action === "tir") { return "tir"; }
+    if (action === "gardien") { return "gardien"; }
     return "defense";
   };
 

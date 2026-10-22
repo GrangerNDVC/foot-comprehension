@@ -2,6 +2,7 @@
 (function () {
   var J = window.JEU = window.JEU || {};
   function demarrer() {
+    if (J.sons) { J.sons.brancher(); }
     J.match.brancher();
     J.match.menu();
   }

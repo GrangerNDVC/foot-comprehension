@@ -9,12 +9,15 @@
         var u = new SpeechSynthesisUtterance(texte);
         u.lang = "fr-FR";
         u.rate = 0.85;
+        var fin = function () { try { if (J.sons) { J.sons.baisserMusique(false); } } catch (e) {} };
+        u.onend = fin; u.onerror = fin;
+        try { if (J.sons) { J.sons.baisserMusique(true); } } catch (e) {}
         window.speechSynthesis.speak(u);
         return true;
       } catch (e) { return false; }
     },
     stop: function () {
-      try { window.speechSynthesis.cancel(); } catch (e) {}
+      try { window.speechSynthesis.cancel(); if (J.sons) { J.sons.baisserMusique(false); } } catch (e) {}
     }
   };
 })();

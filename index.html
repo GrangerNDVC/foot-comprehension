@@ -22,6 +22,8 @@
       <button id="btn-fin-tournoi" class="gros" hidden>🏆 Voir la fin du tournoi</button>
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
       <button id="btn-noms" class="petit"></button>
+      <button id="btn-son-menu" class="petit" data-son="effets"></button>
+      <button id="btn-musique-menu" class="petit" data-son="musique"></button>
       <button id="btn-carnet-menu" class="petit">📒 Carnet de règles</button>
       <button id="btn-recommencer" class="petit discret">🔄 Recommencer le championnat</button>
       <button id="btn-reset" class="petit discret">Effacer ma progression</button>
@@ -48,6 +50,7 @@
   <section id="ecran-match" class="ecran" hidden>
     <header id="m-hud">
       <button id="btn-menu" class="petit">☰</button>
+      <button id="btn-son-match" class="petit" data-son="tout" title="Son : oui / non"></button>
       <div id="hud-score"></div>
       <div id="hud-temps"></div>
       <div id="hud-sanctions" hidden title="Cartons et blessures"></div>
@@ -138,8 +141,11 @@
 <script src="data/defense.js"></script>
 <script src="data/regles-tirs.js"></script>
 <script src="data/tirs.js"></script>
+<script src="data/gardien.js"></script>
 <script src="data/noms.js"></script>
 <script src="js/audio.js"></script>
+<script src="data/sons-reglages.js"></script>
+<script src="js/sons.js"></script>
 <script src="js/progression.js"></script>
 <script src="js/noms.js"></script>
 <script src="js/regles.js"></script>

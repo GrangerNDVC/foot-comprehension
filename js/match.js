@@ -40,6 +40,21 @@
   function nomEquipe() { return R.eq(J.championnat.equipe); }
   function adv() { return R.eq(S.def.adversaire); }
   function tx(t) { return J.noms ? J.noms.texte(t) : t; }
+  // Sons (chantier 10) : le jeu reste jouable si le son manque ou échoue
+  function son(nom) { try { if (J.sons) { J.sons.jouer(nom); } } catch (e) {} }
+  function sonApres(nom, ms) { try { if (J.sons) { J.sons.jouerApres(nom, ms); } } catch (e) {} }
+  function musique(nom, opts) { try { if (J.sons) { J.sons.musique(nom, opts); } } catch (e) {} }
+  function musiqueMatch() { var r = J.sonsReglages || {}; return (IDX >= (r.matchTension || 4)) ? "match-tension" : "match"; }
+  // Les bruitages de l'action qui vient d'être jouée (un peu après le « ding » de la réponse)
+  function sonsAction(ev) {
+    var a = ev.action, d = 450;
+    if (a === "passe" || a === "dribble") { if (ev.ok) { sonApres("coup-de-pied", d); } }
+    else if (a === "tir") { sonApres("tir", d); sonApres(ev.but === "nous" ? "but-nous" : "arret-gardien", d + 650); }
+    else if (a === "gardien") { if (ev.ok) { sonApres("arret-gardien", d); } else { sonApres("tir", d); sonApres("but-adverse", d + 500); } }
+    else if (a === "degager") { if (ev.ok) { sonApres("coup-de-pied", d); } }
+    else if (a === "couper" || a === "tacler" || a === "bloquer") { if (ev.ok) { sonApres("tacle", d); } }
+    if (ev.sanction) { sonApres(ev.sanction.type === "blessure" ? "blessure" : "carton", d + 1000); }
+  }
 
   // Écrit un texte dans un élément ; si `mot` est donné, le surligne (sans accent ni casse)
   function remplirTexte(parent, texte, mot, surligne) {
@@ -54,6 +69,7 @@
 
   /* ---------- menu ---------- */
   M.menu = function () {
+    if (J.sons) { J.sons.annulerAttentes(); } musique("menu");
     J.audio.stop(); if (J.grosplan) { J.grosplan.arreter(); }
     var zone = $("cartes"); vider(zone);
     if (J.histoire) { J.histoire.afficher($("accueil-image"), "accueil", "avant", "histoire-accueil"); }
@@ -103,6 +119,7 @@
 
   /* ---------- avant le match ---------- */
   M.avant = function (i) {
+    if (J.sons) { J.sons.annulerAttentes(); } musique("histoire");
     IDX = i;
     var m = matchs()[i], p = J.config.matchs[m.id] || {};
     if (J.grosplan && J.grosplan.preparer) { J.grosplan.preparer(m); }      // décode les images pendant que l'élève lit
@@ -136,6 +153,7 @@
   /* ---------- démarrage ---------- */
   M.demarrer = function (i) {
     IDX = i;
+    if (J.sons) { J.sons.annulerAttentes(); } son("sifflet-debut"); musique(musiqueMatch());
     S = R.nouveau(matchs()[i], { calibrage: J.progression.calibrage() });
     if (J.grosplan && J.grosplan.preparer) { J.grosplan.preparer(S.def); }
     Q = null;
@@ -233,7 +251,7 @@
   /* ---------- une question ---------- */
   function etiquette(item) {
     if (item.type === "passe") { return item.indices ? "Indices" : "Commentaire du match"; }
-    if (item.type === "defense") { return "Consigne de l'entraîneur"; }
+    if (item.type === "defense" || item.type === "gardien") { return "Consigne de l'entraîneur"; }
     if (item.type === "dribble") { return "Phrase de départ"; }
     return "Texte";
   }
@@ -398,7 +416,7 @@
     return t.join(" ... ");
   }
   function varMethode() {
-    var par = { passe: 0, defense: 1, dribble: 2, tir: 3 };
+    var par = { passe: 0, defense: 1, dribble: 2, tir: 3, gardien: 3 };
     var pal = J.paliers[par[Q ? Q.item.type : "defense"] || 0];
     return pal.methode;
   }
@@ -460,10 +478,12 @@
 
   function valider(ok, k) {
     R.reponse(S, Q.essai, ok);
+    son(ok ? "bonne-reponse" : "mauvaise-reponse");
     majHud();
     if (ok) { return terminer(Q.essai === 1 ? "premier" : "second"); }
     if (Q.essai === 1 && R.secondeChance(S, Q.action)) {
       Q.essai = 2; Q.hint = true;
+      sonApres("indice", 350);
       if (k !== null) { Q.off[k] = true; marquerFausse(k); }
       remplirTextes(true);
       Q.elFeedback.className = "feedback ko";
@@ -509,6 +529,7 @@
     majOutils();
 
     narration(ev.texte);
+    sonsAction(ev);
     if (ev.sanction) {
       var sa = el("div", "sanction sanction-" + ev.sanction.type, ev.sanction.texte);
       Q.elRemede.appendChild(sa);
@@ -541,6 +562,7 @@
 
   /* ---------- mi-temps, prolongation ---------- */
   function ecranMiTemps() {
+    son("sifflet-mitemps"); musique("mi-temps");
     majHud(); dessinerCarte(); narration("");
     var p = $("m-panneau"); vider(p);
     $("ecran-match").className = "ecran etat-pause";
@@ -553,10 +575,11 @@
                        : "Continue comme ça : tu lis bien.");
     p.appendChild(d);
     var b = el("button", "gros", "Reprendre ▶");
-    b.onclick = function () { R.secondeMiTemps(S); tour(); };
+    b.onclick = function () { musique(musiqueMatch()); R.secondeMiTemps(S); tour(); };
     p.appendChild(b);
   }
   function ecranProlongation() {
+    son("prolongation"); musique("match-tension");
     majHud(); dessinerCarte(); narration("");
     var p = $("m-panneau"); vider(p);
     $("ecran-match").className = "ecran etat-pause";
@@ -571,6 +594,7 @@
   /* ---------- fin du match ---------- */
   function finMatch() {
     var res = S.resultat, m = matchs()[IDX];
+    son("sifflet-fin");
     var p = J.config.matchs[m.id] || {};
     // Le match d'essai ne bloque jamais : il sert à régler le niveau, on passe au suivant quoi qu'il arrive
     var pris = (p.auto) ? { nous: res.nous, eux: res.eux, gagne: true } : res;
@@ -615,12 +639,13 @@
     $("btn-rejouer").onclick = function () { M.demarrer(IDX); };
     $("btn-retour-menu").onclick = function () { M.menu(); };
     ecran("ecran-fin");
+    musique((res.gagne || p.auto) ? "victoire" : "defaite", { apres: 1800, boucle: false });
   }
 
   /* ---------- fin du championnat ---------- */
   M.finChampionnat = function () {
     var f = J.championnat.fin, texte = $("ch-texte"), bilan = $("ch-bilan"), tous = [];
-    J.audio.stop();
+    J.audio.stop(); if (J.sons) { J.sons.annulerAttentes(); } son("victoire-tournoi"); musique("fin-championnat", { apres: 2500, boucle: false });
     $("ch-titre").textContent = f.titre;
     if (J.histoire) { J.histoire.afficher($("ch-image"), "fin", "apres", "histoire-07-fin"); }
     vider(texte); f.texte.forEach(function (t) { texte.appendChild(el("p", "", tx(t))); tous.push(tx(t)); });
