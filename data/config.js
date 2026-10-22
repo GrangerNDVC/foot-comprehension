@@ -28,7 +28,8 @@ JEU.config = {
     depart: 50,
     gainPremierEssai: 10,     // bonne réponse du premier coup
     gainDeuxiemeEssai: 5,     // bonne réponse à la deuxième chance
-    aideEliminer: 25          // dépenser de l'énergie pour éliminer une mauvaise réponse
+    aideEliminer: 25,         // dépenser de l'énergie pour éliminer une mauvaise réponse
+    reprise: 10               // énergie retrouvée après un épuisement (énergie à 0 : le ballon est perdu)
   },
 
   /* LES GESTES : ce que l'élève choisit « en contexte ».

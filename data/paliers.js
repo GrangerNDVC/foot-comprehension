@@ -56,9 +56,9 @@ JEU.paliers = [
   }
 ];
 
-/* Le Vestiaire : les petits mots importants, toujours consultables */
+/* Les petits mots importants : sert à expliquer le sens des mots listés dans « Vu à l'entraînement » (js/match.js) */
 JEU.vestiaire = [
-  { mot: "avant / après / puis", sens: "L'ordre des actions : ce qui se passe en premier, en deuxième." },
+  { mot: "avant / après / puis / ensuite / d'abord / enfin", sens: "L'ordre des actions : ce qui se passe en premier, en deuxième." },
   { mot: "sauf", sens: "Une exception : tout est permis SAUF ce qui est dit après." },
   { mot: "seulement / uniquement", sens: "Un seul cas est possible, pas les autres." },
   { mot: "ne … pas / jamais / aucun", sens: "Le contraire : cela ne se passe pas." },

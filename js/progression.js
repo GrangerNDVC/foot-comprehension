@@ -14,6 +14,7 @@
     if (!o || typeof o !== "object") { o = {}; }
     o.matchs = o.matchs || {};
     o.carnet = o.carnet || {};
+    o.mots = o.mots || {};
     if (typeof o.calibrage !== "number") { o.calibrage = 0; }
     memoire = o;
     return o;
@@ -73,6 +74,21 @@
       return sortie;
     },
 
+    /* « Vu à l'entraînement » : les petits mots (ou la règle, si le mot contient un nom de joueur) qui ont posé problème.
+       Une entrée est créée à la première erreur ; deux réussites de suite la marquent comme maîtrisée. */
+    noterMot: function (mot, regle, ok) {
+      if (!mot && !regle) { return; }
+      var m = lire().mots, cle = mot ? "m:" + String(mot).toLowerCase() : "r:" + regle, r = m[cle];
+      if (!r) { if (ok) { return; } r = m[cle] = { mot: mot || null, regle: regle || null, rate: 0, serie: 0 }; }
+      if (ok) { r.serie++; } else { r.rate++; r.serie = 0; }
+      ecrire();
+    },
+    mots: function () {
+      var m = lire().mots, sortie = [], k;
+      for (k in m) { if (m.hasOwnProperty(k) && m[k].rate > 0) { sortie.push({ mot: m[k].mot, regle: m[k].regle, rate: m[k].rate, maitrise: m[k].serie >= 2 }); } }
+      return sortie;
+    },
+
     // Prénoms : "manga" ou "francais" (choix de l'élève)
     modeNoms: function () { return lire().noms === "francais" ? "francais" : "manga"; },
     fixerModeNoms: function (m) { lire().noms = m; ecrire(); },
@@ -91,6 +107,6 @@
       var d = lire(); d.matchs = {}; d.prologue = false; ecrire();
     },
 
-    effacer: function () { var m = lire().noms; memoire = { matchs: {}, carnet: {}, calibrage: 0, noms: m }; ecrire(); }
+    effacer: function () { var m = lire().noms; memoire = { matchs: {}, carnet: {}, mots: {}, calibrage: 0, noms: m }; ecrire(); }
   };
 })(typeof window !== "undefined" ? window : this);

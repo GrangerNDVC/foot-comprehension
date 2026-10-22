@@ -196,6 +196,7 @@
     if (S.etat === "mitemps") { return ecranMiTemps(); }
     if (S.etat === "prolongation") { return ecranProlongation(); }
     if (S.etat === "fin") { return finMatch(); }
+    var epuise = (R.phase(S) === "attaque") && R.epuise(S);     // énergie à zéro : l'adversaire récupère le ballon
     majHud();
     dessinerCarte();
     if (root.scrollTo) { root.scrollTo(0, 0); }          // nouvelle action : on remonte en haut de l'écran
@@ -212,7 +213,9 @@
                 R.nomAdv(S, S.adv) + " a le ballon et attaque.");
       return engager(a, a === "passe" ? R.candidats(S)[0] : null);
     }
-    narration(ph === "attaque" ? nomEquipe() + " a le ballon." : adv() + " attaque !");
+    narration((epuise ? "Plus de souffle ! " + nomEquipe() + " perd le ballon. " : "") +
+              (ph === "attaque" ? nomEquipe() + " a le ballon." : adv() + " attaque !"));
+    if (epuise) { son("sifflet-mitemps"); }
     menu(ph);
   }
 
@@ -245,7 +248,7 @@
       liste.appendChild(b);
     });
     p.appendChild(liste);
-    p.appendChild(el("div", "aide-etoiles", "★ = difficulté de la question · ⚡ = énergie dépensée"));
+    p.appendChild(el("div", "aide-etoiles", "★ = difficulté de la question · ⚡ = énergie dépensée (à zéro, le ballon est perdu)"));
   }
 
   /* ---------- une question ---------- */
@@ -381,11 +384,12 @@
     var o = el("div", "outils");
     var ec = el("button", "petit", "🔊 Écouter"); ec.onclick = function () { J.audio.lire(textePourLire()); };
     var va = el("button", "petit", "📺 Aide VAR"); va.onclick = ouvrirVAR;
-    var ve = el("button", "petit", "🎽 Vestiaire"); ve.onclick = ouvrirVestiaire;
+    var ve = el("button", "petit", "🎽 Vestiaire"); ve.onclick = function () { ouvrirVestiaire(true); };
+    var vu = el("button", "petit", "📋 Vu"); vu.onclick = ouvrirVu;
     var ca = el("button", "petit", "📒 Carnet"); ca.onclick = ouvrirCarnet;
     Q.btnGuts = el("button", "petit guts", "⭐ Éliminer une erreur (⚡ " + J.config.energie.aideEliminer + ")");
     Q.btnGuts.onclick = aideEnergie;
-    [ec, va, ve, ca, Q.btnGuts].forEach(function (b) { o.appendChild(b); });
+    [ec, va, ve, vu, ca, Q.btnGuts].forEach(function (b) { o.appendChild(b); });
     return o;
   }
   function majOutils() {
@@ -425,12 +429,68 @@
     varMethode().forEach(function (m) { ul.appendChild(el("li", "", m)); });
     $("modal-var").hidden = false;
   }
-  function ouvrirVestiaire() {
-    var t = $("table-vestiaire"); vider(t);
-    J.vestiaire.forEach(function (v) {
-      var tr = el("tr"); tr.appendChild(el("th", "", v.mot)); tr.appendChild(el("td", "", v.sens)); t.appendChild(tr);
+  // Le Vestiaire : les joueurs par équipe, avec leur poste (noms du manga ou d'« Olive et Tom » selon le choix de l'élève)
+  var POSTES = [["gardien", "Gardien"], ["défenseur", "Défenseurs"], ["milieu", "Milieux"], ["attaquant", "Attaquants"]];
+  function ouvrirVestiaire(dansMatch) {
+    var c = $("vestiaire-contenu"); vider(c);
+    var nous = R.eq(J.championnat.equipe), banc = J.config.banc || [], titulaires = J.config.titulaires || [];
+    c.appendChild(el("h3", "", nous));
+    var t = el("table", "table-vestiaire");
+    POSTES.forEach(function (p) {
+      var l = J.championnat.joueurs.filter(function (j) { return j.poste === p[0]; });
+      if (!l.length) { return; }
+      var noms = l.map(function (j) {
+        var n = J.noms.joueur(j.n) + " (n°" + j.n + ")" + (j.capitaine ? " ©" : "") + (banc.indexOf(j.n) >= 0 && titulaires.indexOf(j.n) < 0 ? " – remplaçant" : "");
+        return n;
+      });
+      var tr = el("tr"); tr.appendChild(el("th", "", p[1])); tr.appendChild(el("td", "", noms.join(", "))); t.appendChild(tr);
     });
+    c.appendChild(t);
+    if (dansMatch === true && S && S.def) {
+      c.appendChild(el("h3", "", R.eq(S.def.adversaire) + " (les adversaires sont reconnus à leur numéro)"));
+      var t2 = el("table", "table-vestiaire");
+      [["Gardien", "n°1"], ["Défenseurs", "n°2 à n°5"], ["Milieux", "n°6 à n°8"], ["Attaquants", "n°9 à n°11"]].forEach(function (p) {
+        var tr = el("tr"); tr.appendChild(el("th", "", p[0])); tr.appendChild(el("td", "", p[1])); t2.appendChild(tr);
+      });
+      c.appendChild(t2);
+    }
     $("modal-vestiaire").hidden = false;
+  }
+  // « Vu à l'entraînement » : ce qui a posé problème, inscrit au fil des questions
+  function sensDuMot(mot) {
+    if (!mot) { return null; }
+    var m = String(mot).toLowerCase(), i, j, v, mots, re;
+    for (i = 0; i < (J.vestiaire || []).length; i++) {
+      v = J.vestiaire[i]; mots = v.mot.split(/\s*(?:\/|…)\s*/);
+      for (j = 0; j < mots.length; j++) {
+        if (mots[j].length < 3) { continue; }
+        re = new RegExp("(^|[^a-zà-ÿ])" + mots[j].toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![a-zà-ÿ])");
+        if (re.test(m)) { return v.sens; }
+      }
+    }
+    return null;
+  }
+  function ouvrirVu() {
+    var ul = $("liste-vu"); vider(ul);
+    var l = J.progression.mots();
+    $("vu-vide").hidden = l.length > 0;
+    l.sort(function (a, b) { return (a.maitrise ? 1 : 0) - (b.maitrise ? 1 : 0) || b.rate - a.rate; });
+    l.forEach(function (r) {
+      var li = el("li", r.maitrise ? "maitrisee" : "");
+      li.appendChild(el("span", "carnet-etat", r.maitrise ? "✅" : "🔁"));
+      var corps = el("span", "");
+      if (r.mot) { corps.appendChild(el("strong", "", "« " + r.mot + " » ")); }
+      corps.appendChild(doc.createTextNode(sensDuMot(r.mot) || J.regles_texte[r.regle] || r.regle || ""));
+      corps.appendChild(el("small", "vu-fois", "  (raté " + r.rate + " fois)"));
+      li.appendChild(corps);
+      ul.appendChild(li);
+    });
+    $("modal-vu").hidden = false;
+  }
+  // Le petit mot de la question, seulement s'il ne contient pas de nom de joueur (sinon on garde la règle)
+  function motBrut(it) {
+    var q = J.banque.toutes().filter(function (x) { return x.id === it._brut; })[0];
+    return (q && q.mot && q.mot.indexOf("{") < 0) ? q.mot : null;
   }
   function ouvrirCarnet() {
     var ul = $("liste-carnet"); vider(ul);
@@ -509,6 +569,7 @@
     });
     remplirTextes(true);
     J.progression.noterRegle(it.regle, issue === "premier");
+    J.progression.noterMot(motBrut(it), it.regle, issue === "premier");
     if (issue === "rate") { S.dernierRate = it.id; if (S.reglesRatees.indexOf(it.regle) < 0) { S.reglesRatees.push(it.regle); } }
 
     var ev = R.conclure(S, Q.action, issue, Q.cible);
@@ -671,7 +732,8 @@
     $("btn-menu").onclick = function () {
       if (root.confirm("Quitter le match ? Il sera perdu.")) { J.grosplan.arreter(); J.audio.stop(); M.menu(); }
     };
-    $("btn-vestiaire-menu").onclick = ouvrirVestiaire;
+    $("btn-vestiaire-menu").onclick = function () { ouvrirVestiaire(false); };
+    $("btn-vu-menu").onclick = ouvrirVu;
     $("btn-recommencer").onclick = recommencer;
     $("btn-fin-tournoi").onclick = function () { M.finChampionnat(); };
     $("btn-carnet-menu").onclick = ouvrirCarnet;
@@ -681,7 +743,7 @@
     var f = doc.querySelectorAll("[data-fermer]"), i;
     for (i = 0; i < f.length; i++) {
       f[i].onclick = function () {
-        $("modal-var").hidden = true; $("modal-vestiaire").hidden = true; $("modal-carnet").hidden = true;
+        $("modal-var").hidden = true; $("modal-vestiaire").hidden = true; $("modal-carnet").hidden = true; $("modal-vu").hidden = true;
       };
     }
   };

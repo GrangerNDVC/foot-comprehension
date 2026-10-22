@@ -17,6 +17,7 @@ function match(def, calib) {
   while (s.etat !== "fin" && guard++ < 500) {
     if (s.etat === "mitemps") { R.secondeMiTemps(s); continue; }
     if (s.etat === "prolongation") { R.prolongation(s); continue; }
+    if (R.epuise(s)) { continue; }
     var ph = R.phase(s), choix, a;
     if (s.p.auto) { var id = R.autoAction(s); choix = { id: id, cible: id === "passe" ? R.candidats(s)[0] : null }; }
     else {

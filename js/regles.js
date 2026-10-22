@@ -431,6 +431,15 @@
     s.pos = Math.min(s.pos, s.p.contre);
     s.adv = R.choisirAdv(s); s.porteur = nousEnFace(s);
   }
+  // Énergie à zéro quand on a le ballon : l'équipe est essoufflée, l'adversaire récupère le ballon (pas au match d'essai).
+  // Renvoie true si le ballon vient d'être perdu. L'énergie remonte un peu pour ne pas recommencer tout de suite.
+  R.epuise = function (s) {
+    if (s.p.auto || s.poss !== "nous" || s.energie > 0 || s.etat !== "jeu") { return false; }
+    s.energie = cfg().energie.reprise || 10;
+    s.stats.epuise = (s.stats.epuise || 0) + 1;
+    perdre(s);
+    return true;
+  };
   // Ballon récupéré (bonus = crans gagnés en même temps)
   function gagner(s, bonus) {
     s.poss = "nous"; s.tirAdverse = false; s.defOk = 0;

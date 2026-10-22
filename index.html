@@ -24,6 +24,7 @@
       <button id="btn-noms" class="petit"></button>
       <button id="btn-son-menu" class="petit" data-son="effets"></button>
       <button id="btn-musique-menu" class="petit" data-son="musique"></button>
+      <button id="btn-vu-menu" class="petit">📋 Vu à l'entraînement</button>
       <button id="btn-carnet-menu" class="petit">📒 Carnet de règles</button>
       <button id="btn-recommencer" class="petit discret">🔄 Recommencer le championnat</button>
       <button id="btn-reset" class="petit discret">Effacer ma progression</button>
@@ -112,8 +113,16 @@
   </div>
   <div class="modal" id="modal-vestiaire" hidden>
     <div class="carte-modal">
-      <h2>🎽 Le Vestiaire : les petits mots importants</h2>
-      <table id="table-vestiaire"></table>
+      <h2>🎽 Le Vestiaire : les joueurs</h2>
+      <div id="vestiaire-contenu"></div>
+      <button class="gros" data-fermer>Fermer</button>
+    </div>
+  </div>
+  <div class="modal" id="modal-vu" hidden>
+    <div class="carte-modal">
+      <h2>📋 Vu à l'entraînement</h2>
+      <p id="vu-vide">Rien pour l'instant : au fil des questions, les petits mots qui t'ont posé problème s'inscrivent ici.</p>
+      <ul id="liste-vu"></ul>
       <button class="gros" data-fermer>Fermer</button>
     </div>
   </div>

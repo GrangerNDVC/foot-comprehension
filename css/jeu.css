@@ -173,10 +173,14 @@ button.guts:disabled { opacity: .35; }
                max-height: 90vh; overflow: auto; }
 .carte-modal h2 { margin-top: 0; }
 .carte-modal li { margin: 8px 0; }
-#table-vestiaire { border-collapse: collapse; width: 100%; font-size: 16px; }
-#table-vestiaire th { text-align: left; color: #1f3fbf; padding: 6px 10px 6px 0; vertical-align: top; white-space: nowrap; }
-#table-vestiaire td { padding: 6px 0; border-bottom: 1px solid #ddd; }
-#table-vestiaire tr { border-bottom: 1px solid #ddd; }
+.table-vestiaire { border-collapse: collapse; width: 100%; font-size: 16px; }
+.table-vestiaire th { text-align: left; color: #1f3fbf; padding: 6px 10px 6px 0; vertical-align: top; white-space: nowrap; }
+.table-vestiaire td { padding: 6px 0; border-bottom: 1px solid #ddd; }
+.table-vestiaire tr { border-bottom: 1px solid #ddd; }
+#vestiaire-contenu h3 { margin: 10px 0 4px; font-size: 18px; }
+#liste-vu { padding-left: 20px; }
+#liste-vu li.maitrisee { opacity: .6; }
+.vu-fois { color: #777; }
 
 #credits { margin-top: 24px; font-size: 12px; opacity: .55; text-align: center; }
 
