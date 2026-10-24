@@ -237,3 +237,25 @@ button, .option, .action { touch-action: manipulation; }
 /* Boutons de son (chantier 10) */
 #btn-son-match { margin-left: 4px; min-width: 44px; }
 #btn-son-menu, #btn-musique-menu { margin: 4px; }
+
+/* Comptes élèves et espace enseignant (chantier 13) */
+.compte-boite { max-width: 460px; margin: 20px auto; padding: 18px; background: #1b2350; border: 2px solid #3a4280; border-radius: 16px; text-align: center; }
+#compte-numero { font-family: inherit; font-size: 44px; width: 6em; max-width: 100%; text-align: center; letter-spacing: 8px; padding: 6px; border-radius: 12px; border: 3px solid #ffd23f; background: #fff; color: #111; }
+.compte-message { min-height: 1.5em; color: #ffd23f; margin: 6px 0; }
+.compte-note { font-size: 13px; opacity: .65; margin: 10px 0 0; }
+.compte-etat { text-align: center; font-size: 14px; margin: 0 0 8px; opacity: .85; }
+.compte-ok { color: #9fff9f; }
+.compte-hors { color: #ffd23f; }
+.prof-cache { background: none; border: none; box-shadow: none; opacity: .12; font-size: 14px; padding: 2px 6px; margin: 0 0 0 6px; color: #fff; }
+.carte-prof { width: 100%; max-width: 640px; }
+.carte-prof input[type="text"], .carte-prof input[type="password"] { font-family: inherit; font-size: 18px; padding: 8px; border-radius: 8px; border: 2px solid #999; width: 100%; max-width: 320px; }
+.prof-outils { margin: 8px 0; }
+.prof-outils input { width: auto !important; }
+.prof-outils label { margin-right: 12px; white-space: nowrap; }
+.prof-defile { overflow-x: auto; max-height: 45vh; overflow-y: auto; border: 1px solid #ddd; }
+.table-prof { border-collapse: collapse; width: 100%; font-size: 15px; }
+.table-prof th, .table-prof td { padding: 5px 8px; border-bottom: 1px solid #ddd; text-align: left; white-space: nowrap; }
+.table-prof thead th { position: -webkit-sticky; position: sticky; top: 0; background: #eef; }
+.table-prof tr.prof-ancien { background: #ffe9c2; }
+.prof-resume { font-size: 14px; color: #555; margin: 6px 0; }
+.prof-msg { min-height: 1.4em; color: #b00020; font-weight: bold; margin: 8px 0; }

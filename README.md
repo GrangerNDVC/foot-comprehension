@@ -1,7 +1,7 @@
 # Match de compréhension
 
 Serious game de foot : lire finement un commentaire, une consigne, un petit texte, puis jouer l'action.
-Un championnat de 6 matchs (Nankatsu). Aucun serveur, aucun compte : tout tourne dans le navigateur.
+Un championnat de 6 matchs (Nankatsu). Le jeu tourne dans le navigateur ; un numéro à 4 chiffres (facultatif, chantier 13) permet de reprendre sa partie sur un autre appareil.
 
 ## Lancer
 - Ouvrir `index.html` (double-clic) ou, dans VS Code, « Live Server ». Sur Netlify : publier le dossier tel quel.
@@ -31,7 +31,8 @@ js/terrain.js      la mini-carte
 js/grosplan.js     les gros plans (sprites, décor, repli en formes simples)
 js/sprites-recolor.js  recoloration des sprites par équipe
 js/assets.js       chargement des images de décor
-js/progression.js  résultats, niveau de départ, carnet de règles (localStorage)
+js/progression.js  résultats, niveau de départ, carnet de règles (localStorage ; une clé par élève avec un compte)
+js/compte.js       numéro de l'élève, copie dans Firebase, fusion, « Changer d'élève », espace enseignant caché (chantier 13)
 js/audio.js        lecture à voix haute
 data/config.js     TOUS LES RÉGLAGES (guts, niveaux, durée et règles de chaque match)
 data/championnat.js  les 6 matchs, l'histoire, les joueurs de Nankatsu
@@ -83,3 +84,15 @@ Tags de match (pluie, triche) : champ `tags` de chaque match dans `data/champion
 Tir et arrêt du gardien : une seule chance (le match d'essai garde la deuxième). Contre raté : l'adversaire avance de 2 crans.
 Les questions montent en difficulté pendant le match (`montee`). Accueil refait. Un seul ballon par scène d'histoire.
 Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `recul`. Voir 18-CHANTIER8-RESULTATS.md et les « Règles de jeu validées » du plan.
+
+## Chantier 13 (23/10/2026) : comptes élèves et reprise de partie
+- **Écran du numéro** au démarrage : l'élève tape son numéro à 4 chiffres (attribué par l'enseignante) ou choisit « Jouer sans compte ». Le dernier numéro n'est pas retenu (appareil partagé).
+- **Où sont les données** : la mémoire principale reste le localStorage (le jeu marche sans réseau). Une copie est envoyée dans la Realtime Database du projet Firebase LEXICA, à `jeux/foot/<numéro>` (une seule chaîne de texte : `donnees`). Un futur jeu utilisera `jeux/<son-nom>/<numéro>`.
+- **À la connexion** : lecture de la copie du cloud, fusion avec celle de l'appareil (meilleur résultat par match, règles des deux côtés), puis envoi. On n'écrit jamais avant d'avoir lu.
+- **Envois économes** : 5 s après la dernière modification, 20 s au plus pendant un match ; connexion coupée entre deux envois. Hors connexion : le jeu continue, l'envoi part au retour du réseau.
+- **Sans compte** : rien n'est chargé ni envoyé ; la progression reste sur l'appareil (clé d'origine) et n'est jamais copiée dans un compte.
+- **Page ouverte en double-clic (file://)** : Firebase ne marche pas, seul « Jouer sans compte » est proposé. Utiliser Live Server (adresse `localhost`) ou Netlify pour tester les comptes.
+- **Espace enseignant** : petit ⚙ presque invisible en bas de page. Verrou (le jeu ne contient que son empreinte SHA-256, jamais le mot de passe), puis connexion Firebase de l'enseignante (e-mail et mot de passe saisis à chaque fois, jamais gardés). Liste des comptes (numéro, matchs gagnés, règles et mots à revoir, dernière activité), tri par numéro / progression / activité, recherche par numéro, suppression d'un compte ou des comptes inactifs depuis plus de N jours. La session enseignante n'est pas conservée sur l'appareil. **Ce sont les règles Firebase (fichier regles-realtime-database.json) qui réservent liste et suppression au compte de l'enseignante**, pas le verrou.
+- Changer le verrou : calculer le SHA-256 de `foot-prof-v1:` suivi du nouveau mot de passe et remplacer la constante `VERROU` dans js/compte.js.
+- **Données enregistrées** : numéro, progression (matchs, carnet de règles, « Vu à l'entraînement », choix des noms, date de dernière activité). Pas de nom, pas d'e-mail, pas d'adresse IP côté jeu.
+- Contrôle automatique : `node outils-test/verifier-questions.js` (inchangé). Le test du compte (faux Firebase) est dans le compte rendu 25-CHANTIER13-RESULTATS.md.

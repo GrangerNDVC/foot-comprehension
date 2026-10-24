@@ -20,6 +20,7 @@
     MODE = (m === "francais") ? "francais" : "manga";
     return MODE;
   };
+  N.relire = function () { MODE = null; };   // après un changement d'élève
   N.fixer = function (m) {
     MODE = (m === "francais") ? "francais" : "manga";
     if (J.progression && J.progression.fixerModeNoms) { J.progression.fixerModeNoms(MODE); }

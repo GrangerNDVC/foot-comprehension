@@ -31,7 +31,7 @@
     return a;
   }
   function ecran(id) {
-    ["ecran-menu", "ecran-avant", "ecran-match", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
+    ["ecran-compte", "ecran-menu", "ecran-avant", "ecran-match", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
     if (J.histoire && id !== "ecran-avant" && id !== "ecran-fin" && id !== "ecran-championnat") { J.histoire.arreter(); }
     root.scrollTo(0, 0);
   }

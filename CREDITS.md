@@ -6,3 +6,4 @@
 - Exercices et code : créés pour ce projet.
 - Inspiration pédagogique : travaux d'orthophonie sur la compréhension (phrases, consignes, inférences), dont *400 exercices de lecture et compréhension*, M.-C. Perret (Elsevier Masson, 2011). Les exercices du jeu sont originaux.
 - Sons et musiques : voir assets/audio/CREDITS-SONS.md (bruitages de secours fabriqués dans le navigateur par js/sons.js, sans fichier ni droit d'auteur).
+- Comptes élèves (chantier 13) : Firebase (Google), offre gratuite Spark, projet LEXICA : Authentication anonyme (invisible) et Realtime Database. Données conservées : numéro à 4 chiffres (sans lien avec l'identité réelle sans la liste de l'enseignante) et progression dans le jeu. Aucun nom, aucun e-mail d'élève. Compte enseignant : e-mail et mot de passe gérés par Firebase Authentication.

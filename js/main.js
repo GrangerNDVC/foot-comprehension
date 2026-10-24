@@ -4,7 +4,8 @@
   function demarrer() {
     if (J.sons) { J.sons.brancher(); }
     J.match.brancher();
-    J.match.menu();
+    if (J.compte) { J.compte.brancher(); J.compte.demarrer(); }   // écran du numéro, puis le menu
+    else { J.match.menu(); }
   }
   if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", demarrer); }
   else { demarrer(); }

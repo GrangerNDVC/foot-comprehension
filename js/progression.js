@@ -1,29 +1,119 @@
-/* Progression de l'élève, gardée dans son navigateur (localStorage). Rien n'est envoyé nulle part.
+/* Progression de l'élève, gardée dans son navigateur (localStorage).
    - matchs : résultat de chaque match (gagné ?, meilleur score)
    - calibrage : réglage du niveau de départ décidé après le match d'essai (-1, 0, +1)
-   - carnet : règles ratées / réussies */
+   - carnet : règles ratées / réussies
+   - mots : « Vu à l'entraînement »
+   Chantier 13 : avec un compte (js/compte.js), la progression est stockée sous une clé propre à l'élève
+   (« foot-comprehension-v2-c1234 ») et copiée dans le cloud. Sans compte, la clé d'origine est utilisée
+   et rien n'est envoyé nulle part. Ce fichier ne parle jamais au réseau : c'est compte.js qui le fait. */
 (function (root) {
   var J = root.JEU = root.JEU || {};
-  var CLE = "foot-comprehension-v2";
+  var CLE_DEFAUT = "foot-comprehension-v2";
+  var CLE = CLE_DEFAUT;
 
   var memoire = null;       // si le navigateur refuse le stockage, on garde tout en mémoire
+
+  function num(x) { return (typeof x === "number" && isFinite(x)) ? x : 0; }
+
+  // Met un objet de progression au bon format (jamais d'erreur, même si les données sont abîmées)
+  function norm(o) {
+    if (!o || typeof o !== "object") { o = {}; }
+    if (!o.matchs || typeof o.matchs !== "object") { o.matchs = {}; }
+    if (!o.carnet || typeof o.carnet !== "object") { o.carnet = {}; }
+    if (!o.mots || typeof o.mots !== "object") { o.mots = {}; }
+    if (typeof o.calibrage !== "number") { o.calibrage = 0; }
+    o.maj = num(o.maj);         // dernière modification (ms)
+    o.reinit = num(o.reinit);   // dernier « Recommencer le championnat » (ms)
+    o.raz = num(o.raz);         // dernier « Effacer ma progression » (ms)
+    return o;
+  }
+  function copie(o) { return JSON.parse(JSON.stringify(o)); }
+
   function lire() {
     if (memoire) { return memoire; }
     var o = null;
     try { o = JSON.parse(root.localStorage.getItem(CLE) || "null"); } catch (e) { o = null; }
-    if (!o || typeof o !== "object") { o = {}; }
-    o.matchs = o.matchs || {};
-    o.carnet = o.carnet || {};
-    o.mots = o.mots || {};
-    if (typeof o.calibrage !== "number") { o.calibrage = 0; }
-    memoire = o;
-    return o;
+    memoire = norm(o);
+    return memoire;
   }
-  function ecrire() {
+  function ecrire(silencieux) {
+    memoire.maj = Date.now();
     try { root.localStorage.setItem(CLE, JSON.stringify(memoire)); } catch (e) {}
+    if (!silencieux && typeof P.surChangement === "function") { try { P.surChangement(); } catch (e2) {} }
   }
 
-  J.progression = {
+  /* ---------- fusion de deux copies (appareil + cloud) : on ne perd jamais de progression ----------
+     Deux repères évitent de ressusciter ce que l'élève a volontairement effacé :
+     - raz    : « Effacer ma progression » ; une copie plus ancienne que ce repère est ignorée
+     - reinit : « Recommencer le championnat » ; une copie plus ancienne n'apporte pas ses matchs */
+  function meilleurMatch(x, y) {
+    if (!x) { return y ? copie(y) : null; }
+    if (!y) { return copie(x); }
+    var g = x;
+    if (!!y.gagne !== !!x.gagne) { g = y.gagne ? y : x; }
+    else if ((y.nous - y.eux) > (x.nous - x.eux)) { g = y; }
+    var r = copie(g);
+    r.parties = Math.max(num(x.parties), num(y.parties));
+    return r;
+  }
+  function fusion(a, b) {
+    a = norm(a ? copie(a) : null); b = norm(b ? copie(b) : null);
+    var Z = Math.max(a.raz, b.raz), R = Math.max(a.reinit, b.reinit);
+    var cotes = [], k, c;
+    [a, b].forEach(function (s) { if (s.raz >= Z) { cotes.push(s); } });   // une copie d'avant un effacement est ignorée
+    var sortie = { matchs: {}, carnet: {}, mots: {}, calibrage: 0, raz: Z, reinit: R, maj: Math.max(a.maj, b.maj) };
+
+    cotes.forEach(function (s) {
+      if (s.reinit < R) { return; }
+      for (k in s.matchs) { if (s.matchs.hasOwnProperty(k)) { sortie.matchs[k] = meilleurMatch(sortie.matchs[k], s.matchs[k]); } }
+      if (s.prologue) { sortie.prologue = true; }
+    });
+
+    cotes.forEach(function (s) {
+      for (k in s.carnet) {
+        if (!s.carnet.hasOwnProperty(k)) { continue; }
+        var n = s.carnet[k], o = sortie.carnet[k];
+        if (!o) { sortie.carnet[k] = copie(n); continue; }
+        var garde = (n.vu > o.vu) ? n : o;
+        sortie.carnet[k] = { rate: Math.max(num(n.rate), num(o.rate)), vu: Math.max(num(n.vu), num(o.vu)), serie: num(garde.serie) };
+      }
+      for (k in s.mots) {
+        if (!s.mots.hasOwnProperty(k)) { continue; }
+        var m = s.mots[k], p = sortie.mots[k];
+        if (!p) { sortie.mots[k] = copie(m); continue; }
+        var gm = ((num(m.rate) + num(m.serie)) > (num(p.rate) + num(p.serie))) ? m : p;
+        var cm = copie(gm); cm.rate = Math.max(num(m.rate), num(p.rate)); sortie.mots[k] = cm;
+      }
+    });
+
+    // niveau de départ : la valeur non nulle ; en cas de désaccord, la copie qui a le plus de matchs
+    var ca = (cotes.indexOf(a) >= 0) ? a.calibrage : 0, cb = (cotes.indexOf(b) >= 0) ? b.calibrage : 0;
+    if (ca === cb) { c = ca; }
+    else if (ca === 0) { c = cb; }
+    else if (cb === 0) { c = ca; }
+    else { c = (Object.keys(b.matchs).length > Object.keys(a.matchs).length) ? cb : ca; }
+    sortie.calibrage = c;
+
+    // choix des noms : celui de la copie la plus récente
+    var na = (cotes.indexOf(a) >= 0) ? a.noms : undefined, nb = (cotes.indexOf(b) >= 0) ? b.noms : undefined;
+    if (na && nb) { sortie.noms = (a.maj >= b.maj) ? na : nb; }
+    else if (na || nb) { sortie.noms = na || nb; }
+    return sortie;
+  }
+
+  var P = J.progression = {
+    // appelée après chaque modification (compte.js s'y branche pour copier dans le cloud)
+    surChangement: null,
+
+    /* Changer d'élève : lit une autre clé de stockage (null = clé d'origine, sans compte) */
+    utiliser: function (cle) { CLE = cle || CLE_DEFAUT; memoire = null; if (J.noms && J.noms.relire) { J.noms.relire(); } },
+    cleActuelle: function () { return CLE; },
+    exporter: function () { return copie(lire()); },
+    /* Remplace la progression (après fusion avec le cloud) sans déclencher d'envoi */
+    remplacer: function (obj) { memoire = norm(copie(obj)); ecrire(true); if (J.noms && J.noms.relire) { J.noms.relire(); } },
+    fusion: fusion,
+    existe: function () { try { return root.localStorage.getItem(CLE) !== null; } catch (e) { return false; } },
+
     match: function (id) { return lire().matchs[id] || null; },
 
     /* res : { nous, eux, gagne, premier, total } */
@@ -104,9 +194,13 @@
     },
     // Recommencer le championnat : les matchs et le prologue repartent à zéro ; le carnet de règles, le réglage de niveau et le choix des noms restent
     recommencerChampionnat: function () {
-      var d = lire(); d.matchs = {}; d.prologue = false; ecrire();
+      var d = lire(); d.matchs = {}; d.prologue = false; d.reinit = Date.now(); ecrire();
     },
 
-    effacer: function () { var m = lire().noms; memoire = { matchs: {}, carnet: {}, mots: {}, calibrage: 0, noms: m }; ecrire(); }
+    effacer: function () {
+      var m = lire().noms, t = Date.now();
+      memoire = { matchs: {}, carnet: {}, mots: {}, calibrage: 0, noms: m, raz: t, reinit: t, maj: t };
+      ecrire();
+    }
   };
 })(typeof window !== "undefined" ? window : this);

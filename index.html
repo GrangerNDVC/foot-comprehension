@@ -9,6 +9,24 @@
 <body>
 <div id="app">
 
+  <!-- NUMÉRO DE L'ÉLÈVE (chantier 13) : reprise de partie -->
+  <section id="ecran-compte" class="ecran" hidden>
+    <div class="hero">
+      <div class="compte-boite">
+        <h1><span>⚽</span> Le Tournoi National</h1>
+        <div id="compte-formulaire">
+          <p class="intro">Tape ton numéro pour retrouver ta partie.</p>
+          <p><input id="compte-numero" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="0000" aria-label="Ton numéro à 4 chiffres"></p>
+          <p><button id="btn-compte-jouer" class="gros" type="button">▶ Jouer</button></p>
+          <p id="compte-message" class="compte-message"></p>
+        </div>
+        <p id="compte-indispo" class="intro" hidden>Les numéros ne marchent qu'en ligne : la page doit être ouverte depuis le site.</p>
+        <p><button id="btn-compte-sans" class="petit discret" type="button">Jouer sans compte</button></p>
+        <p class="compte-note">Seuls ton numéro et ta progression sont enregistrés. Pas de nom, pas d'e-mail.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- MENU : les matchs du championnat -->
   <section id="ecran-menu" class="ecran">
     <div class="hero">
@@ -17,9 +35,11 @@
     </div>
     <p class="intro">Lis bien, réfléchis, puis joue ! Gagne chaque match pour ouvrir le suivant.</p>
     <p id="menu-progres" class="menu-progres"></p>
+    <p id="compte-etat" class="compte-etat"></p>
     <div id="cartes"></div>
     <div class="menu-actions">
       <button id="btn-fin-tournoi" class="gros" hidden>🏆 Voir la fin du tournoi</button>
+      <button id="btn-changer-eleve" class="petit">👤 Changer d'élève</button>
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
       <button id="btn-noms" class="petit"></button>
       <button id="btn-son-menu" class="petit" data-son="effets"></button>
@@ -104,6 +124,39 @@
   </section>
 
   <!-- FENÊTRES -->
+  <div class="modal" id="modal-prof" hidden>
+    <div class="carte-modal carte-prof">
+      <h2>🔧 Espace enseignant</h2>
+      <div id="prof-verrou">
+        <p>Mot de passe :</p>
+        <p><input id="prof-mdp1" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Mot de passe"></p>
+        <button id="prof-ok1" class="gros" type="button">Valider</button>
+      </div>
+      <div id="prof-connexion" hidden>
+        <p>Connexion avec ton compte enseignant :</p>
+        <p><input id="prof-email" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="e-mail" aria-label="E-mail"></p>
+        <p><input id="prof-mdp2" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="mot de passe" aria-label="Mot de passe du compte"></p>
+        <button id="prof-ok2" class="gros" type="button">Se connecter</button>
+      </div>
+      <div id="prof-liste" hidden>
+        <p class="prof-outils">
+          <label>Trier : <select id="prof-tri"><option value="numero">par numéro</option><option value="progression">par progression</option><option value="activite">par activité (anciens d'abord)</option></select></label>
+          <label>Numéro : <input id="prof-filtre" type="text" inputmode="numeric" maxlength="4" placeholder="début du numéro" autocomplete="off" size="8"></label>
+        </p>
+        <div class="prof-defile">
+          <table class="table-prof">
+            <thead><tr><th>N°</th><th>Matchs gagnés</th><th>Règles à revoir</th><th>Mots à revoir</th><th>Dernière activité</th><th></th></tr></thead>
+            <tbody id="prof-lignes"></tbody>
+          </table>
+        </div>
+        <p id="prof-resume" class="prof-resume"></p>
+        <p class="prof-outils">Inactifs depuis plus de <input id="prof-jours" type="text" inputmode="numeric" maxlength="4" value="180" size="4"> jours :
+          <button id="prof-vider" class="petit" type="button">Supprimer ces comptes</button></p>
+      </div>
+      <p id="prof-msg" class="prof-msg"></p>
+      <button id="prof-fermer" class="gros" type="button">Fermer</button>
+    </div>
+  </div>
   <div class="modal" id="modal-var" hidden>
     <div class="carte-modal">
       <h2>📺 Aide VAR</h2>
@@ -135,7 +188,7 @@
     </div>
   </div>
 
-  <footer id="credits">Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement.</footer>
+  <footer id="credits">Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement. <button id="btn-prof" class="prof-cache" type="button" tabindex="-1" aria-label="Espace enseignant">⚙</button></footer>
 </div>
 
 <!-- moteur et données (dans cet ordre) -->
@@ -156,6 +209,7 @@
 <script src="data/sons-reglages.js"></script>
 <script src="js/sons.js"></script>
 <script src="js/progression.js"></script>
+<script src="js/compte.js"></script>
 <script src="js/noms.js"></script>
 <script src="js/regles.js"></script>
 <script src="js/terrain.js"></script>
