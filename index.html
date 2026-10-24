@@ -15,9 +15,13 @@
       <div class="compte-boite">
         <h1><span>⚽</span> Le Tournoi National</h1>
         <div id="compte-formulaire">
-          <p class="intro">Tape ton numéro pour retrouver ta partie.</p>
+          <p class="intro">Tape ton numéro, puis choisis.</p>
           <p><input id="compte-numero" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="0000" aria-label="Ton numéro à 4 chiffres"></p>
-          <p><button id="btn-compte-jouer" class="gros" type="button">▶ Jouer</button></p>
+          <p class="compte-choix">
+            <button id="btn-compte-reprendre" class="gros" type="button">▶ Reprendre ma partie</button>
+            <button id="btn-compte-nouvelle" class="gros bleu" type="button">🆕 Nouvelle partie</button>
+          </p>
+          <p class="compte-aide"><b>Reprendre</b> : j'ai déjà joué. <b>Nouvelle partie</b> : c'est la première fois.</p>
           <p id="compte-message" class="compte-message"></p>
         </div>
         <p id="compte-indispo" class="intro" hidden>Les numéros ne marchent qu'en ligne : la page doit être ouverte depuis le site.</p>

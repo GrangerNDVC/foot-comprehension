@@ -114,6 +114,8 @@
   var fusionFaite = false;  // on n'écrit jamais avant d'avoir lu et fusionné
   var enCours = false, fileRappels = [];
   var minuteur = null, debutAttente = 0, relance = null, aPousser = false;
+  var modeConnexion = null; // "nouvelle" (le numéro doit être libre) ou "reprendre" (le numéro doit exister)
+  var localConnu = false;   // ce numéro a déjà une copie sur cet appareil
   var fb = null, db = null, auth = null, ops = 0, coupure = null;
 
   C.numero = function () { return numero; };
@@ -174,18 +176,21 @@
       avecDelai(premierEtat(), 8000).then(function (u) {
         if (u && !u.email) { return u; }
         var avant = u ? auth.signOut() : Promise.resolve();
-        return avant.then(function () { return auth.signInAnonymously(); });
+        return avecDelai(avant.then(function () { return auth.signInAnonymously(); }), 12000);
       }).then(function () { fin(null); }, function (e) { fin(e || new Error("auth")); });
     });
   }
 
   /* ---------- synchronisation ---------- */
-  function terminer(ok) {
+  // refus : "pris" | "inconnu" (le numéro n'est pas utilisable) ; une opération d'une session abandonnée est ignorée
+  function terminer(ok, jeton, refus) {
+    if (jeton !== session) { return; }
     enCours = false;
     var q = fileRappels; fileRappels = [];
-    if (!ok && numero) { fixerEtat("hors"); }
-    q.forEach(function (f) { try { f(ok); } catch (e) {} });
+    if (!ok && numero && !refus) { fixerEtat("hors"); }
+    q.forEach(function (f) { try { f(ok, refus); } catch (e) {} });
   }
+  function refuser(code) { var e = new Error("refus"); e.refus = code; return e; }
   function synchroniser(rappel) {
     if (!numero) { if (rappel) { rappel(false); } return; }
     if (rappel) { fileRappels.push(rappel); }
@@ -194,18 +199,25 @@
     var n = numero, jeton = session;
     function perime() { return n !== numero || jeton !== session; }
     preparer(function (err) {
-      if (err || perime()) { terminer(false); return; }
+      if (err || perime()) { terminer(false, jeton); return; }
       ouvrir();
       var ref = db.ref(CHEMIN + "/" + n);
       var lecture = fusionFaite ? Promise.resolve(null) : avecDelai(ref.once("value"), 10000);
       lecture.then(function (snap) {
         if (perime()) { throw new Error("perime"); }
         if (!fusionFaite) {
-          var distant = null;
-          if (snap && snap.exists()) {
+          var distant = null, existe = !!(snap && snap.exists());
+          if (existe) {
             var v = snap.val();
             try { distant = JSON.parse(v.donnees); } catch (e) { distant = null; }
           }
+          if (modeConnexion === "nouvelle") {
+            if (existe) { throw refuser("pris"); }                      // ce numéro appartient déjà à quelqu'un
+            P().remplacer(P().fusion(null, null));                      // départ à zéro (une vieille copie locale n'est pas reprise)
+          } else if (modeConnexion === "reprendre" && !existe && !localConnu) {
+            throw refuser("inconnu");                                   // numéro inconnu : probablement une faute de frappe
+          }
+          modeConnexion = null;
           var local = P().exporter(), fus = P().fusion(local, distant);
           var change = stable(fus) !== stable(local);
           P().remplacer(fus);
@@ -218,8 +230,8 @@
           aPousser = (P().exporter().maj !== envoyee);
           if (aPousser) { planifier(); } else { fixerEtat("ok"); }
         });
-      }).then(function () { fermer(); terminer(true); },
-              function () { fermer(); terminer(false); });
+      }).then(function () { fermer(); terminer(true, jeton); },
+              function (e) { fermer(); terminer(false, jeton, e && e.refus); });
     });
   }
   function pousser() {
@@ -241,21 +253,42 @@
   function arreterMinuteurs() { clearTimeout(minuteur); clearTimeout(relance); minuteur = null; relance = null; debutAttente = 0; }
 
   /* ---------- connexion d'un élève ---------- */
-  // rappel("ok" | "hors") : « hors » = on joue quand même avec la copie de l'appareil, l'envoi viendra plus tard
-  C.connecter = function (n, rappel) {
+  // mode : "nouvelle" (le numéro doit être libre) ou "reprendre" (le numéro doit exister)
+  // rappel("ok" | "hors" | "pris" | "inconnu" | "impossible")
+  //   hors       : pas de réseau, mais l'élève reprend sa partie gardée sur cet appareil (envoi plus tard)
+  //   impossible : pas de réseau et le numéro ne peut pas être vérifié : on n'entre pas
+  function annuler() {
+    arreterMinuteurs(); session++;
+    numero = null; fusionFaite = false; enCours = false; fileRappels = []; aPousser = false; modeConnexion = null; localConnu = false;
+    P().surChangement = null; P().utiliser(null); fixerEtat("sans");
+  }
+  C.connecter = function (n, mode, rappel) {
     arreterMinuteurs();
     session++; numero = String(n); fusionFaite = false; enCours = false; fileRappels = []; aPousser = false;
+    modeConnexion = (mode === "nouvelle") ? "nouvelle" : "reprendre";
     P().utiliser(CLE_LOCALE + numero);
+    localConnu = P().existe();
     P().surChangement = planifier;
     fixerEtat("attente");
+    // sans vérification possible, seule une partie déjà présente sur l'appareil peut être reprise
+    var verificationIndispensable = (modeConnexion === "nouvelle") || !localConnu;
     var fini = false;
     function fin(r) { if (!fini) { fini = true; rappel(r); } }
-    if (!C.disponible()) { fixerEtat("hors"); fin("hors"); return; }
-    var t = setTimeout(function () { if (etat === "attente") { fixerEtat("hors"); } fin("hors"); }, 9000);
-    synchroniser(function (ok) {
+    if (!C.disponible()) { if (verificationIndispensable) { annuler(); fin("impossible"); } else { fixerEtat("hors"); fin("hors"); } return; }
+    var t = setTimeout(function () {
+      if (verificationIndispensable) { annuler(); fin("impossible"); return; }
+      if (etat === "attente") { fixerEtat("hors"); }
+      fin("hors");
+    }, 9000);
+    synchroniser(function (ok, refus) {
       clearTimeout(t);
-      if (!ok) { clearTimeout(relance); relance = setTimeout(pousser, 45000); }
-      fin(ok ? "ok" : "hors");
+      if (refus) { annuler(); fin(refus); return; }
+      if (!ok) {
+        if (verificationIndispensable) { annuler(); fin("impossible"); return; }
+        clearTimeout(relance); relance = setTimeout(pousser, 45000);
+        fin("hors"); return;
+      }
+      fin("ok");
     });
   };
   C.sansCompte = function () {
@@ -275,7 +308,7 @@
     if (J.sons && J.sons.annulerAttentes) { J.sons.annulerAttentes(); }
     $("compte-numero").value = "";
     $("compte-message").textContent = "";
-    $("btn-compte-jouer").disabled = false;
+    boutonsNumero(false);
     var dispo = C.disponible();
     $("compte-formulaire").hidden = !dispo;
     $("compte-indispo").hidden = dispo;
@@ -283,16 +316,29 @@
     afficherEtat();
     if (dispo) { try { $("compte-numero").focus(); } catch (e) {} }
   };
-  function jouerAvecNumero() {
+  function boutonsNumero(occupe) {
+    $("btn-compte-nouvelle").disabled = occupe; $("btn-compte-reprendre").disabled = occupe;
+  }
+  var MESSAGES = {
+    pris: "Ce numéro est déjà pris. Si c'est ta partie, clique sur « Reprendre ma partie ».",
+    inconnu: "Je ne trouve pas ce numéro. Vérifie-le, ou clique sur « Nouvelle partie » si tu joues pour la première fois.",
+    impossible: "Pas de connexion : je ne peux pas vérifier ton numéro. Réessaie plus tard, ou joue sans compte."
+  };
+  function jouerAvecNumero(mode) {
     var brut = String($("compte-numero").value || "").replace(/\s+/g, "");
     var msg = $("compte-message");
     if (!/^[0-9]{4}$/.test(brut)) { msg.textContent = "Ton numéro a 4 chiffres. Vérifie-le."; return; }
-    msg.textContent = "Connexion…";
-    $("btn-compte-jouer").disabled = true;
-    C.connecter(brut, function (res) {
-      msg.textContent = "";
-      J.match.menu();
-      if (res === "hors") { afficherEtat(); }
+    msg.textContent = "Vérification…";
+    boutonsNumero(true);
+    C.connecter(brut, mode, function (res) {
+      if (res === "ok" || res === "hors") {
+        msg.textContent = "";
+        J.match.menu();
+        if (res === "hors") { afficherEtat(); }
+        return;
+      }
+      boutonsNumero(false);
+      msg.textContent = MESSAGES[res] || "Échec de la connexion.";
     });
   }
   // Changer d'élève : on envoie d'abord ce qui n'est pas parti (4 s au plus), puis retour à l'écran du numéro
@@ -446,8 +492,10 @@
 
   /* ---------- branchements ---------- */
   C.brancher = function () {
-    $("btn-compte-jouer").onclick = jouerAvecNumero;
-    $("compte-numero").onkeydown = function (ev) { if ((ev.key || ev.keyIdentifier) === "Enter" || ev.keyCode === 13) { jouerAvecNumero(); } };
+    $("btn-compte-nouvelle").onclick = function () { jouerAvecNumero("nouvelle"); };
+    $("btn-compte-reprendre").onclick = function () { jouerAvecNumero("reprendre"); };
+    // la touche Entrée = « Reprendre » : si c'est une première fois, le message renvoie vers « Nouvelle partie »
+    $("compte-numero").onkeydown = function (ev) { if (ev.keyCode === 13) { jouerAvecNumero("reprendre"); } };
     $("btn-compte-sans").onclick = function () { C.sansCompte(); J.match.menu(); };
     $("btn-changer-eleve").onclick = function () { C.changer(); };
     $("btn-prof").onclick = C.ouvrirProf;
