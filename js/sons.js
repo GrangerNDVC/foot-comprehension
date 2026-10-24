@@ -166,11 +166,28 @@
       } catch (e) { root.clearInterval(el._fondu); }
     }, 40);
   }
+  var toutes = [];                          // tous les lecteurs de musique encore susceptibles de sonner
+  function couper(el) {                     // arrêt garanti : petit fondu, MAIS pause forcée même si le volume est bloqué (iPad)
+    if (!el || el._mort) { return; }
+    el._mort = true; el.onerror = null;
+    var fait = false;
+    function pause() {
+      if (fait) { return; } fait = true;
+      try { if (el._fondu) { root.clearInterval(el._fondu); el._fondu = null; } } catch (e) {}
+      try { el.pause(); } catch (e) {}
+      var i = toutes.indexOf(el); if (i >= 0) { toutes.splice(i, 1); }
+    }
+    try { fondu(el, 0, pause); } catch (e) {}
+    root.setTimeout(pause, 500);
+  }
+  function toutCouper(sauf) {               // filet de sécurité : plus aucune autre musique ne doit jouer
+    var l = toutes.slice(), i;
+    for (i = 0; i < l.length; i++) { if (l[i] !== sauf) { couper(l[i]); } }
+  }
   function arreterMusique() {
     demandee = null;
-    if (!courante) { return; }
-    var c = courante; courante = null;
-    try { fondu(c.el, 0, function () { try { c.el.pause(); } catch (e) {} }); } catch (e) {}
+    if (courante) { var c = courante; courante = null; couper(c.el); }
+    toutCouper(null);
   }
   function musique(nom, opts) {
     try {
@@ -180,7 +197,7 @@
         minuteurs.push(root.setTimeout(function () { musique(nom, o2); }, opts.apres));
         return;
       }
-      if (courante && courante.nom === nom && !courante.el.ended) { return; }
+      if (courante && courante.nom === nom && !courante.el.ended && !courante.el._mort) { return; }
       arreterMusique();
       if (!nom) { return; }
       if (muetMusique || !deverrouille) { demandee = { nom: nom, opts: opts }; return; }
@@ -190,7 +207,9 @@
       var essaiWav = false;                  // pas de .mp3 : on essaie le .wav du même nom
       el.loop = (opts.boucle == null) ? !!reg.boucle : !!opts.boucle;
       el.volume = 0; el.preload = "auto";
+      toutes.push(el);
       el.onerror = function () {             // fichier absent : .wav puis silence, jamais d'erreur
+        if (el._mort || courante == null || courante.el !== el) { return; }   // lecteur déjà remplacé : on ne le relance pas
         if (!essaiWav) { essaiWav = true; try { el.src = CFG.dossier + "musique/" + nom + ".wav"; var q = el.play(); if (q && q.catch) { q.catch(function () {}); } } catch (e) {} }
       };
       courante = { nom: nom, el: el };
@@ -216,7 +235,7 @@
   }
   function appliquerMusique() {
     if (muetMusique) {
-      if (courante) { demandee = { nom: courante.nom, opts: { boucle: courante.el.loop } }; var c = courante; courante = null; try { fondu(c.el, 0, function () { c.el.pause(); }); } catch (e) {} }
+      if (courante) { demandee = { nom: courante.nom, opts: { boucle: courante.el.loop } }; var c = courante; courante = null; couper(c.el); }
     } else if (demandee) { var d = demandee; demandee = null; musique(d.nom, d.opts); }
   }
   function brancher() {
