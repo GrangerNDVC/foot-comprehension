@@ -44,6 +44,7 @@
     <div class="menu-actions">
       <button id="btn-fin-tournoi" class="gros" hidden>🏆 Voir la fin du tournoi</button>
       <button id="btn-changer-eleve" class="petit">👤 Changer d'élève</button>
+      <button id="btn-tirs-menu" class="petit">🥅 Tirs au but : petits mots</button>
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
       <button id="btn-noms" class="petit"></button>
       <button id="btn-son-menu" class="petit" data-son="effets"></button>
@@ -91,6 +92,27 @@
         <div id="m-narration"></div>
       </div>
       <div id="m-panneau"></div>
+    </div>
+  </section>
+
+  <!-- TIRS AU BUT « PETITS MOTS » (chantier 15) : entraînement et fin de match -->
+  <section id="ecran-tirs" class="ecran" hidden>
+    <header id="t-hud">
+      <button id="t-menu" class="petit" type="button">☰</button>
+      <div id="t-titre"></div>
+      <div id="t-score"></div>
+      <div id="t-pastilles"></div>
+    </header>
+    <div id="t-scene"></div>
+    <div id="t-bas">
+      <div id="t-extra"></div>
+      <div id="t-etiquette"></div>
+      <div id="t-phrase"></div>
+      <div id="t-question"></div>
+      <div id="t-feedback" class="feedback"></div>
+      <div id="t-remede" class="remediation"></div>
+      <button id="t-suite" class="gros suite" type="button" hidden>Continuer ▶</button>
+      <div id="t-outils" class="outils"></div>
     </div>
   </section>
 
@@ -208,6 +230,8 @@
 <script src="data/regles-tirs.js"></script>
 <script src="data/tirs.js"></script>
 <script src="data/gardien.js"></script>
+<script src="data/regles-motspetits.js"></script>
+<script src="data/motspetits.js"></script>
 <script src="data/noms.js"></script>
 <script src="js/audio.js"></script>
 <script src="data/sons-reglages.js"></script>
@@ -245,6 +269,8 @@
 <script src="data/histoire-reglages.js"></script>
 <script src="js/grosplan.js"></script>
 <script src="js/histoire.js"></script>
+<script src="assets/tirs/tirs-atlas.js"></script>
+<script src="js/tirsaubut.js"></script>
 <script src="js/match.js"></script>
 <script src="js/main.js"></script>
 </body>

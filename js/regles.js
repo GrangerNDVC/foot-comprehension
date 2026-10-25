@@ -107,6 +107,7 @@
       actionsDefense: p.actionsDefense || ["couper", "tacler", "bloquer", "degager"],
       actionsParMiTemps: p.actionsParMiTemps || 8,
       prolongation: p.prolongation || 0,
+      tirsAuBut: !!p.tirsAuBut,                    // encore nul après la prolongation : tirs au but (chantier 15)
       defenseRequise: p.defenseRequise || 1,       // bonnes réponses de suite pour récupérer le ballon en « coupant »
       departAdv: (p.departAdv != null) ? p.departAdv : 2,   // position du ballon quand l'adversaire engage (0 = devant notre but)
       contre: (p.contre != null) ? p.contre : 1,            // position du ballon quand on perd la balle en attaquant (contre-attaque)
@@ -461,17 +462,29 @@
     if (s.restantes > 0) { return; }
     if (s.mi === 1) { s.etat = "mitemps"; return; }
     if (s.mi === 2 && s.score.nous === s.score.eux && s.p.prolongation > 0) { s.etat = "prolongation"; return; }
+    if (s.mi === 3 && s.score.nous === s.score.eux && s.p.tirsAuBut) { s.etat = "tirsaubut"; return; }
     finDeMatch(s);
   };
-  function finDeMatch(s) {
+  // tirs : { nous, eux } = buts de la séance de tirs au but ; absent = fin normale
+  function finDeMatch(s, tirs) {
     s.etat = "fin";
     s.resultat = {
       nous: s.score.nous, eux: s.score.eux,
-      gagne: s.score.nous > s.score.eux,
-      nul: s.score.nous === s.score.eux,
+      gagne: tirs ? tirs.nous > tirs.eux : s.score.nous > s.score.eux,
+      nul: tirs ? false : s.score.nous === s.score.eux,
       premier: s.stats.premier, second: s.stats.second, rate: s.stats.rate, total: s.stats.q
     };
+    if (tirs) { s.resultat.tirs = { nous: tirs.nous, eux: tirs.eux }; }
   }
+  /* Tirs au but : fin du match une fois la séance jouée (res = { nous, eux } buts de la séance) */
+  R.finTirs = function (s, res) { finDeMatch(s, res); };
+  /* Niveau des questions « petits mots » de la séance de tirs au but : niveau du match + calibrage + réglage,
+     +1 en mort subite ; toujours entre 1 et 5 */
+  R.niveauTirs = function (s, nbTirsChacun) {
+    var c = cfg().tirsAuBut || {}, n = s.p.niveauBase + s.calibrage + s.ajust + (c.niveauSupp || 0);
+    if (nbTirsChacun >= (c.serie || 5)) { n += 1; }
+    return borne(n, 1, 5);
+  };
   R.secondeMiTemps = function (s) {
     s.mi = 2; s.restantes = s.p.actionsParMiTemps; s.faites = 0; s.etat = "jeu";
     s.poss = "eux"; s.pos = departAdv(s); s.tirAdverse = false; s.defOk = 0; R.placer(s);

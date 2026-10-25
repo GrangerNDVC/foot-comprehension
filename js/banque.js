@@ -148,7 +148,7 @@
   };
 
   /* Choisit une question et l'écrit avec les noms de l'action en cours.
-     type    : passe | dribble | tir | defense | gardien
+     type    : passe | dribble | tir | defense | gardien | motpetit (tirs au but « petits mots »)
      niveau  : 1 à 5
      opts.exclus      : ids déjà posés dans ce match (dans l'ordre)
      opts.revoir      : règles du carnet à revoir
@@ -231,7 +231,7 @@
       if (!q.id) { pb.push("une question sans id"); return; }
       if (ids[q.id]) { p("id en double"); }
       ids[q.id] = true;
-      if (["passe", "dribble", "tir", "defense", "gardien"].indexOf(q.type) < 0) { p("type inconnu (" + q.type + ")"); }
+      if (["passe", "dribble", "tir", "defense", "gardien", "motpetit"].indexOf(q.type) < 0) { p("type inconnu (" + q.type + ")"); }
       if (!(q.niveau >= 1 && q.niveau <= 5)) { p("niveau hors de 1 à 5"); }
       if (["choix", "barrer", "vrai-faux-nsp"].indexOf(q.format) < 0) { p("format inconnu (" + q.format + ")"); }
       if (!q.question) { p("pas de question"); }

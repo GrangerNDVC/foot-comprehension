@@ -267,3 +267,83 @@ button.gros.bleu { background: #7ad0ff; box-shadow: 0 4px 0 #3a86b3; }
 .boite-consigne.flashback { background: #3a2f1f; border-color: #a8864f; }
 .boite-consigne.flashback .texte-consigne, .boite-consigne.flashback .situation { color: #f3e3c3; }
 .bandeau-flashback { display: inline-block; background: #a8864f; color: #1b1308; font-weight: bold; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; border-radius: 8px; padding: 3px 10px; margin-bottom: 6px; }
+
+/* ============================================================
+   TIRS AU BUT « PETITS MOTS » (chantier 15)
+   Le but en pleine page (proportion 8:7 comme les images du jeu), 4 petits mots dans les coins.
+   ============================================================ */
+#t-hud { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; flex-wrap: wrap;
+         background: #0a0f24; border: 2px solid #3a4280; border-radius: 12px; padding: 6px 10px; margin-bottom: 8px; }
+#t-titre { color: #ffd23f; font-weight: bold; margin: 0 10px; white-space: nowrap; }
+#t-score { -webkit-box-flex: 1; flex: 1; font-size: 24px; font-weight: bold; text-align: center; min-width: 90px; }
+#t-pastilles { font-size: 18px; text-align: right; margin-left: 8px; }
+.t-ligne-pastille { opacity: .65; white-space: nowrap; }
+.t-ligne-pastille.t-actif { opacity: 1; font-weight: bold; }
+
+#t-scene { max-width: 640px; margin: 0 auto; }
+#t-cadre { position: relative; width: 100%; padding-bottom: 87.5%; background: #0A9400; border: 3px solid #000; overflow: hidden; }
+#t-fond, #t-fond svg, #t-img-but { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+#t-img-but { image-rendering: pixelated; image-rendering: -moz-crisp-edges; }
+
+#t-gardien { position: absolute; left: 43%; top: 41.5%; width: 14%; padding-bottom: 19.6%; z-index: 4;
+             -webkit-transform-origin: 50% 70%; transform-origin: 50% 70%;
+             -webkit-transition: -webkit-transform .5s ease-out; transition: transform .5s ease-out; }
+#t-gardien svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+#t-gardien.t-plonge-hg { -webkit-transform: translate(-150%, -105%) rotate(-55deg); transform: translate(-150%, -105%) rotate(-55deg); }
+#t-gardien.t-plonge-hd { -webkit-transform: translate(150%, -105%) rotate(55deg); transform: translate(150%, -105%) rotate(55deg); }
+#t-gardien.t-plonge-bg { -webkit-transform: translate(-150%, 0) rotate(-80deg); transform: translate(-150%, 0) rotate(-80deg); }
+#t-gardien.t-plonge-bd { -webkit-transform: translate(150%, 0) rotate(80deg); transform: translate(150%, 0) rotate(80deg); }
+
+.t-coin { position: absolute; z-index: 3; width: 30%; height: 13%; margin: 0; padding: 2px 4px; font-size: 18px; font-weight: bold; line-height: 1.1;
+          display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center;
+          text-align: center; background: rgba(255,255,255,.92); color: #111; border: 3px solid #111; border-radius: 10px; box-shadow: 0 3px 0 rgba(0,0,0,.5); }
+.t-hg { left: 14%; top: 20%; } .t-hd { left: 56%; top: 20%; } .t-bg { left: 14%; top: 49%; } .t-bd { left: 56%; top: 49%; }
+.t-coin:disabled { opacity: 1; }
+.t-coin.t-bonne { background: #6be06b; border-color: #1c6a1c; }
+.t-coin.t-fausse { background: #ff8a8a; border-color: #8a1c1c; text-decoration: line-through; }
+.t-coin.t-grise { background: rgba(255,255,255,.55); color: #444; }
+.t-coin:active:not(:disabled) { background: #ffd23f; }
+
+#t-ballon { position: absolute; z-index: 5; border-radius: 50%; border: 2px solid #111; width: 5.5%; height: 0; padding-bottom: 5.5%;
+            background: radial-gradient(circle at 35% 35%, #fff 0, #f2f2f2 55%, #8a8a8a 100%);
+            -webkit-transition: left .55s ease-out, top .55s ease-out, width .55s ease-out, padding-bottom .55s ease-out; transition: left .55s ease-out, top .55s ease-out, width .55s ease-out, padding-bottom .55s ease-out; }
+#t-ballon.t-sans-transition { -webkit-transition: none; transition: none; }
+#t-tireur { position: absolute; left: 31%; bottom: 0; width: 17%; padding-bottom: 29.75%; z-index: 6;
+            -webkit-transition: -webkit-transform .35s ease-out; transition: transform .35s ease-out; }
+#t-tireur svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+#t-tireur.t-sprite { left: 36%; width: 28%; padding-bottom: 28%; -webkit-transition: none; transition: none; }
+#t-tireur canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: -moz-crisp-edges; }
+#t-ballon.t-cache { display: none; }
+/* avec l'image du but (assets/tirs/tir-01-but.png), le but est plus bas : coins, gardien et message sont décalés */
+#t-cadre.t-img .t-hg, #t-cadre.t-img .t-hd { top: 37%; }
+#t-cadre.t-img .t-bg, #t-cadre.t-img .t-bd { top: 59%; }
+#t-cadre.t-img #t-gardien { top: 55%; }
+#t-cadre.t-img #t-bulle { top: 9%; }
+#t-tireur.t-elan { -webkit-transform: translateY(-4%) scale(.97); transform: translateY(-4%) scale(.97); }
+#t-tireur.t-frappe { -webkit-transform: translateY(-9%) scale(.93); transform: translateY(-9%) scale(.93); }
+
+#t-bulle { position: absolute; z-index: 7; left: 0; right: 0; top: 36%; text-align: center; font-size: 46px; font-weight: bold; letter-spacing: 2px; color: #fff;
+           text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0 5px 0 #000; pointer-events: none; }
+#t-bulle.t-bulle-ok { color: #ffd23f; } #t-bulle.t-bulle-ko { color: #ff9a9a; }
+
+#t-bas { max-width: 760px; margin: 10px auto; }
+#t-etiquette { margin-bottom: 6px; }
+.t-niveau { color: #ffd23f; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-right: 6px; }
+#t-phrase { font-size: 24px; font-weight: bold; background: #1b2350; border: 2px solid #3a4280; border-radius: 14px; padding: 12px 16px; margin-bottom: 6px; }
+#t-phrase:empty { display: none; }
+.t-trou { display: inline-block; border-bottom: 4px solid #ffd23f; min-width: 3em; }
+.t-trou-rempli { background: #6be06b; color: #111; border-radius: 6px; padding: 0 6px; }
+#t-question { font-size: 20px; font-weight: bold; color: #ffd23f; margin: 6px 0; }
+#t-extra { text-align: center; }
+#t-extra .boite-avant { text-align: left; }
+.t-choix-niveau select { font-size: 18px; padding: 6px; border-radius: 8px; }
+@media (max-width: 600px) {
+  .t-coin { font-size: 13px; border-width: 2px; border-radius: 7px; padding: 1px 2px; }
+  #t-bulle { font-size: 30px; }
+  #t-phrase { font-size: 20px; padding: 8px 10px; }
+  #t-titre { display: none; }
+}
+@media (max-width: 380px) { .t-coin { font-size: 11px; } }
+@media (max-height: 520px) and (min-width: 600px) { #t-scene { max-width: 380px; } }
+/* tablette en paysage (ex. iPad Mini 2 : 1024 × 768) : le but un peu plus petit pour voir la phrase sans défiler */
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 820px) { #t-scene { max-width: 500px; } }

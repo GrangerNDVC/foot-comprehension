@@ -84,6 +84,15 @@ JEU.config = {
     min: -1, max: 1
   },
 
+  /* TIRS AU BUT « PETITS MOTS » (chantier 15) : séance d'entraînement (menu) et départage d'un match nul.
+     serie : tirs de chaque équipe avant la mort subite ; mortSubiteMax : tirs de plus par équipe au maximum (sécurité)
+     niveauSupp : niveau ajouté aux questions des tirs au but (0 = niveau du match + calibrage + réglage)
+     entrainement : tirs par série ; niveauHaut = nombre de buts qui fait monter d'un niveau, niveauBas = nombre qui fait baisser */
+  tirsAuBut: {
+    serie: 5, mortSubiteMax: 10, niveauSupp: 0,
+    entrainement: { tirs: 5, niveauHaut: 4, niveauBas: 2 }
+  },
+
   /* Après le match d'essai : réglage du niveau de départ pour la suite (-1, 0 ou +1) */
   calibrage: {
     tauxHaut: 0.80,   // au moins 80 % de réussite du premier coup -> +1
@@ -98,6 +107,7 @@ JEU.config = {
      auto : true = pas de choix d'action (une question par action)
      actionsAttaque / actionsDefense : les commandes disponibles
      prolongation : nombre de questions en cas d'égalité (le premier but gagne)
+     tirsAuBut : true = si c'est encore nul après la prolongation, séance de tirs au but (voir « tirsAuBut » plus haut)
      Réglages d'équilibre (facultatifs) :
        defenseRequise : bonnes réponses de suite pour récupérer le ballon en « coupant » (1 par défaut)
        departAdv : où l'adversaire engage (0 = devant notre but, 2 par défaut) : plus c'est bas, plus c'est dangereux
@@ -108,14 +118,14 @@ JEU.config = {
   matchs: {
     m1: { nom: "Match d'essai", auto: true,  niveauBase: 2, montee: 0, actionsParMiTemps: 5,  prolongation: 0 },
     m2: { auto: false, montee: 1, tirNiveau: 1, actionsAttaque: ["passe", "tir"],
-          actionsDefense: ["couper", "tacler"], sanctions: [],                      actionsParMiTemps: 8,  prolongation: 4 },
+          actionsDefense: ["couper", "tacler"], sanctions: [],                      actionsParMiTemps: 8,  prolongation: 4, tirsAuBut: true },
     m3: { auto: false, departAdv: 1, actionsAttaque: ["passe", "lob", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "degager"], sanctions: ["jaune"],      actionsParMiTemps: 9,  prolongation: 4 },
+          actionsDefense: ["couper", "tacler", "degager"], sanctions: ["jaune"],      actionsParMiTemps: 9,  prolongation: 4, tirsAuBut: true },
     m4: { auto: false, departAdv: 1, defenseRequise: 2, defenseBonus: 1, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure"], actionsParMiTemps: 10, prolongation: 4 },
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure"], actionsParMiTemps: 10, prolongation: 4, tirsAuBut: true },
     m5: { auto: false, defenseBonus: 1, departAdv: 1, defenseRequise: 2, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 10, prolongation: 4 },
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 10, prolongation: 4, tirsAuBut: true },
     m6: { auto: false, defenseBonus: 1, departAdv: 1, defenseRequise: 2, contre: 0, actionsAttaque: ["passe", "lob", "uneDeux", "dribble", "tir"],
-          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 12, prolongation: 6 }
+          actionsDefense: ["couper", "tacler", "contre", "bloquer", "degager"], sanctions: ["jaune", "blessure", "rouge"], actionsParMiTemps: 12, prolongation: 6, tirsAuBut: true }
   }
 };

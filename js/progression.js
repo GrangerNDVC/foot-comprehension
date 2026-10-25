@@ -62,6 +62,9 @@
     var cotes = [], k, c;
     [a, b].forEach(function (s) { if (s.raz >= Z) { cotes.push(s); } });   // une copie d'avant un effacement est ignorée
     var sortie = { matchs: {}, carnet: {}, mots: {}, calibrage: 0, raz: Z, reinit: R, maj: Math.max(a.maj, b.maj) };
+    // niveau de l'entraînement « tirs au but » : celui de la copie la plus récente (chantier 15)
+    var ta = (a.raz >= Z && a.tirs) ? a.tirs : null, tb = (b.raz >= Z && b.tirs) ? b.tirs : null;
+    if (ta && tb) { sortie.tirs = (a.maj >= b.maj) ? copie(ta) : copie(tb); } else if (ta || tb) { sortie.tirs = copie(ta || tb); }
 
     cotes.forEach(function (s) {
       if (s.reinit < R) { return; }
@@ -123,6 +126,7 @@
       var jouees = (a ? a.parties : 0) + 1;
       if (nouveau) {
         d.matchs[id] = { gagne: !!res.gagne, nous: res.nous, eux: res.eux, parties: jouees };
+        if (res.tirs) { d.matchs[id].tab = res.tirs.nous + "–" + res.tirs.eux; }          // tirs au but (chantier 15)
       } else {
         a.parties = jouees;
       }
@@ -135,6 +139,10 @@
       var prec = lire().matchs[matchs[index - 1].id];
       return !!(prec && prec.gagne);
     },
+
+    // Niveau de l'entraînement « tirs au but » (1 à 5 ; 0 = pas encore fixé)
+    niveauTirs: function () { var t = lire().tirs; return (t && typeof t.niveau === "number") ? t.niveau : 0; },
+    fixerNiveauTirs: function (n) { var d = lire(); d.tirs = { niveau: n }; ecrire(); },
 
     calibrage: function () { return lire().calibrage; },
     fixerCalibrage: function (v) { lire().calibrage = v; ecrire(); },

@@ -96,3 +96,11 @@ Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `rec
 - Changer le verrou : calculer le SHA-256 de `foot-prof-v1:` suivi du nouveau mot de passe et remplacer la constante `VERROU` dans js/compte.js.
 - **Données enregistrées** : numéro, progression (matchs, carnet de règles, « Vu à l'entraînement », choix des noms, date de dernière activité). Pas de nom, pas d'e-mail, pas d'adresse IP côté jeu.
 - Contrôle automatique : `node outils-test/verifier-questions.js` (inchangé). Le test du compte (faux Firebase) est dans le compte rendu 25-CHANTIER13-RESULTATS.md.
+
+## Chantier 15 (25/10/2026) : tirs au but « petits mots »
+- **Entraînement** : bouton « 🥅 Tirs au but : petits mots » dans le menu. 5 tirs ; le niveau (1 à 5) s'adapte tout seul (4 buts ou plus : on monte ; 2 buts ou moins : on descend) ou se fixe à la main.
+- **Fin de match** : si le match est encore nul après la prolongation, séance de 5 tirs chacun puis mort subite. L'élève tire pour son équipe (il complète une phrase : bon coin = but) et est gardien sur les tirs adverses (bon petit mot = arrêt).
+- Banque : data/motspetits.js (80 questions, 16 par niveau, type `motpetit`) et data/regles-motspetits.js (règles `mp_*` du carnet).
+- Réglages : `tirsAuBut` dans data/config.js (série, mort subite maximale, niveau supplémentaire, seuils d'entraînement).
+- Images : assets/tirs/tir-01-but.png (le but) et assets/tirs/tirs-atlas.js (4 tireurs recolorables). Pour changer le but, remplacer le PNG (même nom).
+- Voir 28-CHANTIER15-RESULTATS.md.

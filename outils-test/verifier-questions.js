@@ -5,7 +5,7 @@ var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8");
 var scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien|motspetits)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { window: {}, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } }; ctx.window = ctx; ctx.JEU = undefined; vm.createContext(ctx);
 ctx.JEU = ctx.JEU; scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });
 var J = ctx.JEU, pb = J.banque.verifier();
@@ -82,5 +82,29 @@ gds.forEach(function (q) {
 var gvf = [0, 0, 0]; gds.filter(function (q) { return q.format === "vrai-faux-nsp"; }).forEach(function (q) { gvf[q.bonne]++; });
 console.log("Banque de gardien : " + gds.length + " questions ; position de la bonne (choix) " + gpos.join("/") + " ; longueur consigne+situation par niveau (min-max) " + Object.keys(gmots).map(function (k) { return k + ":" + Math.min.apply(null, gmots[k]) + "-" + Math.max.apply(null, gmots[k]); }).join(" "));
 console.log("Gardien, « On ne peut pas savoir » : bonne réponse " + gnspBonne + " fois (" + Math.round(100 * gnspBonne / Math.max(1, gds.length)) + " %), mauvaise réponse " + gnspMauvaise + " fois ; vrai-faux-nsp Oui/Non/NSP = " + gvf.join("/"));
-console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ")" : "Contrôle complet : aucun problème.");
+/* Banque « petits mots » (chantier 15) : 12 par niveau au moins, un seul trou « ____ », 4 options distinctes, règles mp_ de 10 mots au plus,
+   la longueur des phrases croît avec le niveau, une seule bonne réponse (format choix), aucune place {A}… */
+var mps = tous.filter(function (q) { return /^mp-/.test(q.id); });
+for (var nm = 1; nm <= 5; nm++) { var nn = mps.filter(function (q) { return q.niveau === nm; }).length; if (nn < 12) { console.log("PROBLÈME : niveau " + nm + " a " + nn + " questions de petits mots (12 au moins attendues)"); pb.push("niveau " + nm + " motpetit : " + nn); } }
+if (tous.filter(function (q) { return q.type === "motpetit"; }).length !== mps.length) { pb.push("des questions de type motpetit ne sont pas dans data/motspetits.js"); }
+var mpLong = {}, mpPos = [0, 0, 0, 0];
+mps.forEach(function (q) {
+  if (q.type !== "motpetit") { pb.push(q.id + " : type motpetit attendu"); }
+  if (q.format !== "choix") { pb.push(q.id + " : format choix attendu"); }
+  if (q.options.length !== 4) { pb.push(q.id + " : 4 options attendues (une par coin du but)"); }
+  if (q.consigne.split("____").length !== 2) { pb.push(q.id + " : un seul trou « ____ » attendu dans la phrase"); }
+  if (/\{[A-Z]/.test(JSON.stringify(q))) { pb.push(q.id + " : pas de place {A}… dans les petits mots"); }
+  var debutTrou = /^____/.test(q.consigne), maj = /^[A-ZÀÉÈ]/.test(q.options[q.bonne]);
+  if (debutTrou && !maj) { pb.push(q.id + " : trou en début de phrase, l'option doit commencer par une majuscule"); }
+  if (!debutTrou && /^[A-ZÀ-Ý]/.test(q.options[q.bonne]) && !/^[A-ZÀ-Ý]/.test(q.consigne.split("____")[0].slice(-3)) && q.consigne.split("____")[0].slice(-2) !== ". " && q.consigne.split("____")[0].slice(-2) !== "? ") { pb.push(q.id + " : majuscule inattendue au milieu de la phrase"); }
+  q.options.forEach(function (o, i) { if (i !== q.bonne && o.toLowerCase() === q.options[q.bonne].toLowerCase()) { pb.push(q.id + " : option identique à la bonne réponse"); } });
+  var mots = q.consigne.split(/\s+/).length; (mpLong[q.niveau] = mpLong[q.niveau] || []).push(mots);
+  mpPos[q.bonne]++;
+});
+Object.keys(J.regles_texte).forEach(function (k) { if (/^mp_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
+mps.forEach(function (q) { if (!/^mp_/.test(q.regle)) { pb.push(q.id + " : règle mp_ attendue"); } });
+var moy = {}; Object.keys(mpLong).forEach(function (k) { var s = 0; mpLong[k].forEach(function (x) { s += x; }); moy[k] = s / mpLong[k].length; });
+for (var kl = 2; kl <= 5; kl++) { if (!(moy[kl] > moy[kl - 1])) { pb.push("petits mots : la phrase moyenne du niveau " + kl + " n'est pas plus longue que celle du niveau " + (kl - 1)); } }
+console.log("Banque « petits mots » : " + mps.length + " questions ; longueur moyenne des phrases par niveau (mots) " + Object.keys(moy).map(function (k) { return k + ":" + Math.round(moy[k]); }).join(" ") + " ; position de la bonne dans les données " + mpPos.join("/") + " (le jeu mélange les coins)");
+console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ") :\n- " + pb.join("\n- ") : "Contrôle complet : aucun problème.");
 process.exit(pb.length ? 1 : 0);

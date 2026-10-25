@@ -31,10 +31,11 @@
     return a;
   }
   function ecran(id) {
-    ["ecran-compte", "ecran-menu", "ecran-avant", "ecran-match", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
+    ["ecran-compte", "ecran-menu", "ecran-avant", "ecran-match", "ecran-tirs", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
     if (J.histoire && id !== "ecran-avant" && id !== "ecran-fin" && id !== "ecran-championnat") { J.histoire.arreter(); }
     root.scrollTo(0, 0);
   }
+  M.ecran = ecran;                 // pour js/tirsaubut.js
   function tout() { return /[?&]tout\b/.test(root.location.search || ""); }
   function matchs() { return J.championnat.matchs; }
   function nomEquipe() { return R.eq(J.championnat.equipe); }
@@ -70,7 +71,7 @@
   /* ---------- menu ---------- */
   M.menu = function () {
     if (J.sons) { J.sons.annulerAttentes(); } musique("menu");
-    J.audio.stop(); if (J.grosplan) { J.grosplan.arreter(); }
+    J.audio.stop(); if (J.grosplan) { J.grosplan.arreter(); } if (J.tirs) { J.tirs.arreter(); }
     var zone = $("cartes"); vider(zone);
     if (J.histoire) { J.histoire.afficher($("accueil-image"), "accueil", "avant", "histoire-accueil"); }
     var gagnes = matchs().filter(function (m) { var r = J.progression.match(m.id); return r && r.gagne; }).length;
@@ -96,7 +97,7 @@
       for (k = 1; k <= 5; k++) { etoiles += (k <= m.niveau ? "★" : "☆"); }
       carte.appendChild(el("p", "carte-niveau", "Difficulté " + etoiles));
       carte.appendChild(el("div", "carte-score",
-        meilleur ? ((meilleur.gagne ? "✅ Gagné " : "Pas encore gagné · ") + meilleur.nous + " – " + meilleur.eux) :
+        meilleur ? ((meilleur.gagne ? "✅ Gagné " : "Pas encore gagné · ") + meilleur.nous + " – " + meilleur.eux + (meilleur.tab ? " (tirs au but " + meilleur.tab + ")" : "")) :
                    (ouvert ? "À jouer" : "🔒 Gagne le match d'avant")));
       var b = el("button", "gros", ouvert ? "▶ Jouer" : "🔒");
       b.disabled = !ouvert;
@@ -195,6 +196,7 @@
   function tour() {
     if (S.etat === "mitemps") { return ecranMiTemps(); }
     if (S.etat === "prolongation") { return ecranProlongation(); }
+    if (S.etat === "tirsaubut") { return ecranTirsAuBut(); }
     if (S.etat === "fin") { return finMatch(); }
     var epuise = (R.phase(S) === "attaque") && R.epuise(S);     // énergie à zéro : l'adversaire récupère le ballon
     majHud();
@@ -655,9 +657,36 @@
     $("ecran-match").className = "ecran etat-pause";
     p.appendChild(el("div", "titre-menu", "⏱ Prolongation !"));
     p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + adv()));
-    p.appendChild(el("p", "texte-pause", "Égalité ! Le premier qui marque gagne le match."));
+    p.appendChild(el("p", "texte-pause", "Égalité ! Le premier qui marque gagne le match." +
+      (S.p.tirsAuBut ? " Si personne ne marque, ce sera les tirs au but." : "")));
     var b = el("button", "gros", "C'est parti ▶");
     b.onclick = function () { R.prolongation(S); tour(); };
+    p.appendChild(b);
+  }
+
+  /* ---------- tirs au but « petits mots » (chantier 15) : encore nul après la prolongation ---------- */
+  function ecranTirsAuBut() {
+    son("sifflet-mitemps"); musique("match-tension");
+    majHud(); dessinerCarte(); narration("");
+    var p = $("m-panneau"); vider(p);
+    $("ecran-match").className = "ecran etat-pause";
+    p.appendChild(el("div", "titre-menu", "🥅 Tirs au but !"));
+    p.appendChild(el("div", "score-pause", nomEquipe() + " " + S.score.nous + " – " + S.score.eux + " " + adv()));
+    p.appendChild(el("p", "texte-pause", "Toujours égalité ! Le match se joue aux tirs au but : 5 tirs chacun, puis un tir de plus chacun jusqu'à ce qu'il y ait un gagnant."));
+    var b = el("button", "gros", "C'est parti ▶");
+    b.onclick = function () {
+      J.tirs.serieMatch({
+        def: S.def, nomNous: nomEquipe(), nomEux: adv(), exclus: S.exclus,
+        niveau: function (etat) { return R.niveauTirs(S, Math.min(etat.nous.length, etat.eux.length)); },
+        surQuitter: function () { M.menu(); },
+        onFin: function (res) {
+          res.reglesRatees.forEach(function (r) { if (S.reglesRatees.indexOf(r) < 0) { S.reglesRatees.push(r); } });
+          R.finTirs(S, res);
+          ecran("ecran-match");
+          tour();
+        }
+      });
+    };
     p.appendChild(b);
   }
 
@@ -673,9 +702,12 @@
     if (p.auto) { calib = R.calibrer(res); J.progression.fixerCalibrage(calib); }
 
     $("fin-titre").textContent = res.gagne ? "🏆 Victoire !" : (res.nul ? "🤝 Égalité" : "Match perdu");
-    $("fin-score").textContent = nomEquipe() + " " + res.nous + " – " + res.eux + " " + R.eq(m.adversaire);
+    $("fin-score").textContent = nomEquipe() + " " + res.nous + " – " + res.eux + " " + R.eq(m.adversaire) +
+      (res.tirs ? " (tirs au but : " + res.tirs.nous + " – " + res.tirs.eux + ")" : "");
     var pct = res.total ? Math.round(100 * res.premier / res.total) : 0;
-    var msg = p.auto ? "Match d'essai terminé : le jeu a réglé le niveau. Le championnat commence !" :
+    var msg = (res.tirs && res.gagne) ? "Bravo : tu as gagné aux tirs au but !" :
+              (res.tirs) ? "Battu aux tirs au but, de justesse. Rejoue pour décrocher la victoire." :
+              p.auto ? "Match d'essai terminé : le jeu a réglé le niveau. Le championnat commence !" :
               res.gagne ? "Bravo, tu as gagné ce match !" :
               res.nul ? "Égalité : rejoue pour décrocher la victoire." :
                         "Pas cette fois. Rejoue : chaque match te fait progresser !";
@@ -746,6 +778,7 @@
     $("btn-recommencer").onclick = recommencer;
     $("btn-fin-tournoi").onclick = function () { M.finChampionnat(); };
     $("btn-carnet-menu").onclick = ouvrirCarnet;
+    $("btn-tirs-menu").onclick = function () { J.tirs.entrainement(); };
     $("btn-reset").onclick = function () {
       if (root.confirm("Effacer toute ma progression ?")) { J.progression.effacer(); M.menu(); }
     };
@@ -760,5 +793,6 @@
   // pour les tests automatiques
   M._etat = function () { return { S: S, Q: Q }; };
   M._finMatch = function () { return finMatch(); };
+  M.ouvrirCarnet = ouvrirCarnet;           // pour js/tirsaubut.js
   M._tour = function () { return tour(); };
 })(typeof window !== "undefined" ? window : this);
