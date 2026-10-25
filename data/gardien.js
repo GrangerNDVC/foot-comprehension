@@ -11,6 +11,8 @@
    LES NOMS : aucun prénom en dur. {X} = l'adversaire qui tire (écrit « n°7 »), {A} = notre joueur placé en face (jamais le gardien),
    {B} {C} = d'autres joueurs de Nankatsu, {Y} {Z} = d'autres adversaires. Le gardien s'écrit « le gardien ».
    ============================================================ */
+/* FLASHBACK (chantier 14) : `flashback: "libellé"` = le texte ne se passe pas dans l'action à l'écran (autre match, cours, entraînement…).
+   Sans ce champ, {B} {C} sont des joueurs sur le terrain, entourés en rose. */
 JEU.ajouterQuestions([
 
 /* ---------------- NIVEAU 1 : une information, phrases simples (20 à 26 mots) ---------------- */
@@ -143,7 +145,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "puis lever le bras", regle: "tir_ordre",
   explication: { bonne: "Il a crié : il lève maintenant le bras.", cle: "Les deux consignes se suivent : crier, puis lever.", piege: "Crier est déjà fait." } },
 
-{ id: "gar-2-05", niveau: 2, type: "gardien", format: "choix",
+{ id: "gar-2-05", flashback: "À l'entraînement", niveau: 2, type: "gardien", format: "choix",
   consigne: "Trois tireurs s'entraînent face au gardien : {X} tire à droite, {Y} tire à gauche, et {Z} tire au centre.",
   situation: "Le gardien les regarde l'un après l'autre sans bouger.",
   question: "Quel tireur envoie le ballon à gauche ?",
@@ -160,12 +162,12 @@ JEU.ajouterQuestions([
   explication: { bonne: "Le tir est très puissant : il le repousse.", cle: "« Comme » donne la cause.", piege: "Le texte ne parle ni du coach, ni d'un ballon lent." } },
 
 { id: "gar-2-07", niveau: 2, type: "gardien", format: "barrer",
-  consigne: "Le gardien porte le numéro 1 et {B} porte le numéro 5. {X} porte le numéro 9 : il tire, et le gardien arrête le ballon.",
-  situation: "{B} est derrière le gardien, près de la ligne.",
+  consigne: "Le gardien porte le numéro 1 et le défenseur porte le numéro 5. Le tireur adverse porte le numéro 9 : il tire, et le gardien arrête le ballon.",
+  situation: "Le défenseur est derrière le gardien, près de la ligne.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
-  options: ["Le gardien porte le numéro 1.", "{B} porte le numéro 9.", "{X} porte le numéro 9.", "{B} arrête le ballon."],
+  options: ["Le gardien porte le numéro 1.", "Le défenseur porte le numéro 9.", "Le tireur adverse porte le numéro 9.", "Le défenseur arrête le ballon."],
   bonne: [0, 2], mot: "numéro 1", regle: "tir_qui",
-  explication: { bonne: "Le gardien porte le 1 et {X} le 9.", cle: "Relie chaque joueur à son numéro.", piege: "{B} porte le 5 et n'arrête pas le ballon." } },
+  explication: { bonne: "Le gardien porte le 1 et le tireur le 9.", cle: "Relie chaque joueur à son numéro.", piege: "Le défenseur porte le 5 et n'arrête pas le ballon." } },
 
 { id: "gar-2-08", niveau: 2, type: "gardien", format: "vrai-faux-nsp",
   consigne: "Le gardien plonge à droite et touche le ballon. {X} regarde le ciel, puis il se retourne vers {A}.",
@@ -183,7 +185,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "regarde les hanches", regle: "tir_negation",
   explication: { bonne: "Il regarde les hanches de {X}.", cle: "« Ne… pas » interdit le ballon, puis on dit quoi faire.", piege: "Le ballon est justement ce qu'il ne doit pas regarder." } },
 
-{ id: "gar-2-10", niveau: 2, type: "gardien", format: "choix",
+{ id: "gar-2-10", flashback: "Un autre match", niveau: 2, type: "gardien", format: "choix",
   consigne: "Le gardien a arrêté cinq tirs, mais il en a encaissé deux. {X} a marqué le deuxième, de loin, avec le pied gauche.",
   situation: "Le gardien baisse la tête, puis il applaudit son adversaire.",
   question: "Combien de tirs le gardien a-t-il arrêtés ?",
@@ -233,7 +235,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "le défenseur", regle: "tir_qui",
   explication: { bonne: "{B}, le défenseur, sauve le but.", cle: "« Le défenseur » reprend {B}.", piege: "{Y} tire encore, mais son tir est sauvé." } },
 
-{ id: "gar-3-04", niveau: 3, type: "gardien", format: "choix",
+{ id: "gar-3-04", flashback: "Après un match", niveau: 3, type: "gardien", format: "choix",
   consigne: "Avant d'aller aux vestiaires, le gardien range ses gants, puis il remplit sa gourde. Il n'oublie pas de féliciter {B}, qui a bien défendu. Ensuite, il va saluer les supporters.",
   situation: "Il fait la même chose après chaque match.",
   question: "Que fait le gardien juste après avoir rangé ses gants ?",
@@ -280,7 +282,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "aussi rapide que {X}", regle: "tir_comparaison",
   explication: { bonne: "{X} et {B} sont aussi rapides.", cle: "« Aussi rapide que » : même vitesse.", piege: "Le gardien est plus grand, pas plus rapide." } },
 
-{ id: "gar-3-10", niveau: 3, type: "gardien", format: "barrer",
+{ id: "gar-3-10", flashback: "Un autre match", niveau: 3, type: "gardien", format: "barrer",
   consigne: "Quand {X} s'élance, le gardien ne bouge pas. Il attend que le pied touche le ballon, puis il plonge. Il ne tente jamais d'anticiper : l'an dernier, cela lui a coûté un but.",
   situation: "{B} regarde la scène depuis le banc.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
@@ -306,7 +308,7 @@ JEU.ajouterQuestions([
 
 /* ---------------- NIVEAU 4 : conditions, exceptions, quantités (48 à 62 mots) ---------------- */
 
-{ id: "gar-4-01", niveau: 4, type: "gardien", format: "choix",
+{ id: "gar-4-01", flashback: "Avant le match", niveau: 4, type: "gardien", format: "choix",
   consigne: "Avant le match, le coach donne une fiche au gardien : « Contre un tireur droitier, plonge à ta droite, sauf si le tireur regarde ton côté gauche : dans ce cas, plonge à ta gauche. Contre un gaucher, fais l'inverse. Si tu ne sais pas, reste au centre et attends. »",
   situation: "{X} est droitier, et il regarde le côté gauche du gardien.",
   question: "De quel côté le gardien plonge-t-il ?",
@@ -329,7 +331,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "seulement si", regle: "tir_condition",
   explication: { bonne: "Non : la passe de {B} était volontaire.", cle: "Il faut deux conditions : la surface ET pas de passe volontaire.", piege: "La surface ne suffit pas." } },
 
-{ id: "gar-4-04", niveau: 4, type: "gardien", format: "choix",
+{ id: "gar-4-04", flashback: "Un autre match", niveau: 4, type: "gardien", format: "choix",
   consigne: "Sur quatre penaltys, {X} en a marqué trois. Le gardien n'en a donc arrêté qu'un seul. Mais, sur les cinq tirs au but suivants, il a arrêté tous ceux qui partaient à gauche, soit deux. Les trois autres sont entrés.",
   situation: "Le coach range sa feuille de statistiques, très content de son gardien.",
   question: "Combien de tirs le gardien a-t-il arrêtés sur les cinq tirs au but suivants ?",
@@ -337,7 +339,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "soit deux", regle: "tir_nombre",
   explication: { bonne: "Il en a arrêté deux.", cle: "Ne mélange pas les penaltys et les tirs au but suivants.", piege: "Un arrêt concerne les quatre penaltys." } },
 
-{ id: "gar-4-05", niveau: 4, type: "gardien", format: "barrer",
+{ id: "gar-4-05", flashback: "Bilan du coach", niveau: 4, type: "gardien", format: "barrer",
   consigne: "Notes du coach sur les buts encaissés : {X} et {Y} ont marqué de près, tous les deux dans la surface. Aucun autre tireur n'a battu le gardien de près. Le gardien n'a encaissé qu'un seul but de loin : un coup franc de {Z}, à vingt mètres.",
   situation: "Le coach lit ces notes avant la mi-temps.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
@@ -361,7 +363,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "moins de six secondes", regle: "tir_exclu",
   explication: { bonne: "Non : « moins de six » ne comprend pas six.", cle: "Moins de six : six secondes n'est pas compris.", piege: "Six secondes pile, c'est déjà trop." } },
 
-{ id: "gar-4-08", niveau: 4, type: "gardien", format: "choix",
+{ id: "gar-4-08", flashback: "À l'entraînement", niveau: 4, type: "gardien", format: "choix",
   consigne: "Un gardien aide son équipe de trois façons : il arrête les tirs, il lance les contre-attaques, et il parle à ses défenseurs. Ni {B} ni {C} ne peuvent le remplacer pour cela, car ils n'ont pas de gants. Le troisième rôle est le plus discret.",
   situation: "Le coach insiste sur ce point devant tout le groupe, avant l'entraînement.",
   question: "Quel est le troisième rôle du gardien ?",
@@ -369,7 +371,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "trois façons", regle: "tir_nombre",
   explication: { bonne: "Le troisième : parler à ses défenseurs.", cle: "Compte dans l'ordre : arrêter, lancer, parler.", piege: "Remplacer {B} n'est pas un des trois rôles." } },
 
-{ id: "gar-4-09", niveau: 4, type: "gardien", format: "choix",
+{ id: "gar-4-09", flashback: "Un autre match", niveau: 4, type: "gardien", format: "choix",
   consigne: "Au tir au but, chaque équipe tire cinq fois. Si, après cinq tirs, les scores sont égaux, on tire un par un jusqu'à ce qu'une équipe marque et que l'autre rate. Après cinq tirs chacune, le score est de quatre à quatre.",
   situation: "{X} s'avance pour le tir suivant, le sixième de son équipe.",
   question: "Que se passe-t-il maintenant ?",
@@ -410,7 +412,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "sauf quand le gardien est tout petit", regle: "tir_sauf",
   explication: { bonne: "Pied droit, sans feinte, gardien grand : coin gauche.", cle: "L'exception ne s'applique pas : le gardien est grand.", piege: "Le coin droit vient du pied gauche." } },
 
-{ id: "gar-5-02", niveau: 5, type: "gardien", format: "vrai-faux-nsp",
+{ id: "gar-5-02", flashback: "Après le match", niveau: 5, type: "gardien", format: "vrai-faux-nsp",
   consigne: "Le coach avait prévenu le gardien : « Si {X} tire à droite, plonge à droite. Si {X} tire à gauche, plonge à gauche. Si tu hésites, reste au centre. » Après le match, le gardien explique qu'il a plongé à gauche sur le dernier tir, mais sans dire pourquoi, ni où {X} avait tiré.",
   situation: "Le dernier tir est entré dans le but.",
   question: "{X} a-t-il tiré à gauche ?",
@@ -434,7 +436,7 @@ JEU.ajouterQuestions([
   bonne: [0, 2], mot: "sauf si", regle: "tir_sauf",
   explication: { bonne: "Il suit le regard : le côté droit.", cle: "L'exception ne s'applique pas : {X} n'a jamais trompé.", piege: "Les épaules comptent seulement si {X} a déjà trompé." } },
 
-{ id: "gar-5-05", niveau: 5, type: "gardien", format: "choix",
+{ id: "gar-5-05", flashback: "Au club", niveau: 5, type: "gardien", format: "choix",
   consigne: "Pour entrer dans l'équipe de gardiens du club, il faut avoir moins de quinze ans, savoir plonger des deux côtés, et avoir l'autorisation écrite d'un parent. Le candidat qui a quinze ans n'est pas accepté. {A} a douze ans, plonge bien des deux côtés, mais n'a pas encore rapporté sa feuille signée.",
   situation: "Le coach attend la réponse du club avant de décider, et {A} espère que ce sera oui.",
   question: "{A} peut-il entrer dans l'équipe de gardiens aujourd'hui ?",
@@ -458,7 +460,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "deux fois moins", regle: "tir_comparaison",
   explication: { bonne: "Deux fois moins qu'une seconde : une demi-seconde.", cle: "Compare à dix mètres, puis divise par deux.", piege: "Deux secondes serait le double, pas la moitié." } },
 
-{ id: "gar-5-08", niveau: 5, type: "gardien", format: "barrer",
+{ id: "gar-5-08", flashback: "À l'entraînement", niveau: 5, type: "gardien", format: "barrer",
   consigne: "Bien que le gardien soit le plus petit de l'équipe, c'est lui qui sauve le plus de ballons, parce qu'il saute plus vite que les autres. {B} est plus grand que lui, et pourtant il ne sauve presque rien : il bouge trop tard. Le coach dit que la taille compte moins que la vitesse.",
   situation: "Les supporters le savent depuis longtemps, et ils appellent le gardien « la fusée ».",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
@@ -466,7 +468,7 @@ JEU.ajouterQuestions([
   bonne: [0, 2], mot: "Bien que", regle: "tir_meme_si",
   explication: { bonne: "Le gardien est le plus petit et le plus rapide.", cle: "« Bien que » : un détail qui ne change pas le résultat.", piege: "{B} est plus grand, mais il bouge trop tard." } },
 
-{ id: "gar-5-09", niveau: 5, type: "gardien", format: "choix",
+{ id: "gar-5-09", flashback: "Cette saison", niveau: 5, type: "gardien", format: "choix",
   consigne: "{X} a tiré trois penaltys cette saison. Le premier, il l'a tiré à gauche, et le gardien a plongé du bon côté. Le deuxième, il l'a tiré à droite, mais le gardien a encore plongé du bon côté. Pour le troisième, {X} a changé de pied, et le ballon est entré. Le gardien dit qu'il n'a pas compris pourquoi.",
   question: "Que dit le texte du troisième penalty ?",
   options: ["Le gardien a plongé du bon côté", "Le gardien a plongé du mauvais côté", "{X} a tiré sur le poteau", "Le ballon est entré après un changement de pied"],
@@ -481,7 +483,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "sorti derrière le poteau", regle: "tir_condition",
   explication: { bonne: "Non : le ballon n'est pas entré, c'est un corner.", cle: "Le but est accordé seulement si le ballon entre.", piege: "Toucher le ballon ne donne pas de but." } },
 
-{ id: "gar-5-11", niveau: 5, type: "gardien", format: "choix",
+{ id: "gar-5-11", flashback: "Un autre match", niveau: 5, type: "gardien", format: "choix",
   consigne: "Le gardien arrête tous les tirs qui partent sur sa gauche, sauf ceux qui viennent de {X}, car {X} tire plus fort que les autres. Sur sa droite, il en arrête la moitié. Le match compte dix tirs : quatre à gauche, dont un de {X}, et six à droite.",
   situation: "Le coach regarde le tableau des statistiques, puis il félicite le gardien devant l'équipe.",
   question: "Combien de tirs le gardien arrête-t-il à gauche ?",

@@ -16,6 +16,8 @@ tous.forEach(function (q) {
   var bonnes = [].concat(q.bonne);
   if (q.format === "vrai-faux-nsp" && q.options.join("|") !== "Oui|Non|On ne peut pas savoir") { pb.push(q.id + " : options vrai-faux-nsp inattendues"); }
 });
+tous.forEach(function (q) { if (q.flashback != null && (typeof q.flashback !== "string" || !q.flashback.trim() || q.flashback.length > 40)) { pb.push(q.id + " : flashback doit être un libellé de 1 à 40 caractères"); } });
+console.log("Questions en flashback : " + tous.filter(function (q) { return q.flashback; }).length);
 Object.keys(J.regles_texte).forEach(function (k) { if (/^(att|def|tir)_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
 console.log("Fichiers chargés : " + scripts.join(", "));
 console.log("Questions : " + tous.length);

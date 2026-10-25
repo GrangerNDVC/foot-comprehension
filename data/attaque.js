@@ -11,6 +11,8 @@
    fixe: { B: 10 } = cette place doit être ce joueur (« le capitaine » = Tsubasa / Olivier).
    special: "une-deux" = question réservée à l'échange de passes de Tsubasa (Olivier) et Misaki (Ben).
    ============================================================ */
+/* FLASHBACK (chantier 14) : `flashback: "libellé"` = le texte raconte un autre match (minute, score, météo ou blessure qui
+   ne correspondent pas à l'action à l'écran). Sans ce champ, {C} {D} sont des joueurs sur le terrain, entourés en rose. */
 JEU.ajouterQuestions([
 
 /* ---------- NIVEAU 1 : une information, phrases simples (12 à 18 mots) ---------- */
@@ -283,7 +285,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "Ce défenseur glisse", regle: "att_reprise_groupe",
   explication: { bonne: "L'arrière droit adverse glisse.", cle: "« Ce défenseur » reprend l'arrière droit adverse.", piege: "« L'attaquant » désigne {A} : il en profite, il ne glisse pas." } },
 
-{ id: "att-d2-03", niveau: 2, type: "dribble", format: "choix",
+{ id: "att-d2-03", flashback: "Un autre match", niveau: 2, type: "dribble", format: "choix",
   consigne: "À la 12e minute, {A} dribble un défenseur sur la droite. Il dribble ensuite un deuxième défenseur, puis il centre dans la surface.",
   question: "À quelle minute {A} dribble-t-il le deuxième défenseur ?",
   options: ["À la 12e minute", "À la 14e minute", "On ne peut pas savoir : il manque une information", "À la 16e minute"],
@@ -453,7 +455,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "Après le dribble", regle: "att_avant_apres",
   explication: { bonne: "Il tire en dernier.", cle: "« Après le dribble » : le tir vient à la fin.", piege: "Regarder {B} vient avant, et le dribble au milieu." } },
 
-{ id: "att-d3-02", niveau: 3, type: "dribble", format: "choix",
+{ id: "att-d3-02", flashback: "Un autre match", niveau: 3, type: "dribble", format: "choix",
   consigne: "Comme la pelouse était mouillée, {A} a glissé juste avant de dribbler. Le défenseur en a profité pour récupérer le ballon et lancer une contre-attaque rapide.",
   question: "Qu'est-ce qui a fait glisser {A} ?",
   options: ["Le défenseur", "La pelouse mouillée", "Un dribble raté", "Le sifflet de l'arbitre"],
@@ -516,7 +518,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "préfère terminer l'action lui-même", regle: "att_qui_reprise",
   explication: { bonne: "{A} préfère terminer l'action lui-même.", cle: "« Lui-même » reprend {A} : il finit seul.", piege: "{B} fait signe : il ne finit pas l'action." } },
 
-{ id: "att-d3-11", niveau: 3, type: "dribble", format: "vrai-faux-nsp",
+{ id: "att-d3-11", flashback: "Un autre match", niveau: 3, type: "dribble", format: "vrai-faux-nsp",
   consigne: "{A} dribble le défenseur avant la mi-temps, mais pas le gardien, qui sort à temps. Après la pause, le gardien reste prudent sur sa ligne et ne sort plus.",
   question: "{A} dribble-t-il le gardien ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -560,7 +562,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "seuls {B} et {C}", regle: "att_seulement",
   explication: { bonne: "Deux : {B} et {C}.", cle: "« Seuls » veut dire : eux, et personne d'autre.", piege: "« Tous les autres » sont marqués : on ne leur passe pas." } },
 
-{ id: "att-p4-05", niveau: 4, type: "passe", format: "choix",
+{ id: "att-p4-05", flashback: "Un autre match", niveau: 4, type: "passe", format: "choix",
   consigne: "À la 70e minute, {A} ne passe ni à {B} ni à {C} et il garde le ballon beaucoup plus longtemps que d'habitude. Les supporters sifflent, et le {X} adverse en profite pour se replacer devant lui.",
   question: "Pourquoi {A} garde-t-il le ballon ?",
   options: ["Parce qu'ils sont marqués", "Parce qu'ils sont blessés", "On ne peut pas savoir : il manque une information", "Parce qu'il veut tirer"],
@@ -602,7 +604,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "ne pas passer à celui qui est hors-jeu", regle: "att_negation",
   explication: { bonne: "Il garde le ballon.", cle: "Il écarte celui qui est marqué et celui qui est hors-jeu.", piege: "{C} est libre, mais hors-jeu : il est écarté aussi." } },
 
-{ id: "att-p4-11", niveau: 4, type: "passe", format: "vrai-faux-nsp",
+{ id: "att-p4-11", flashback: "Un autre match", niveau: 4, type: "passe", format: "vrai-faux-nsp",
   consigne: "Sur les cinq attaques de la mi-temps, {A} a lancé deux fois la passe décisive, {B} une seule fois, et {C} jamais. Les deux autres attaques se sont terminées sans passe, par un tir lointain de {D}, mal cadré.",
   question: "Y a-t-il eu trois passes décisives pendant la mi-temps ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -651,7 +653,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "mais pour trouver un espace", regle: "att_negation",
   explication: { bonne: "Pour trouver un espace.", cle: "« Ne… pas pour… mais pour… » : le vrai but suit « mais ».", piege: "« Gagner du temps » est écarté par « ne… pas »." } },
 
-{ id: "att-d4-06", niveau: 4, type: "dribble", format: "vrai-faux-nsp",
+{ id: "att-d4-06", flashback: "Un autre match", niveau: 4, type: "dribble", format: "vrai-faux-nsp",
   consigne: "Sur les trois dribbles tentés par {A} pendant la première mi-temps, deux réussissent. {B}, lui, n'en tente aucun, mais il récupère deux ballons, et {C}, pendant la même période, en tente deux, dont un seul réussit.",
   question: "{A} rate-t-il un dribble ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -679,7 +681,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "s'il reste en place", regle: "att_si_sinon",
   explication: { bonne: "Il passe à {B}.", cle: "Le {X} reste en place : c'est le deuxième cas.", piege: "Le dribble est pour le cas où le {X} avance." } },
 
-{ id: "att-d4-10", niveau: 4, type: "dribble", format: "choix",
+{ id: "att-d4-10", flashback: "Un autre match", niveau: 4, type: "dribble", format: "choix",
   consigne: "{A} a dribblé quatre fois pendant le match : deux fois avant la pause, puis deux fois après. {B}, lui, n'a dribblé qu'une seule fois, juste avant la pause, et {C} n'a jamais essayé de dribbler personne.",
   question: "Combien de dribbles y a-t-il eu avant la pause ?",
   options: ["Deux", "Trois", "Quatre", "Cinq"],
@@ -693,7 +695,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "ni le {X} adverse ni le {Y} adverse", regle: "att_negation",
   explication: { bonne: "Non : il évite le {X}, il ne le dribble pas.", cle: "« Ni… ni » écarte le {X} et le {Y}.", piege: "Seul le {Z} adverse est dribblé, à la fin." } },
 
-{ id: "att-d4-12", niveau: 4, type: "dribble", format: "barrer",
+{ id: "att-d4-12", flashback: "Un autre match", niveau: 4, type: "dribble", format: "barrer",
   consigne: "À la 55e minute, {A} dribble le {X} adverse, mais pas le {Y} adverse, qui reste devant lui. Après dix secondes d'hésitation, il passe à {B}, sauf que la passe est trop longue et sort en touche.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} dribble le {X}.", "{A} dribble le {Y}.", "{B} reçoit la passe.", "La passe sort en touche."],
@@ -716,14 +718,14 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "sauf si un défenseur est sur la ligne de passe", regle: "att_sauf",
   explication: { bonne: "Les deux exceptions s'appliquent : ni {B} ni {C}.", cle: "« Sauf si » : l'exception arrive, la passe n'a pas lieu.", piege: "{D} est seul, mais {A} ne le voit pas." } },
 
-{ id: "att-p5-03", niveau: 5, type: "passe", format: "choix",
+{ id: "att-p5-03", flashback: "Un autre match", niveau: 5, type: "passe", format: "choix",
   consigne: "Bien que {C} soit libre depuis plusieurs secondes et qu'il réclame le ballon à grands cris, {A} passe à {B}, qui est pourtant marqué par le {X} adverse. À la mi-temps, l'entraîneur avait demandé d'attirer les défenseurs sur le côté avant de changer de jeu vers le centre du terrain.",
   question: "Quelle phrase correspond au commentaire ?",
   options: ["{A} passe à {B} parce que {C} est libre.", "{A} passe à {B}, même si {C} est libre.", "{A} passe à {C}, car {B} est libre.", "{A} ne passe à personne."],
   bonne: 1, mot: "Bien que {C} soit libre", regle: "att_malgre",
   explication: { bonne: "{A} passe à {B}, même si {C} est libre.", cle: "« Bien que » annonce le contraire de ce qu'on attend.", piege: "« Parce que » donnerait une cause : ce n'est pas le sens." } },
 
-{ id: "att-p5-04", niveau: 5, type: "passe", format: "choix",
+{ id: "att-p5-04", flashback: "Un autre match", niveau: 5, type: "passe", format: "choix",
   consigne: "Tant que {B} reste marqué, {A} garde le ballon, sauf si {C} est libre : dans ce cas, il lui passe tout de suite. À la 30e minute, {B} est encore marqué, mais {C} s'est libéré dans l'axe, et le {X} adverse, qui presse {A}, n'est plus qu'à deux mètres de lui.",
   question: "Que fait {A} à la 30e minute ?",
   options: ["Il garde le ballon", "Il passe à {B}", "On ne peut pas savoir : il manque une information", "Il passe à {C}"],
@@ -751,14 +753,14 @@ JEU.ajouterQuestions([
   bonne: [2, 3], mot: "à condition que {B} soit démarqué", regle: "att_si_sinon",
   explication: { bonne: "Le défenseur reste, et {B} est marqué : pas de passe courte.", cle: "La condition « démarqué » n'est pas remplie pour {B}.", piege: "« En profondeur » est pour le cas où le défenseur monte." } },
 
-{ id: "att-p5-08", niveau: 5, type: "passe", format: "barrer",
+{ id: "att-p5-08", flashback: "Un autre match", niveau: 5, type: "passe", format: "barrer",
   consigne: "Même si {B} est marqué, {A} lui passe, car {C} est blessé et {D} est trop loin. Le {X} adverse est pourtant tout près de {B}, mais il n'ose pas le toucher, de peur de commettre une faute dans la surface, où l'arbitre reste très attentif, pendant que le public retient son souffle.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} passe à {B}.", "{B} est libre.", "{C} est blessé.", "{D} est trop loin."],
   bonne: [0, 2, 3], mot: "Même si {B} est marqué", regle: "att_malgre",
   explication: { bonne: "{A} passe à {B} ; {C} est blessé, {D} trop loin.", cle: "« Car » donne les raisons ; « même si » donne l'obstacle.", piege: "{B} est marqué : « libre » est faux." } },
 
-{ id: "att-p5-09", niveau: 5, type: "passe", format: "choix",
+{ id: "att-p5-09", flashback: "Un autre match", niveau: 5, type: "passe", format: "choix",
   consigne: "À la 88e minute, l'équipe de {A} mène 1 à 0. {A} garde le ballon près du drapeau de corner et attend que {B} se démarque. Il ne tire pas, ne dribble personne, et fait traîner l'action le plus longtemps possible, en regardant régulièrement le chronomètre, sous les sifflets du public adverse.",
   question: "Pourquoi {A} fait-il traîner l'action ?",
   options: ["Parce qu'il est fatigué", "Pour garder l'avantage au score", "Parce que {B} est blessé", "Pour que {B} tire à sa place"],
@@ -779,7 +781,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "voyant le {X} adverse se décaler vers eux", regle: "att_pourquoi",
   explication: { bonne: "Le {X} se décale à droite : la gauche est libre.", cle: "« Voyant » donne la raison de la bascule.", piege: "Le texte ne parle ni de fatigue, ni de blessure, ni d'arbitre." } },
 
-{ id: "att-p5-12", niveau: 5, type: "passe", format: "vrai-faux-nsp",
+{ id: "att-p5-12", flashback: "Un autre match", niveau: 5, type: "passe", format: "vrai-faux-nsp",
   consigne: "{A} passe à {B} si {C} est marqué, et à {C} s'il est libre. Mais si ni {B} ni {C} ne sont démarqués, il tente une passe en profondeur vers {D}. À la 63e minute, {B} est libre, {C} est libre aussi, mais {A}, qui vient de recevoir le ballon dos au but, est pressé par le {X} adverse.",
   question: "{A} passe-t-il à {B} ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -807,7 +809,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "Tant que le défenseur ne bouge pas", regle: "att_condition",
   explication: { bonne: "Il reste immobile.", cle: "« Tant que » : {A} attend, comme le défenseur.", piege: "Il accélérera « dès que » le défenseur lèvera le pied." } },
 
-{ id: "att-d5-04", niveau: 5, type: "dribble", format: "choix",
+{ id: "att-d5-04", flashback: "Un autre match", niveau: 5, type: "dribble", format: "choix",
   consigne: "Bien que le terrain soit glissant, {A} dribble sans tomber. Il a pourtant vu deux coéquipiers glisser avant lui, et le {X} adverse, qui avait pris des crampons plus longs, a failli le déséquilibrer au moment du contact, au milieu de la pelouse détrempée, avant que {A} termine son dribble à la limite de la surface.",
   question: "Quelle phrase correspond au commentaire ?",
   options: ["{A} dribble sans tomber malgré le terrain glissant.", "{A} dribble sans tomber parce que le terrain est sec.", "{A} tombe parce que le terrain est glissant.", "{A} ne dribble pas car le terrain est glissant."],
@@ -828,7 +830,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "à moins que celui-ci ne sorte à temps", regle: "att_condition",
   explication: { bonne: "Non : le gardien sort à temps.", cle: "« À moins que » : si la condition arrive, le dribble n'a pas lieu.", piege: "Sans cette exception, {A} aurait dribblé le gardien." } },
 
-{ id: "att-d5-07", niveau: 5, type: "dribble", format: "vrai-faux-nsp",
+{ id: "att-d5-07", flashback: "Un autre match", niveau: 5, type: "dribble", format: "vrai-faux-nsp",
   consigne: "Si {A} dribble le défenseur avant la 40e minute, son équipe mène au score à la mi-temps. {A} dribble le défenseur à la 41e minute, juste avant la pause, devant les deux arrières, et {B} reprend le ballon, mais il tire au-dessus du but, sous les sifflets de tout le stade.",
   question: "L'équipe de {A} mène-t-elle au score ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -856,7 +858,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "dribble à droite malgré son mauvais pied", regle: "att_si_sinon",
   explication: { bonne: "À droite, il tire du pied gauche, son mauvais pied.", cle: "Le texte donne le lien : dribble à droite, pied gauche.", piege: "Le bon pied va avec le dribble à gauche, qu'il évite." } },
 
-{ id: "att-d5-11", niveau: 5, type: "dribble", format: "vrai-faux-nsp",
+{ id: "att-d5-11", flashback: "Un autre match", niveau: 5, type: "dribble", format: "vrai-faux-nsp",
   consigne: "Si {A} dribble avec succès au moins deux défenseurs, son entraîneur le laisse tirer ; s'il n'en dribble qu'un seul, il doit passer à {B}. Ce soir, {A} a tenté trois dribbles : le premier a réussi, le deuxième a échoué, et le troisième a réussi aussi, juste avant d'entrer dans la surface.",
   question: "{A} a-t-il le droit de tirer ?",
   options: ["Oui", "Non", "On ne peut pas savoir"],

@@ -262,3 +262,8 @@ button, .option, .action { touch-action: manipulation; }
 .compte-choix button { margin: 6px; }
 button.gros.bleu { background: #7ad0ff; box-shadow: 0 4px 0 #3a86b3; }
 .compte-aide { font-size: 14px; opacity: .8; margin: 4px 0 8px; }
+
+/* chantier 14 : flashback (texte qui ne se passe pas dans l'action à l'écran) */
+.boite-consigne.flashback { background: #3a2f1f; border-color: #a8864f; }
+.boite-consigne.flashback .texte-consigne, .boite-consigne.flashback .situation { color: #f3e3c3; }
+.bandeau-flashback { display: inline-block; background: #a8864f; color: #1b1308; font-weight: bold; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; border-radius: 8px; padding: 3px 10px; margin-bottom: 6px; }

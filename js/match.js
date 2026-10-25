@@ -185,9 +185,9 @@
     if (S.poss === "nous") { b.textContent = "⚽ " + R.nom(S.porteur) + "   contre   " + R.nomAdv(S, S.adv); }
     else { b.textContent = "🛡️ " + R.nom(S.porteur) + "   face à   " + R.nomAdv(S, S.adv); }
   }
-  function dessinerCarte(candidats) {
+  function dessinerCarte(candidats, cites) {
     bandeau();
-    J.terrain.dessiner($("m-canvas"), S, { candidats: candidats });
+    J.terrain.dessiner($("m-canvas"), S, { candidats: candidats, cites: cites });
   }
   function narration(t) { $("m-narration").textContent = t || ""; }
 
@@ -313,6 +313,7 @@
     Q.elConsigne = Q.elSituation = Q.elIndices = null;
     if (it.consigne) {
       var boite = el("div", "boite-consigne");
+      if (it.flashback) { boite.className += " flashback"; boite.appendChild(el("div", "bandeau-flashback", "⏪ Flashback : " + it.flashback)); }
       boite.appendChild(el("div", "etiquette", etiquette(it)));
       Q.elConsigne = el("div", "texte-consigne");
       boite.appendChild(Q.elConsigne);
@@ -321,6 +322,13 @@
     }
     if (it.indices) { Q.elIndices = el("div", "bloc-indices"); p.appendChild(Q.elIndices); }
     remplirTextes(false);
+    // les joueurs cités qui sont sur le terrain sont entourés en rose (sauf en flashback : ils ne sont pas dans l'action)
+    var cites = [];
+    if (!it.flashback && it._ctx) { ["C", "D"].forEach(function (l) { if (it._ctx[l] != null) { cites.push(it._ctx[l]); } }); }
+    if (cites.length) {
+      dessinerCarte(null, cites);
+      p.appendChild(el("div", "aide-format", "🩷 Les joueurs cités dans le texte sont entourés en rose sur le terrain."));
+    }
 
     p.appendChild(el("div", "question-grosse", it.question));
     if (it.format === "barrer") {
@@ -360,7 +368,7 @@
     Q.btnSuite.onclick = continuer;
     p.appendChild(Q.btnSuite);
     p.appendChild(outils());
-    dessinerCarte();
+    dessinerCarte(null, cites.length ? cites : null);
     majOutils();
   }
 
@@ -412,6 +420,7 @@
   }
   function textePourLire() {
     var it = Q.item, t = [];
+    if (it.flashback) { t.push("Flashback. " + it.flashback); }
     if (it.consigne) { t.push(etiquette(it)); t.push(it.consigne); }
     if (it.situation) { t.push(it.situation); }
     if (it.indices) { for (var k = 0; k < (Q.verrou ? it.indices.length : nbIndices()); k++) { t.push("Indice " + (k + 1) + ". " + it.indices[k]); } }

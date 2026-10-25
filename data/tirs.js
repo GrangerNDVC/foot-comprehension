@@ -6,6 +6,11 @@
    Principe : le texte (champ `consigne`) fait 2 à 5 phrases ; une bonne réponse ne dit jamais plus que le texte ;
    les mauvaises changent un détail, ajoutent une information ou tirent une conclusion que le texte ne permet pas.
 
+   FLASHBACK (chantier 14) : un champ `flashback: "libellé"` signale un texte qui ne se passe PAS dans l'action à l'écran
+   (entraînement, vestiaire, hier, cours, cantine…). Le jeu affiche alors « ⏪ Flashback : libellé » et les personnages
+   cités {C} {D} sont pris dans toute l'équipe de Nankatsu. Sans ce champ, le texte raconte l'action en cours : {C} et {D}
+   sont des joueurs qui sont sur le terrain, et ils sont entourés en rose à l'écran.
+
    LES NOMS : aucun prénom en dur. {A} = le joueur qui tire (utilisé dans chaque question), {C} {D} = d'autres joueurs
    de Nankatsu sur le terrain, {X} = l'adversaire en face (écrit « n°7 »). Voir js/banque.js.
 
@@ -28,7 +33,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "seul sur la droite", regle: "tir_collage",
   explication: { bonne: "Le gardien est sorti, et {C} est libre.", cle: "« Seul » : aucun adversaire près de {C}.", piege: "{A} est à dix mètres et ne voit pas {C}." } },
 
-{ id: "tir-1-02", niveau: 1, type: "tir", format: "choix",
+{ id: "tir-1-02", niveau: 1, type: "tir", flashback: "Avant le match, au vestiaire", format: "choix",
   consigne: "Avant le match, {A} a changé de chaussures. {C} l'a regardé faire sans rien dire, puis il est allé chercher un ballon dans le sac. Dehors, les supporters arrivent.",
   question: "Pourquoi {A} a-t-il changé de chaussures ?",
   options: ["Parce que ses anciennes chaussures étaient abîmées.", "Parce qu'un joueur de l'équipe lui a prêté les siennes.", "Parce que {C} le lui avait demandé avant le match.", "On ne peut pas savoir : il manque une information"],
@@ -49,7 +54,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "moins sûr", regle: "detail",
   explication: { bonne: "Il est moins sûr sur les ballons au ras du sol.", cle: "« Moins sûr » : le point faible du gardien.", piege: "Les ballons hauts, il les garde bien." } },
 
-{ id: "tir-1-05", niveau: 1, type: "tir", format: "choix",
+{ id: "tir-1-05", niveau: 1, type: "tir", flashback: "À l'entraînement", format: "choix",
   consigne: "À l'entraînement, {A} a tiré dix fois : sept fois à droite et trois fois à gauche. Le gardien a arrêté deux tirs, et {C} a ramassé tous les ballons derrière le but.",
   question: "Quelle phrase correspond le mieux au texte ?",
   options: ["{A} a tiré plus souvent à droite qu'à gauche.", "{A} a tiré plus souvent à gauche qu'à droite.", "Le gardien a tout arrêté.", "On ne peut pas savoir : il manque une information"],
@@ -63,14 +68,14 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "sur la gauche", regle: "detail",
   explication: { bonne: "{A} reçoit le ballon à gauche et le garde.", cle: "« Sur la gauche » : c'est {A} qui est à gauche.", piege: "{C} est à droite, et {A} ne lui passe pas le ballon." } },
 
-{ id: "tir-1-07", niveau: 1, type: "tir", format: "barrer",
+{ id: "tir-1-07", niveau: 1, type: "tir", flashback: "Hier, à l'entraînement", format: "barrer",
   consigne: "Hier, à l'entraînement, {A} a tiré deux fois : un tir est passé au-dessus du but, l'autre a touché le poteau. Le gardien n'a pas bougé, et {C} a rigolé.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} a tiré deux fois.", "Un tir a touché le poteau.", "Le gardien a arrêté un tir.", "{A} a marqué un but."],
   bonne: [0, 1], mot: "deux fois", regle: "tir_quantite",
   explication: { bonne: "{A} a tiré deux fois ; un tir a touché le poteau.", cle: "« Deux fois » et « poteau » sont écrits dans le texte.", piege: "Le gardien n'a pas bougé : il n'a rien arrêté." } },
 
-{ id: "tir-1-08", niveau: 1, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-1-08", niveau: 1, type: "tir", flashback: "Avant le match, au vestiaire", format: "vrai-faux-nsp",
   consigne: "{A} met son maillot. Dehors, les supporters chantent. {C} attache ses lacets en silence, puis il boit un grand verre d'eau avant de sortir du vestiaire.",
   question: "Cette phrase est-elle vraie ? « {C} est nerveux avant le match. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -98,7 +103,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "plonge à droite", regle: "tir_collage",
   explication: { bonne: "Le gardien plonge à droite.", cle: "Ne mélange pas le gardien et le ballon.", piege: "À gauche, c'est le côté du ballon." } },
 
-{ id: "tir-1-12", niveau: 1, type: "tir", format: "barrer",
+{ id: "tir-1-12", niveau: 1, type: "tir", flashback: "À l'échauffement", format: "barrer",
   consigne: "{A} tire trois fois pendant l'échauffement. Le premier tir est bloqué, le deuxième est dévié, et le troisième entre dans le but, sous les cris de {C}.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["Le premier tir est bloqué.", "Le deuxième tir entre dans le but.", "Le troisième tir entre dans le but.", "{C} tire le troisième ballon."],
@@ -121,7 +126,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "Il le rend", regle: "tir_qui",
   explication: { bonne: "{C} rend le ballon à {A}.", cle: "« Il » reprend {C}, qui vient de le recevoir.", piege: "{D} appelle le ballon, mais il ne l'a pas." } },
 
-{ id: "tir-2-03", niveau: 2, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-2-03", niveau: 2, type: "tir", flashback: "À l'entraînement", format: "vrai-faux-nsp",
   consigne: "À l'entraînement, {A} a tiré trois fois du pied droit et deux fois du pied gauche. {C} a tiré quatre fois en tout, et {D} a fait les passes sans jamais tirer.",
   question: "Cette phrase est-elle vraie ? « {A} a tiré cinq fois à l'entraînement. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -149,14 +154,14 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "tirer le corner", regle: "tir_pas_dit",
   explication: { bonne: "Le texte ne dit pas de quel côté.", cle: "« Tirer le corner » : aucun côté n'est écrit.", piege: "Droite ou gauche : les deux sont possibles." } },
 
-{ id: "tir-2-07", niveau: 2, type: "tir", format: "barrer",
+{ id: "tir-2-07", niveau: 2, type: "tir", flashback: "Hier, à l'entraînement", format: "barrer",
   consigne: "Hier, {A} et {C} ont tiré chacun deux fois au but. {A} a marqué une fois. {C} n'a pas marqué, mais il a touché le poteau avec son deuxième tir.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} a tiré deux fois.", "{C} a marqué une fois.", "{C} n'a pas marqué.", "{A} n'a pas marqué."],
   bonne: [0, 2], mot: "chacun", regle: "tir_quantite",
   explication: { bonne: "{A} a tiré deux fois ; {C} n'a pas marqué.", cle: "« Chacun » : deux tirs pour {A}, deux pour {C}.", piege: "{A} a marqué une fois, et {C} aucune." } },
 
-{ id: "tir-2-08", niveau: 2, type: "tir", format: "choix",
+{ id: "tir-2-08", niveau: 2, type: "tir", flashback: "À l'entraînement", format: "choix",
   consigne: "{A} court plus vite que {C}, mais {C} tire plus fort que {A}. {D} court moins vite que {C}, et il tire moins fort que {A}. Le coach les regarde tous les trois.",
   question: "Qui est le plus rapide des trois ?",
   options: ["{C}", "{A}", "{D}", "On ne peut pas savoir : il manque une information"],
@@ -177,7 +182,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "lui passe le ballon", regle: "tir_qui",
   explication: { bonne: "Non : {C} passe le ballon, c'est {A} qui tire.", cle: "« Lui » désigne {A}, qui reçoit le ballon.", piege: "{C} a le ballon d'abord, mais il le donne." } },
 
-{ id: "tir-2-11", niveau: 2, type: "tir", format: "choix",
+{ id: "tir-2-11", niveau: 2, type: "tir", flashback: "À l'entraînement", format: "choix",
   consigne: "Le coach a posé six ballons devant {A}. {A} en a tiré quatre, puis il s'est reposé un moment. {C} a ramassé les deux autres pour les ranger dans le grand sac.",
   question: "Combien de ballons {A} n'a-t-il pas tirés ?",
   options: ["Deux", "Quatre", "Six", "On ne peut pas savoir : il manque une information"],
@@ -214,14 +219,14 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "Alors seulement", regle: "tir_ordre",
   explication: { bonne: "Non : {A} a frappé après le cri de {C}.", cle: "« Alors seulement » : le tir vient après le cri.", piege: "{A} a d'abord pris son temps, puis il a tiré." } },
 
-{ id: "tir-3-04", niveau: 3, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-3-04", niveau: 3, type: "tir", flashback: "Hier, au match", format: "vrai-faux-nsp",
   consigne: "Hier, {A} a tiré un penalty. Le gardien a plongé à gauche. Après son plongeon, le ballon est entré à droite, tout doucement, et {C} a levé les poings avant même que le ballon ne s'arrête.",
   question: "Cette phrase est-elle vraie ? « Le ballon est entré du côté opposé au plongeon du gardien. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
   bonne: 0, mot: "Après son plongeon", regle: "tir_ordre",
   explication: { bonne: "Oui : plongeon à gauche, ballon à droite.", cle: "« Après son plongeon » : le but arrive ensuite.", piege: "Le gardien n'a rien arrêté : le ballon est entré." } },
 
-{ id: "tir-3-05", niveau: 3, type: "tir", format: "choix",
+{ id: "tir-3-05", niveau: 3, type: "tir", flashback: "Un autre match", format: "choix",
   consigne: "Comme le terrain était sec, le ballon roulait vite. {A} a donc préparé un tir tendu, ras du sol, que le gardien, pourtant bien placé, n'a pas eu le temps de bloquer. {C} a crié de joie.",
   question: "Pourquoi {A} a-t-il préparé un tir ras du sol ?",
   options: ["Parce que le ballon roulait vite sur le terrain sec.", "Parce que le gardien adverse était beaucoup trop petit.", "Parce que le terrain était mouillé et glissant.", "Parce que {C} lui avait demandé un tir bien fort."],
@@ -235,7 +240,7 @@ JEU.ajouterQuestions([
   bonne: 3, mot: "s'est pris la tête", regle: "tir_qui",
   explication: { bonne: "Le texte ne dit pas ce que fait {A} après.", cle: "« S'est pris la tête » parle de {C}, pas de {A}.", piege: "Ne mélange pas les deux joueurs : ce geste est celui de {C}." } },
 
-{ id: "tir-3-07", niveau: 3, type: "tir", format: "choix",
+{ id: "tir-3-07", niveau: 3, type: "tir", flashback: "Avant chaque match", format: "choix",
   consigne: "Avant chaque match, {A} fait trois choses : il s'étire, puis il boit de l'eau, et enfin il tire cinq ballons au but. {C}, lui, commence toujours par tirer, puis il s'étire.",
   question: "Que fait {A} juste après avoir bu ?",
   options: ["Il s'étire de nouveau, tranquillement.", "Il boit encore un peu d'eau.", "Il rentre au vestiaire sans rien dire.", "Il tire cinq ballons au but."],
@@ -256,7 +261,7 @@ JEU.ajouterQuestions([
   bonne: 0, mot: "Ensuite seulement", regle: "tir_ordre",
   explication: { bonne: "Il compte ses coéquipiers libres, puis il tire.", cle: "« Ensuite seulement » : le tir vient en dernier.", piege: "Regarder les adversaires vient avant le comptage." } },
 
-{ id: "tir-3-10", niveau: 3, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-3-10", niveau: 3, type: "tir", flashback: "Un autre match", format: "vrai-faux-nsp",
   consigne: "Comme {C} était fatigué, le coach l'a remplacé par {D}. {D} a tiré dès sa première touche de balle, mais le ballon est passé à côté du poteau. {A} lui a tapé dans le dos pour le consoler.",
   question: "Cette phrase est-elle vraie ? « {D} a été remplacé par {C}. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -279,84 +284,84 @@ JEU.ajouterQuestions([
 
 /* ---------------- NIVEAU 4 : négation et quantités (documents scolaires et textes de foot) (48 à 62 mots) ---------------- */
 
-{ id: "tir-4-01", niveau: 4, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-4-01", niveau: 4, type: "tir", flashback: "Au collège", format: "choix", tags: ["ecole"],
   consigne: "Règlement du collège : aucun élève ne doit courir dans le couloir. Personne n'entre dans la salle avant le professeur. Les sacs restent dans le casier, jamais devant la porte. {A} est dans le couloir, devant la salle de classe, son sac sur l'épaule.",
   question: "Quelle phrase montre que {A} respecte le règlement ?",
   options: ["{A} court dans le couloir pour arriver avant {C}.", "{A} marche calmement, puis il entre dans la salle vide.", "{A} pose son sac devant la porte et attend le professeur.", "{A} range son sac dans le casier, marche et attend le professeur."],
   bonne: 3, mot: "Personne n'entre", regle: "tir_negation",
   explication: { bonne: "Il range son sac, marche et attend le professeur.", cle: "« Aucun », « personne », « jamais » : trois interdits.", piege: "Courir, entrer seul ou poser son sac devant la porte est interdit." } },
 
-{ id: "tir-4-02", niveau: 4, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-4-02", niveau: 4, type: "tir", flashback: "En classe de maths", format: "choix", tags: ["ecole"],
   consigne: "Problème de maths : dans la classe de {A}, vingt-six élèves sont présents ce matin. Trois élèves sont absents, car ils ont la grippe. Personne d'autre n'est inscrit dans la classe. Parmi les élèves présents, onze sont des garçons. Les élèves s'assoient par deux.",
   question: "Combien d'élèves y a-t-il dans la classe en tout ?",
   options: ["23", "26", "29", "30"],
   bonne: 2, mot: "sont absents", regle: "tir_nombre",
   explication: { bonne: "26 présents + 3 absents = 29 élèves.", cle: "« En tout » : on additionne présents et absents.", piege: "23 vient d'une soustraction : on ne retire pas les absents." } },
 
-{ id: "tir-4-03", niveau: 4, type: "tir", format: "vrai-faux-nsp", tags: ["ecole"],
+{ id: "tir-4-03", niveau: 4, type: "tir", flashback: "En classe de SVT", format: "vrai-faux-nsp", tags: ["ecole"],
   consigne: "En SVT, {A} lit : « Une plante verte a besoin de lumière, d'eau et d'air. Sans lumière, elle jaunit et ne grandit plus. » {A} a mis sa plante dans un placard fermé pendant dix jours. Son cahier ne dit rien sur l'arrosage.",
   question: "Cette phrase est-elle vraie ? « La plante de {A} a manqué d'eau. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
   bonne: 2, mot: "Sans lumière", regle: "tir_pas_dit",
   explication: { bonne: "On ne sait pas si {A} l'a arrosée.", cle: "Le placard fermé prive de lumière, pas forcément d'eau.", piege: "Seul le manque de lumière est sûr ; l'eau n'est pas citée." } },
 
-{ id: "tir-4-04", niveau: 4, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-4-04", niveau: 4, type: "tir", flashback: "Sortie scolaire", format: "choix", tags: ["ecole"],
   consigne: "Sortie scolaire au musée. Sur le panneau : « Entrée gratuite pour les moins de 12 ans. Aucune visite sans guide. Les sacs à dos restent à l'accueil. » {A} a 12 ans et {C} en a 11. Ils viennent avec leur classe, un jeudi matin.",
   question: "Quelle phrase est vraie ?",
   options: ["{A} et {C} entrent tous les deux gratuitement.", "{A} paie l'entrée, et {C} entre gratuitement.", "{A} visite le musée sans guide, avec sa classe.", "{C} garde son sac à dos pendant la visite."],
   bonne: 1, mot: "moins de 12 ans", regle: "tir_exclu",
   explication: { bonne: "{A} a 12 ans : il paie. {C} a 11 ans : gratuit.", cle: "« Moins de 12 ans » ne compte pas les 12 ans.", piege: "Le guide est obligatoire, et les sacs restent à l'accueil." } },
 
-{ id: "tir-4-05", niveau: 4, type: "tir", format: "barrer", tags: ["ecole"],
+{ id: "tir-4-05", niveau: 4, type: "tir", flashback: "Atelier cuisine", format: "barrer", tags: ["ecole"],
   consigne: "Atelier cuisine, recette des crêpes : « Mélange la farine et les œufs. Ajoute du lait, pas d'eau. Ne mets aucun sucre dans la pâte. Laisse-la reposer une heure, sans la remuer. » {A} suit la recette à la lettre, mais {C} oublie de l'écouter.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} ajoute du lait.", "{A} ajoute de l'eau.", "{A} met du sucre dans la pâte.", "{A} laisse reposer la pâte."],
   bonne: [0, 3], mot: "aucun sucre", regle: "tir_negation",
   explication: { bonne: "Il ajoute du lait et laisse reposer la pâte.", cle: "« Pas d'eau » et « aucun sucre » : à ne pas faire.", piege: "L'eau et le sucre sont interdits dans cette recette." } },
 
-{ id: "tir-4-06", niveau: 4, type: "tir", format: "choix",
+{ id: "tir-4-06", niveau: 4, type: "tir", flashback: "Ces derniers matchs", format: "choix",
   consigne: "{A} n'a marqué aucun but depuis trois matchs. Pourtant, il n'a jamais cessé de tirer : hier, à l'entraînement, il a tiré cinq fois. {C}, lui, n'a tiré qu'une fois hier, mais il a marqué. {D} n'a pas tiré du tout, car il jouait en défense.",
   question: "Quelle phrase correspond le mieux au texte ?",
   options: ["{A} a marqué hier.", "{A} a cessé de tirer.", "{A} a tiré plus souvent que {C} hier.", "On ne peut pas savoir : il manque une information"],
   bonne: 2, mot: "n'a tiré qu'une fois", regle: "tir_ne_que",
   explication: { bonne: "{A} a tiré cinq fois, {C} une seule fois.", cle: "« N'… qu' » veut dire seulement.", piege: "Aucun but depuis trois matchs : le texte ne dit pas qu'{A} a marqué hier." } },
 
-{ id: "tir-4-07", niveau: 4, type: "tir", format: "choix",
+{ id: "tir-4-07", niveau: 4, type: "tir", flashback: "Un autre match", format: "choix",
   consigne: "Trois attaquants, {A}, {C} et {D}, ont tiré une fois chacun. Un seul tir a fini dans le but. Le gardien a arrêté un autre tir, et le troisième est passé à côté. Personne n'a touché le poteau, et aucun tir n'a été repris par un autre joueur.",
   question: "Quelle phrase correspond le mieux au texte ?",
   options: ["Les trois tirs ont fini dans le but.", "Le gardien a arrêté un seul tir.", "Deux joueurs ont marqué.", "On ne peut pas savoir : il manque une information"],
   bonne: 1, mot: "Un seul tir", regle: "tir_quantite",
   explication: { bonne: "Un but, un tir arrêté, un tir à côté.", cle: "« Un seul tir » est un but ; « un autre » est arrêté.", piege: "Trois tirs, mais un seul but : pas deux buts." } },
 
-{ id: "tir-4-08", niveau: 4, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-4-08", niveau: 4, type: "tir", flashback: "Hier, à l'entraînement", format: "vrai-faux-nsp",
   consigne: "{A} ne tire jamais du pied gauche, et {C} ne tire jamais de la tête. Hier, {A} a tiré trois fois, toutes du pied droit. {C} a tiré deux fois, une fois du pied gauche et une fois du pied droit. {D} n'a tiré qu'une seule fois, de la tête.",
   question: "Cette phrase est-elle vraie ? « Hier, {A} a tiré de la tête. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
   bonne: 1, mot: "toutes du pied droit", regle: "tir_quantite",
   explication: { bonne: "Non : ses trois tirs étaient du pied droit.", cle: "« Toutes » : aucun tir d'une autre sorte.", piege: "La tête, c'est {D} ; « jamais de la tête » concerne {C}." } },
 
-{ id: "tir-4-09", niveau: 4, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-4-09", niveau: 4, type: "tir", flashback: "À la cantine", format: "choix", tags: ["ecole"],
   consigne: "Règlement de la cantine : on ne peut prendre qu'un seul dessert par repas. Les élèves ne quittent pas la table avant la fin du repas, sauf permission d'un surveillant. {A} a fini son plat, et {C} aussi. Ce jour-là, la cantine propose des fruits et des yaourts.",
   question: "Que peut prendre {A} comme dessert ?",
   options: ["Un fruit et un yaourt", "Un seul dessert", "Aucun dessert", "Deux fruits"],
   bonne: 1, mot: "qu'un seul dessert", regle: "tir_ne_que",
   explication: { bonne: "Un seul dessert : fruit ou yaourt.", cle: "« Ne… qu'un seul » veut dire seulement un.", piege: "Deux desserts, même du même genre, est interdit." } },
 
-{ id: "tir-4-10", niveau: 4, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-4-10", niveau: 4, type: "tir", flashback: "En classe de sciences", format: "choix", tags: ["ecole"],
   consigne: "Fiche de sciences : « Un litre d'eau pèse un kilogramme. Une bouteille vide ne pèse presque rien. » {A} remplit une bouteille de deux litres, puis il en verse un demi-litre sur la pelouse. {C}, lui, remplit une bouteille d'un litre et n'en verse pas une goutte.",
   question: "Combien pèse l'eau qui reste dans la bouteille de {A} ?",
   options: ["Un kilogramme et demi", "Deux kilogrammes", "Un demi-kilogramme", "Un kilogramme"],
   bonne: 0, mot: "un demi-litre", regle: "tir_nombre",
   explication: { bonne: "2 litres moins un demi-litre : 1,5 litre, donc 1,5 kg.", cle: "Un litre pèse un kilogramme : retire ce qu'on verse.", piege: "Deux kilogrammes oublie l'eau versée sur la pelouse." } },
 
-{ id: "tir-4-11", niveau: 4, type: "tir", format: "choix",
+{ id: "tir-4-11", niveau: 4, type: "tir", flashback: "Hier, à l'entraînement", format: "choix",
   consigne: "Hier, {A} a tiré dix ballons au but. Aucun tir n'est passé au-dessus de la barre. Le gardien en a arrêté quatre, deux ont touché le poteau, et tous les autres sont entrés dans le but. {C} n'a tiré que trois ballons, et il les a tous mis au fond.",
   question: "Combien de ballons {A} a-t-il mis dans le but ?",
   options: ["Deux", "Trois", "Quatre", "Six"],
   bonne: 2, mot: "tous les autres", regle: "tir_nombre",
   explication: { bonne: "Dix tirs, moins quatre arrêtés et deux poteaux : quatre buts.", cle: "« Tous les autres » : ce qui reste après les arrêts et poteaux.", piege: "Trois buts, c'est ceux de {C}." } },
 
-{ id: "tir-4-12", niveau: 4, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-4-12", niveau: 4, type: "tir", flashback: "Hier, à l'entraînement", format: "vrai-faux-nsp",
   consigne: "Le coach répète que personne ne doit tirer de trop loin. Hier, {A} a tiré deux fois depuis la surface. {C} n'a tiré qu'une fois, depuis le rond central. {D} n'a tiré aucune fois, car il n'a jamais eu le ballon à moins de trente mètres du but.",
   question: "Cette phrase est-elle vraie ? « {C} a respecté la consigne du coach. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
@@ -365,35 +370,35 @@ JEU.ajouterQuestions([
 
 /* ---------------- NIVEAU 5 : conditions et exceptions (documents scolaires et textes de foot) (60 à 78 mots) ---------------- */
 
-{ id: "tir-5-01", niveau: 5, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-5-01", niveau: 5, type: "tir", flashback: "Au CDI", format: "choix", tags: ["ecole"],
   consigne: "Règlement du CDI : on peut emprunter trois livres à la fois, pour deux semaines. Un dictionnaire ne s'emprunte pas, sauf avec l'accord de la documentaliste. Les magazines se lisent sur place, sans exception. {A} a l'accord de la documentaliste. Il veut emprunter un dictionnaire, deux romans et un magazine.",
   question: "{A} veut emprunter le plus de livres possible. Que fait-il ?",
   options: ["Il emprunte les quatre.", "Il emprunte le dictionnaire et deux romans, et lit le magazine sur place.", "Il emprunte seulement les deux romans.", "Il emprunte le dictionnaire, mais un seul roman."],
   bonne: 1, mot: "sauf avec l'accord", regle: "tir_sauf",
   explication: { bonne: "Dictionnaire et deux romans : trois livres ; magazine sur place.", cle: "« Sauf avec l'accord » : {A} l'a ; les magazines ne sortent jamais.", piege: "Quatre livres dépasse la limite de trois." } },
 
-{ id: "tir-5-02", niveau: 5, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-5-02", niveau: 5, type: "tir", flashback: "En classe de maths", format: "choix", tags: ["ecole"],
   consigne: "Programme de calcul : « Choisis un nombre. S'il est plus grand que 10, enlève 4. Sinon, multiplie-le par 2. Dans les deux cas, ajoute 1 au résultat. » {A} choisit 7 et {C} choisit 12. Chacun applique le programme sans se tromper, puis le professeur passe dans les rangs pour vérifier les cahiers. Il félicite ceux qui ont montré leurs calculs, mais il n'accepte aucun résultat écrit sans la moindre explication.",
   question: "Quel résultat {A} obtient-il ?",
   options: ["14", "15", "9", "29"],
   bonne: 1, mot: "Sinon", regle: "tir_condition",
   explication: { bonne: "7 n'est pas plus grand que 10 : 7 × 2 + 1 = 15.", cle: "« Sinon » : on multiplie, puis « dans les deux cas » on ajoute 1.", piege: "14 oublie d'ajouter 1 ; 9 est le résultat de {C}, pas de {A}." } },
 
-{ id: "tir-5-03", niveau: 5, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-5-03", niveau: 5, type: "tir", flashback: "En classe de physique", format: "choix", tags: ["ecole"],
   consigne: "Expérience de physique : « Quand l'eau atteint 100 °C, elle bout. Tant que la température reste inférieure à 100 °C, elle ne bout pas. Quand elle bout, la température ne monte plus. » Après cinq minutes, le thermomètre de {A} indique 85 °C. Après dix minutes, celui de {C} indique 100 °C.",
   question: "Que peut écrire {A} dans son cahier, après cinq minutes ?",
   options: ["L'eau est en train de bouillir.", "L'eau ne bout pas encore.", "L'eau a déjà atteint 100 °C.", "L'eau est devenue complètement froide."],
   bonne: 1, mot: "Tant que", regle: "tir_tantque",
   explication: { bonne: "85 °C est inférieur à 100 °C : elle ne bout pas.", cle: "« Tant que » : sous 100 °C, pas d'ébullition.", piege: "Elle bout seulement quand elle atteint 100 °C : c'est {C}." } },
 
-{ id: "tir-5-04", niveau: 5, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-5-04", niveau: 5, type: "tir", flashback: "Sortie scolaire", format: "choix", tags: ["ecole"],
   consigne: "Sortie scolaire : « Le car part à 8 h, sauf s'il pleut : dans ce cas, il part à 9 h. Les élèves qui arrivent après le départ du car ne peuvent pas venir. » Le matin de la sortie, {A} prépare son sac, et {C} regarde par la fenêtre sans rien dire du temps qu'il fait. Le professeur répète que personne ne doit être en retard, car le car n'attend aucun élève.",
   question: "À quelle heure le car part-il ?",
   options: ["À 8 h.", "À 9 h.", "À 8 h 30.", "On ne peut pas savoir : il manque une information"],
   bonne: 3, mot: "sauf s'il pleut", regle: "tir_inconnu",
   explication: { bonne: "On ne sait pas s'il pleut ce matin-là.", cle: "« Sauf s'il pleut » : l'heure dépend de la météo.", piege: "Choisir 8 h ou 9 h, c'est deviner le temps." } },
 
-{ id: "tir-5-05", niveau: 5, type: "tir", format: "barrer", tags: ["ecole"],
+{ id: "tir-5-05", niveau: 5, type: "tir", flashback: "Au collège", format: "barrer", tags: ["ecole"],
   consigne: "Mot de la vie scolaire : « Les élèves qui ont sport ce matin viennent en tenue de sport. Les autres viennent en tenue normale, à moins d'avoir un mot du professeur. Les chaussures de sport restent obligatoires pour tous, sauf pour les élèves dispensés. » {A} a sport ce matin. {C} n'a pas sport et n'a pas de mot du professeur.",
   question: "Quelles phrases sont vraies ? (Plusieurs réponses possibles.)",
   options: ["{A} vient en tenue de sport.", "{C} vient en tenue de sport.", "{C} vient en tenue normale.", "{A} vient en tenue normale."],
@@ -407,21 +412,21 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "Sinon, passe à {C}", regle: "tir_condition",
   explication: { bonne: "Gardien sur sa ligne, hors surface : il passe à {C}.", cle: "Cherche quelle condition est vraie, une par une.", piege: "Le lob est pour un gardien avancé ; le ras du sol, dans la surface." } },
 
-{ id: "tir-5-07", niveau: 5, type: "tir", format: "vrai-faux-nsp",
+{ id: "tir-5-07", niveau: 5, type: "tir", flashback: "À l'entraînement", format: "vrai-faux-nsp",
   consigne: "Le coach a dit : « Les joueurs qui ont tiré au moins deux fois à l'entraînement joueront dimanche, à moins d'être blessés. Ceux qui ont tiré moins de deux fois resteront remplaçants, sauf si un titulaire se blesse. » {A} a tiré trois fois. {C} a tiré une fois. Personne ne parle de blessure dans le groupe, mais le médecin du club n'est pas encore passé voir les joueurs.",
   question: "Cette phrase est-elle vraie ? « {A} jouera dimanche. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
   bonne: 2, mot: "à moins d'être blessés", regle: "tir_inconnu",
   explication: { bonne: "On ne sait pas si {A} est blessé.", cle: "« À moins d'être blessés » : une blessure change tout.", piege: "Trois tirs suffisent, mais la blessure n'est pas exclue." } },
 
-{ id: "tir-5-08", niveau: 5, type: "tir", format: "vrai-faux-nsp", tags: ["ecole"],
+{ id: "tir-5-08", niveau: 5, type: "tir", flashback: "En cours d'EPS", format: "vrai-faux-nsp", tags: ["ecole"],
   consigne: "Fiche d'EPS : « Le saut en longueur est validé à partir de 3 mètres, même si le pied touche la planche. Si le pied dépasse la planche, le saut ne compte pas. Chaque élève fait trois essais, et seul le meilleur saut est noté. » {A} a sauté 3 m 20, le pied sur la planche, à son deuxième essai.",
   question: "Cette phrase est-elle vraie ? « Le saut de {A} est validé. »",
   options: ["Oui", "Non", "On ne peut pas savoir"],
   bonne: 0, mot: "même si", regle: "tir_meme_si",
   explication: { bonne: "Oui : plus de 3 m, et le pied ne dépasse pas.", cle: "« Même si » : toucher la planche n'annule pas le saut.", piege: "Seul un pied qui dépasse la planche annule le saut." } },
 
-{ id: "tir-5-09", niveau: 5, type: "tir", format: "choix",
+{ id: "tir-5-09", niveau: 5, type: "tir", flashback: "Au club", format: "choix",
   consigne: "Règlement du club : tout joueur qui arrive en retard à l'entraînement fait cinq tours de terrain, sauf s'il prévient le coach avant, et sauf s'il a un mot de ses parents. {A} est arrivé en retard et a prévenu le coach. {C} est arrivé en retard sans prévenir, mais il a un mot de ses parents. Le coach range sa feuille de présence en silence.",
   question: "Qui fait cinq tours de terrain ?",
   options: ["{A}", "{C}", "{A} et {C}", "Aucun des deux"],
@@ -435,7 +440,7 @@ JEU.ajouterQuestions([
   bonne: [0, 2], mot: "au moins quatre", regle: "tir_condition",
   explication: { bonne: "Quatre penaltys : il passe au tir de loin, et manque.", cle: "« Au moins quatre » comprend quatre.", piege: "Il ne recommence qu'avec trois penaltys ou moins." } },
 
-{ id: "tir-5-11", niveau: 5, type: "tir", format: "choix", tags: ["ecole"],
+{ id: "tir-5-11", niveau: 5, type: "tir", flashback: "En cours d'EPS", format: "choix", tags: ["ecole"],
   consigne: "Mot du professeur d'EPS : « Pour le cross, on court trois tours si le terrain est sec, et deux tours s'il est mouillé. Les élèves dispensés ne courent pas, mais ils comptent les tours des autres. » {A} est dispensé. {C} n'est pas dispensé, et le terrain est sec. Le professeur sifflera le départ dans quelques instants, quand tous les élèves auront enlevé leur veste.",
   question: "Que fait {C} ?",
   options: ["Il court deux tours", "Il court trois tours", "Il compte les tours des autres", "On ne peut pas savoir : il manque une information"],

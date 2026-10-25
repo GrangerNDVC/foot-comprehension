@@ -9,6 +9,8 @@
    tags : "pluie" et "triche" (matchs à particularité), "ecole" (consigne scolaire authentique : niveaux 4 et 5).
    Les consignes scolaires (maths, recette, mesures) sont placées dans une situation de mi-temps ou d'après-entraînement.
    ============================================================ */
+/* FLASHBACK (chantier 14) : `flashback: "libellé"` = le texte ne se passe pas dans l'action à l'écran (autre match, cours, entraînement…).
+   Sans ce champ, {B} {C} sont des joueurs sur le terrain, entourés en rose. */
 JEU.ajouterQuestions([
 
 /* ---------------- NIVEAU 1 : une consigne claire, une information (12 à 18 mots) ---------------- */
@@ -321,7 +323,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "personne n'est avec toi", regle: "def_si_sinon",
   explication: { bonne: "{B} est libre, à côté de {A} : il lui passe le ballon.", cle: "Teste les conditions dans l'ordre : la première est fausse.", piege: "Dégager en touche, c'est seulement si {A} est sans aide." } },
 
-{ id: "def-4-05", niveau: 4, type: "defense", format: "choix",
+{ id: "def-4-05", flashback: "En classe de maths", niveau: 4, type: "defense", format: "choix",
   consigne: "Construis un carré de 4 cm de côté. Ne trace pas ses diagonales, mais marque chaque sommet d'une petite croix. Écris ensuite le nom du carré au centre.",
   situation: "Mi-temps. {A} fait la fiche de maths que le coach lui a donnée.",
   question: "Que doit avoir {A} sur sa feuille à la fin ?",
@@ -329,7 +331,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "Ne trace pas ses diagonales", regle: "def_negation", tags: ["ecole"],
   explication: { bonne: "4 cm, des croix aux sommets, pas de diagonales.", cle: "Vérifie chaque ordre : mesure, négation, croix.", piege: "Une seule erreur de mesure ou une diagonale suffit à rater." } },
 
-{ id: "def-4-06", niveau: 4, type: "defense", format: "choix",
+{ id: "def-4-06", flashback: "Après l'entraînement", niveau: 4, type: "defense", format: "choix",
   consigne: "Mélange la farine et le sucre. N'ajoute les œufs qu'après avoir fait fondre le beurre. Verse ensuite la pâte dans le moule, sauf si elle est trop épaisse : ajoute alors un peu de lait.",
   situation: "Après l'entraînement, {A} prépare un gâteau avec cette recette. Le beurre n'est pas encore fondu.",
   question: "Quelle étape {A} ne peut pas faire maintenant ?",
@@ -345,7 +347,7 @@ JEU.ajouterQuestions([
   bonne: [0, 1], mot: "seul {A} monte", regle: "def_seulement",
   explication: { bonne: "{A} monte ; {B} et {C} gardent la ligne.", cle: "« Seul » : un seul joueur monte.", piege: "{D} bouge seulement si le gardien l'appelle." } },
 
-{ id: "def-4-08", niveau: 4, type: "defense", format: "choix",
+{ id: "def-4-08", flashback: "Un autre match", niveau: 4, type: "defense", format: "choix",
   consigne: "{A} a fait trois fautes en vingt minutes. Le coach lui dit : « Au moins deux fois sur trois, reste debout au lieu de tacler. Si tu retombes dans le piège, je te remplace. »",
   question: "Que demande le coach à {A} ?",
   options: ["Ne plus jamais tacler", "Rester debout au moins deux fois sur trois", "Tacler au moins deux fois sur trois", "Sortir du terrain tout de suite"],
@@ -407,7 +409,7 @@ JEU.ajouterQuestions([
   bonne: 1, mot: "ils échangent leurs rôles", regle: "def_simultane",
   explication: { bonne: "{B} garde la droite après l'échange.", cle: "{A} suivait le ballon : il va à gauche, {B} à droite.", piege: "{A} garde la droite seulement au début." } },
 
-{ id: "def-5-04", niveau: 5, type: "defense", format: "vrai-faux-nsp",
+{ id: "def-5-04", flashback: "Un autre match", niveau: 5, type: "defense", format: "vrai-faux-nsp",
   consigne: "Si la pluie continue à la mi-temps, change de crampons. Sinon, garde les mêmes. Mais si un joueur est blessé, le coach décide à sa place, même s'il pleut. {A} n'est pas blessé, et personne ne sait s'il pleuvra encore.",
   situation: "La mi-temps commence.",
   question: "{A} doit-il changer de crampons ?",
@@ -415,7 +417,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "Si la pluie continue", regle: "def_nsp", tags: ["pluie"],
   explication: { bonne: "On ne sait pas s'il pleuvra encore.", cle: "La condition « la pluie continue » reste inconnue.", piege: "Il n'est pas blessé : le coach ne décide pas à sa place." } },
 
-{ id: "def-5-05", niveau: 5, type: "defense", format: "choix",
+{ id: "def-5-05", flashback: "En classe de maths", niveau: 5, type: "defense", format: "choix",
   consigne: "Si le nombre est pair, divise-le par 2. Sinon, ajoute 1, puis divise le résultat par 2. Dans les deux cas, écris ton résultat sans virgule : si tu trouves une virgule, tu t'es trompé.",
   situation: "Mi-temps. {A} fait un exercice de maths. Le nombre de départ est 7.",
   question: "Quel nombre {A} obtient-il ?",
@@ -423,7 +425,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "Sinon, ajoute 1", regle: "def_si_sinon", tags: ["ecole"],
   explication: { bonne: "7 est impair : 7 + 1 = 8, puis 8 ÷ 2 = 4.", cle: "Deux étapes dans le cas « sinon » : ajouter, diviser.", piege: "3,5 oublie d'ajouter 1 ; 8 oublie de diviser." } },
 
-{ id: "def-5-06", niveau: 5, type: "defense", format: "choix",
+{ id: "def-5-06", flashback: "En cours de sciences", niveau: 5, type: "defense", format: "choix",
   consigne: "Note la température toutes les heures, même si elle ne change pas. Si le thermomètre est cassé, ne note rien et préviens le coach. Si tu oublies une heure, ne devine pas : écris « non mesurée ». Ne recopie jamais la mesure précédente.",
   situation: "À 10 h, {A} note 12 °C. À 11 h, il n'a pas regardé le thermomètre.",
   question: "Que note {A} à 11 h ?",
@@ -461,7 +463,7 @@ JEU.ajouterQuestions([
   bonne: 2, mot: "tout dépendait du terrain", regle: "def_nsp",
   explication: { bonne: "Le coach ne dit pas ce qui est permis sur sec.", cle: "« Tout dépendait » : la règle n'est pas donnée.", piege: "Le terrain sec semble permettre, mais rien ne l'écrit." } },
 
-{ id: "def-5-11", niveau: 5, type: "defense", format: "choix",
+{ id: "def-5-11", flashback: "Un autre match", niveau: 5, type: "defense", format: "choix",
   consigne: "Le coach avait confié {Y} à {B} : « Tu le marques, tu ne le quittes pas. » {A} l'avait rappelé à {B}. Mais {B}, trop occupé, a oublié. Résultat : {Y} est resté seul devant le but. Le coach, furieux, a crié : « Qui devait le marquer ? » {A} baisse la tête sans répondre.",
   question: "Qui devait marquer {Y} ?",
   options: ["{A}", "{B}", "{X}", "Le coach"],

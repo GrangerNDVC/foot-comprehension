@@ -57,7 +57,7 @@
     ctx.fillText(String(texte), x, y + 1);
   }
 
-  /* s = état du match (js/regles.js) ; opts.candidats = numéros à mettre en évidence */
+  /* s = état du match (js/regles.js) ; opts.candidats = numéros à mettre en évidence (jaune) ; opts.cites = joueurs cités dans le texte (rose) */
   T.dessiner = function (canvas, s, opts) {
     opts = opts || {};
     var ctx = canvas.getContext("2d");
@@ -80,6 +80,10 @@
       x = Math.max(0.03, Math.min(0.97, p[0] + decal)); y = p[1];
       if (enAttaque && k === s.porteur) { x = bx; }
       var cand = opts.candidats && opts.candidats.indexOf(k) >= 0;
+      if (opts.cites && opts.cites.indexOf(k) >= 0) {       // joueur cité dans le texte (chantier 14) : anneau rose
+        ctx.beginPath(); ctx.arc(X(x), Y(y), 19, 0, Math.PI * 2);
+        ctx.strokeStyle = "#ff5fd0"; ctx.lineWidth = 4; ctx.stroke();
+      }
       if (cand) {
         ctx.beginPath(); ctx.arc(X(x), Y(y), 19, 0, Math.PI * 2);
         ctx.strokeStyle = "#ffe600"; ctx.lineWidth = 4; ctx.stroke();

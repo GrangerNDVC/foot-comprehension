@@ -99,6 +99,7 @@
   /* Attribue les joueurs aux places d'une question, selon l'action en cours.
      base = { porteur, cible (ou null), equipe: [numéros sur le terrain], adv, advListe: [numéros adverses] }
      Renvoie ctx, ou null si la question ne convient pas à cette action. */
+  var TOUTE_L_EQUIPE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16];   // les 14 joueurs de Nankatsu
   B.attribuer = function (q, base) {
     var pl = B.places(q), ctx = {}, utilises = {}, l, fixe = q.fixe || {}, libres;
     // A = porteur, B = cible : imposés
@@ -121,8 +122,11 @@
     }
     for (l in ctx) { if (ctx.hasOwnProperty(l)) { if (utilises[ctx[l]]) { return null; } utilises[ctx[l]] = true; } }
     // les autres places : au hasard parmi les joueurs sur le terrain
-    var autres = base.equipe.filter(function (n) { return n !== 1 && !utilises[n]; });
-    if (!autres.length) { autres = base.equipe.filter(function (n) { return !utilises[n]; }); }
+    // Flashback (q.flashback) : le texte ne se passe pas dans l'action en cours, donc n'importe quel joueur de Nankatsu convient.
+    // Sinon : seulement des joueurs qui sont sur le terrain (ils seront entourés en jaune à l'écran).
+    var vivier = q.flashback ? TOUTE_L_EQUIPE : base.equipe;
+    var autres = vivier.filter(function (n) { return n !== 1 && !utilises[n]; });
+    if (!autres.length) { autres = vivier.filter(function (n) { return !utilises[n]; }); }
     ["A", "B", "C", "D"].forEach(function (lettre) {
       if (pl[lettre] && ctx[lettre] == null) {
         if (!autres.length) { ctx.__manque = true; return; }
