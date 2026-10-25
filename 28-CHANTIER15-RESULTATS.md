@@ -4,7 +4,7 @@
 - L'élève est **gardien** sur les tirs adverses : une question « petit mot » à chaque fois, bonne réponse = arrêt.
 - Niveau d'entraînement **automatique** (4 buts ou plus : +1 ; 2 buts ou moins : −1), ou fixé à la main. Niveau sauvegardé (`tirs`) et fusionné avec le cloud.
 - Tirs au but **après la prolongation**, si le match est encore nul (prolongation inchangée). 5 tirs chacun, arrêt anticipé quand l'écart ne peut plus être rattrapé, puis mort subite par paires (garde-fou : 10 paires).
-- Images du but et des tireurs générées par Julie ; gardien dessiné en SVG par le code.
+- Images du but et des tireurs générées par Julie ; gardien : sprites de la planche NES fournie par Julie (ligne « Default Type »), 3 poses (debout, plongeon bas, plongeon en diagonale), maillot recoloré aux couleurs de l'équipe ; gardien dessiné en SVG par le code si les sprites manquent.
 
 ## Fonctionnement
 - Un tir : phrase à compléter sous le but, un petit mot dans chaque coin, **une seule chance**. Tireur : bon mot = but, mauvais = arrêt. Gardien : le coin choisi est le plongeon ; bon mot = arrêt, mauvais = but adverse.
@@ -19,7 +19,7 @@
 `serie` 5, `mortSubiteMax` 10, `niveauSupp` 0, `entrainement: {tirs, niveauHaut, niveauBas}`. `tirsAuBut: true` sur les matchs m2 à m6.
 
 ## Fichiers
-Nouveaux : `data/motspetits.js`, `data/regles-motspetits.js`, `js/tirsaubut.js`, `assets/tirs/tir-01-but.png`, `assets/tirs/tirs-atlas.js`, `28-CHANTIER15-RESULTATS.md`.
+Nouveaux : `assets/tirs/gardien-atlas.js`, `data/motspetits.js`, `data/regles-motspetits.js`, `js/tirsaubut.js`, `assets/tirs/tir-01-but.png`, `assets/tirs/tirs-atlas.js`, `28-CHANTIER15-RESULTATS.md`.
 Modifiés : `index.html`, `css/jeu.css`, `js/match.js`, `js/regles.js`, `js/progression.js`, `js/banque.js`, `data/config.js`, `outils-test/verifier-questions.js`, `README.md`, `CREDITS.md`.
 
 ## Tests faits
@@ -30,8 +30,9 @@ Modifiés : `index.html`, `css/jeu.css`, `js/match.js`, `js/regles.js`, `js/prog
 
 ## Non testé / limites
 - **iPad Mini 2 (iOS 12) réel** : à essayer en classe (animations du gardien et du ballon, recoloration des tireurs).
-- Gardien dessiné en code (pas de sprites). Le but pèse ~228 Ko.
+- Le gardien n'a que 3 poses (pas de pose « arrêt avec ballon »). Le but pèse ~228 Ko.
 - Sons : réutilisation des sons existants. Panneau enseignant et Firebase inchangés.
 
 ## Remplacer les images
+Gardien : `assets/tirs/gardien-atlas.js` (3 poses : repos, bas, haut ; elles regardent à droite, le jeu les retourne). Réglage de taille : `ECHELLE_G` dans js/tirsaubut.js.
 Le but : remplacer `assets/tirs/tir-01-but.png` (même nom, ratio 8:7). Les tireurs sont dans `tirs-atlas.js` (4 poses ; maillot magenta uni recoloré, short blanc).

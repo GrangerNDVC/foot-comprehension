@@ -102,5 +102,5 @@ Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `rec
 - **Fin de match** : si le match est encore nul après la prolongation, séance de 5 tirs chacun puis mort subite. L'élève tire pour son équipe (il complète une phrase : bon coin = but) et est gardien sur les tirs adverses (bon petit mot = arrêt).
 - Banque : data/motspetits.js (80 questions, 16 par niveau, type `motpetit`) et data/regles-motspetits.js (règles `mp_*` du carnet).
 - Réglages : `tirsAuBut` dans data/config.js (série, mort subite maximale, niveau supplémentaire, seuils d'entraînement).
-- Images : assets/tirs/tir-01-but.png (le but) et assets/tirs/tirs-atlas.js (4 tireurs recolorables). Pour changer le but, remplacer le PNG (même nom).
+- Images : assets/tirs/tir-01-but.png (le but), assets/tirs/tirs-atlas.js (4 tireurs recolorables) et assets/tirs/gardien-atlas.js (gardien, 3 poses). Pour changer le but, remplacer le PNG (même nom).
 - Voir 28-CHANTIER15-RESULTATS.md.

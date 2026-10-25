@@ -13,7 +13,7 @@
    - assets/tirs/tir-01-but.png : le but en pleine page. Sans elle, le décor est dessiné par le code (SVG).
    - assets/tirs/tirs-atlas.js : les tireurs vus de dos (4 sprites). Le maillot, les chaussettes et le short sont recolorés
      aux couleurs de l'équipe. Sans lui, le tireur est dessiné par le code.
-   Le gardien est toujours dessiné par le code (SVG).
+   - assets/tirs/gardien-atlas.js : le gardien (3 poses de la planche de sprites NES), maillot recoloré ; sans lui, gardien dessiné par le code (SVG).
    Code en ES5 (vieil iPad). Les réglages sont dans data/config.js (J.config.tirsAuBut).
    ============================================================ */
 (function (root) {
@@ -58,8 +58,8 @@
     { id: "bd", nom: "en bas à droite" }
   ];
   var GEO = {
-    dessin: { hautY: 22, basY: 60, gaucheX: 16, droiteX: 84 },
-    image:  { hautY: 39, basY: 70, gaucheX: 16, droiteX: 84 }
+    dessin: { hautY: 22, basY: 60, gaucheX: 16, droiteX: 84, piedsGardien: 64 },
+    image:  { hautY: 39, basY: 70, gaucheX: 16, droiteX: 84, piedsGardien: 77 }
   };
   function appliquerGeo(image) {
     var g = image ? GEO.image : GEO.dessin;
@@ -104,6 +104,56 @@
       return copie;
     } catch (e) { return null; }
   }
+  /* ---------- les sprites du gardien (planche NES, atlas en data-URI) : le bleu du maillot est recoloré ---------- */
+  var ATLAS_G = {}, CACHE_G = {}, GARDIEN = { actif: false, c: null };
+  var ECHELLE_G = { repos: 1.75, bas: 1.75, haut: 1.1 };       // pixels de l'écran 256 × 224 par pixel du sprite
+  (function () {
+    var src = J.gardienImages, k;
+    if (!src) { return; }
+    function charger(cle) { var im = new root.Image(); im.onload = function () { ATLAS_G[cle] = im; }; im.src = src[cle]; }
+    for (k in src) { if (src.hasOwnProperty(k)) { charger(k); } }
+  })();
+  function spriteGardien(cle, c) {
+    var im = ATLAS_G[cle];
+    if (!im) { return null; }
+    var id = cle + "|" + c.join(",");
+    try {
+      var base = CACHE_G[id];
+      if (!base) {
+        base = doc.createElement("canvas"); base.width = im.width; base.height = im.height;
+        var ctx = base.getContext("2d"); ctx.drawImage(im, 0, 0);
+        var d = ctx.getImageData(0, 0, im.width, im.height), p = d.data, i;
+        for (i = 0; i < p.length; i += 4) {
+          if (p[i + 3] === 0) { continue; }
+          if (p[i] === 21 && p[i + 1] === 95 && p[i + 2] === 217) { p[i] = c[0]; p[i + 1] = c[1]; p[i + 2] = c[2]; }                     // maillot et pantalon
+          else if (p[i] === 100 && p[i + 1] === 176 && p[i + 2] === 255) {                                                              // reflets : même couleur éclaircie
+            p[i] = Math.round(c[0] + (255 - c[0]) * 0.45); p[i + 1] = Math.round(c[1] + (255 - c[1]) * 0.45); p[i + 2] = Math.round(c[2] + (255 - c[2]) * 0.45);
+          }
+        }
+        ctx.putImageData(d, 0, 0);
+        CACHE_G[id] = base;
+      }
+      var copie = doc.createElement("canvas"); copie.width = base.width; copie.height = base.height;
+      copie.getContext("2d").drawImage(base, 0, 0);
+      return copie;
+    } catch (e) { return null; }
+  }
+  // pose le gardien : le centre du sprite en (cx, cy) % de la scène ; retourné si flip (les poses de plongeon regardent à droite)
+  function placerGardien(cle, cx, cy, flip) {
+    var g = $("t-gardien"), cv = g.firstChild; if (!cv) { return; }
+    var w = cv.width * ECHELLE_G[cle] / 2.56, h = cv.height * ECHELLE_G[cle] / 2.24;     // % de la largeur et de la hauteur de la scène
+    g.style.width = w + "%"; g.style.height = h + "%"; g.style.paddingBottom = "0";
+    g.style.left = (cx - w / 2) + "%"; g.style.top = (cy - h / 2) + "%";
+    cv.style.webkitTransform = flip ? "scaleX(-1)" : "none"; cv.style.transform = flip ? "scaleX(-1)" : "none";
+  }
+  function poserGardien(cle, cx, cy, flip) {
+    var g = $("t-gardien"), sp = spriteGardien(cle, GARDIEN.c);
+    if (!sp) { return false; }
+    vider(g); g.appendChild(sp);
+    placerGardien(cle, cx, cy, flip);
+    return true;
+  }
+  function centreRepos() { var g = IMG_BUT ? GEO.image : GEO.dessin; return { x: 50, piedsY: g.piedsGardien }; }
   function couleursNum(eq) { return { maillot: numeros(eq && eq.maillot, [255, 255, 255]), short: numeros(eq && eq.short, [21, 95, 217]) }; }
 
   /* ---------- couleurs des équipes ---------- */
@@ -115,7 +165,7 @@
   function couleursTireur(eq) {
     return { maillot: rgb(eq && eq.maillot, "#ffffff"), short: rgb(eq && eq.short, "#1561d9") };
   }
-  function couleurGardien(eq, defaut) { return rgb(eq && eq.gardien && eq.gardien.maillot, defaut); }
+  function couleurGardien(eq, defaut) { var m = eq && eq.gardien && eq.gardien.maillot; return (m && m.length === 3) ? m : defaut; }
 
   /* ---------- le décor (dessiné en code, 256 × 224 comme les images du jeu) ---------- */
   var NS = "http://www.w3.org/2000/svg";
@@ -209,7 +259,14 @@
     b.style.width = taille + "%"; b.style.paddingBottom = taille + "%";
   }
   function reinitialiserScene(tireurEq, gardienCouleur, cheveux) {
-    var g = $("t-gardien"); g.className = ""; g.innerHTML = svgGardien(gardienCouleur);
+    var g = $("t-gardien"); g.className = ""; g.removeAttribute("style"); vider(g);
+    GARDIEN.c = gardienCouleur; GARDIEN.actif = false;
+    if (ATLAS_G.repos) {                         // le gardien de la planche de sprites, debout
+      var hr = ATLAS_G.repos.height * ECHELLE_G.repos / 2.24, cr = centreRepos();
+      g.className = "t-gs t-sans-transition";
+      if (poserGardien("repos", cr.x, cr.piedsY - hr / 2, false)) { GARDIEN.actif = true; }
+    }
+    if (!GARDIEN.actif) { g.className = ""; g.removeAttribute("style"); g.innerHTML = svgGardien(rgb(gardienCouleur)); }
     var t = $("t-tireur"), b = $("t-ballon");
     var cn = couleursNum(tireurEq), sp = spriteRecolore((cheveux || "noir") + "Repos", cn);
     vider(t); b.className = "t-sans-transition";
@@ -322,9 +379,9 @@
     // équipes et couleurs
     var eqT, eqG, couleurG, cheveux = "noir";
     if (E.mode === "match") {
-      if (role === "tireur") { eqT = E.eqNous; eqG = E.eqAdv; couleurG = couleurGardien(E.eqAdv, "#4a6cd4"); }
-      else { eqT = E.eqAdv; eqG = E.eqNous; couleurG = couleurGardien(E.eqNous, "#ff7800"); cheveux = "brun"; }     // l'adversaire a les cheveux bruns
-    } else { eqT = equipeNous(); couleurG = "#4a6cd4"; }
+      if (role === "tireur") { eqT = E.eqNous; eqG = E.eqAdv; couleurG = couleurGardien(E.eqAdv, [74, 108, 212]); }
+      else { eqT = E.eqAdv; eqG = E.eqNous; couleurG = couleurGardien(E.eqNous, [255, 120, 0]); cheveux = "brun"; }     // l'adversaire a les cheveux bruns
+    } else { eqT = equipeNous(); couleurG = [74, 108, 212]; }
     reinitialiserScene(eqT, couleurG, cheveux);
     majHud();
 
@@ -379,6 +436,17 @@
     return autres[Math.floor(alea() * autres.length)];
   }
 
+  function plongerGardien(cg) {
+    if (!GARDIEN.actif) { $("t-gardien").className = "t-plonge-" + cg.id; return; }
+    var g = $("t-gardien"), haut = cg.id.charAt(0) === "h", gauche = cg.id.charAt(1) === "g", cle = haut ? "haut" : "bas";
+    var geo = IMG_BUT ? GEO.image : GEO.dessin, cr = centreRepos();
+    var hr = ATLAS_G.repos.height * ECHELLE_G.repos / 2.24;
+    g.className = "t-gs t-sans-transition";
+    if (!poserGardien(cle, cr.x, cr.piedsY - hr / 2, gauche)) { return; }       // la pose de plongeon, d'abord à la place du gardien debout
+    var cx = gauche ? 30 : 70, cy = haut ? geo.hautY + 8 : geo.basY - 2;
+    root.setTimeout(function () { g.className = "t-gs"; placerGardien(cle, cx, cy, gauche); }, 40);
+  }
+
   function animer(cb, cg, but, ok, kChoisi) {
     var item = Q.item, role = Q.role;
     // élan du tireur, puis frappe
@@ -393,7 +461,7 @@
         root.setTimeout(function () { b.className = ""; placerBallon(cb.x, cb.y, 3.6); }, 40);
       } else { $("t-tireur").className = "t-frappe"; placerBallon(cb.x, cb.y, 3.6); }
       son("tir");
-      $("t-gardien").className = "t-plonge-" + cg.id;
+      plongerGardien(cg);
     });
     attendre(1050, function () {
       var bonCoin = COINS[Q.ordre.indexOf(item.bonne)];
@@ -463,7 +531,7 @@
     E.surQuitter = function () { J.match.menu(); };
     musique("match");
     montrerEcran();
-    reinitialiserScene(equipeNous(), "#4a6cd4");
+    reinitialiserScene(equipeNous(), [74, 108, 212]);
     majHud();
     introEntrainement();
   };
@@ -502,7 +570,7 @@
   }
   function finEntrainement() {
     viderBas(); annulerMinuteurs();
-    reinitialiserScene(equipeNous(), "#4a6cd4");
+    reinitialiserScene(equipeNous(), [74, 108, 212]);
     var buts = butsDe(E.resultats), c = cfg().entrainement || {}, ex = $("t-extra");
     var haut = (c.niveauHaut != null) ? c.niveauHaut : 4, bas = (c.niveauBas != null) ? c.niveauBas : 2;
     var msg;
@@ -527,7 +595,7 @@
       bo.appendChild(ul); ex.appendChild(bo);
     }
     var b = el("button", "gros", "🔁 Une autre série"); b.type = "button";
-    b.onclick = function () { E.resultats = []; E.reglesRatees = []; musique("match"); introEntrainement(); reinitialiserScene(equipeNous(), "#4a6cd4"); majHud(); };
+    b.onclick = function () { E.resultats = []; E.reglesRatees = []; musique("match"); introEntrainement(); reinitialiserScene(equipeNous(), [74, 108, 212]); majHud(); };
     var m = el("button", "petit", "☰ Menu"); m.type = "button";
     m.onclick = function () { arreter(); J.match.menu(); };
     ex.appendChild(b); ex.appendChild(m);
@@ -567,7 +635,7 @@
     E.onFin = opts.onFin;
     musique("match-tension");
     montrerEcran();
-    reinitialiserScene(E.eqNous, couleurGardien(E.eqAdv, "#4a6cd4"));
+    reinitialiserScene(E.eqNous, couleurGardien(E.eqAdv, [74, 108, 212]));
     majHud();
     introMatch();
   };
@@ -597,7 +665,7 @@
     viderBas(); annulerMinuteurs();
     var ex = $("t-extra"), gagne = (v === "nous"), bn = butsDe(E.nous), be = butsDe(E.eux);
     majHud();
-    reinitialiserScene(gagne ? E.eqNous : E.eqAdv, couleurGardien(gagne ? E.eqAdv : E.eqNous, "#4a6cd4"), gagne ? "noir" : "brun");
+    reinitialiserScene(gagne ? E.eqNous : E.eqAdv, couleurGardien(gagne ? E.eqAdv : E.eqNous, [74, 108, 212]), gagne ? "noir" : "brun");
     bulle(bn + " – " + be, gagne ? "t-bulle-ok" : "t-bulle-ko");
     ex.appendChild(el("div", "titre-menu", gagne ? "🏆 Victoire aux tirs au but !" : "Défaite aux tirs au but"));
     ex.appendChild(el("p", "texte-pause", E.nomNous + " " + bn + " – " + be + " " + E.nomEux + " aux tirs au but"));
