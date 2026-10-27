@@ -13,7 +13,7 @@
    - assets/tirs/tir-01-but.png : le but en pleine page. Sans elle, le décor est dessiné par le code (SVG).
    - assets/tirs/tirs-atlas.js : les tireurs vus de dos (4 sprites). Le maillot, les chaussettes et le short sont recolorés
      aux couleurs de l'équipe. Sans lui, le tireur est dessiné par le code.
-   - assets/tirs/gardien-atlas.js : le gardien (3 poses de la planche de sprites NES), maillot recoloré ; sans lui, gardien dessiné par le code (SVG).
+   Le gardien est toujours dessiné par le code (SVG).
    Code en ES5 (vieil iPad). Les réglages sont dans data/config.js (J.config.tirsAuBut).
    ============================================================ */
 (function (root) {
@@ -58,8 +58,8 @@
     { id: "bd", nom: "en bas à droite" }
   ];
   var GEO = {
-    dessin: { hautY: 22, basY: 60, gaucheX: 16, droiteX: 84, piedsGardien: 64 },
-    image:  { hautY: 39, basY: 70, gaucheX: 16, droiteX: 84, piedsGardien: 77 }
+    dessin: { hautY: 22, basY: 60, gaucheX: 16, droiteX: 84 },
+    image:  { hautY: 39, basY: 70, gaucheX: 16, droiteX: 84 }
   };
   function appliquerGeo(image) {
     var g = image ? GEO.image : GEO.dessin;
@@ -104,78 +104,18 @@
       return copie;
     } catch (e) { return null; }
   }
-  /* ---------- les sprites des gardiens (images générées, atlas en data-URI) : le rouge du jogging est recoloré ---------- */
-  var ATLAS_G = {}, CACHE_G = {}, GARDIEN = { actif: false, sprite: null, c: null };
-  var ECHELLE_G = 0.8;             // unités de l'écran 256 × 224 par pixel du sprite (le gardien debout fait 76 pixels de haut)
-  (function () {
-    var src = J.gardienImages, k, p;
-    if (!src) { return; }
-    function charger(cle, pose) { var im = new root.Image(); im.onload = function () { ATLAS_G[cle + "." + pose] = im; }; im.src = src[cle][pose]; }
-    for (k in src) { if (src.hasOwnProperty(k)) { for (p in src[k]) { if (src[k].hasOwnProperty(p)) { charger(k, p); } } } }
-  })();
-  // Renvoie un canvas (le sprite, jogging recoloré si c est donné), ou null
-  function spriteGardien(sprite, pose, c) {
-    var im = ATLAS_G[sprite + "." + pose];
-    if (!im) { return null; }
-    var id = sprite + "." + pose + "|" + (c ? c.join(",") : "-");
-    try {
-      var base = CACHE_G[id];
-      if (!base) {
-        base = doc.createElement("canvas"); base.width = im.width; base.height = im.height;
-        var ctx = base.getContext("2d"); ctx.drawImage(im, 0, 0);
-        if (c) {
-          var d = ctx.getImageData(0, 0, im.width, im.height), p = d.data, i, f;
-          for (i = 0; i < p.length; i += 4) {
-            if (p[i + 3] === 0) { continue; }
-            if (p[i] > 60 && p[i + 1] < p[i] * 0.36 && p[i + 2] < p[i] * 0.36) {        // le rouge (casquette et jogging), avec ses ombres
-              f = p[i] / 235;
-              p[i] = Math.min(255, Math.round(c[0] * f)); p[i + 1] = Math.min(255, Math.round(c[1] * f)); p[i + 2] = Math.min(255, Math.round(c[2] * f));
-            }
-          }
-          ctx.putImageData(d, 0, 0);
-        }
-        CACHE_G[id] = base;
-      }
-      var copie = doc.createElement("canvas"); copie.width = base.width; copie.height = base.height;
-      copie.getContext("2d").drawImage(base, 0, 0);
-      return copie;
-    } catch (e) { return null; }
-  }
-  // pose le gardien : le centre du sprite en (cx, cy) % de la scène ; retourné si flip (les poses de plongeon regardent à droite)
-  function placerGardien(cx, cy, flip) {
-    var g = $("t-gardien"), cv = g.firstChild; if (!cv) { return; }
-    var w = cv.width * ECHELLE_G / 2.56, h = cv.height * ECHELLE_G / 2.24;     // % de la largeur et de la hauteur de la scène
-    g.style.width = w + "%"; g.style.height = h + "%"; g.style.paddingBottom = "0";
-    g.style.left = (cx - w / 2) + "%"; g.style.top = (cy - h / 2) + "%";
-    cv.style.webkitTransform = flip ? "scaleX(-1)" : "none"; cv.style.transform = flip ? "scaleX(-1)" : "none";
-  }
-  function poserGardien(pose, cx, cy, flip) {
-    var g = $("t-gardien"), sp = spriteGardien(GARDIEN.sprite, pose, GARDIEN.c);
-    if (!sp) { return false; }
-    vider(g); g.appendChild(sp);
-    placerGardien(cx, cy, flip);
-    return true;
-  }
-  function piedsGardien() { return (IMG_BUT ? GEO.image : GEO.dessin).piedsGardien; }
-  function gardiensTirs() { return J.gardiensTirs || { gardiens: {}, parEquipe: {}, match: {} }; }
-  function leGardien(id) { var G = gardiensTirs().gardiens; return G[id] || G.alan || { sprite: "alan", couleur: null, niveaux: [1, 5], types: ["motpetit"], cats: ["pc"] }; }
-  // gardien d'une équipe en match : l'image vient de data/gardiens-tirs.js, le jogging de l'équipe (sauf si l'image ne se recolore pas)
-  function gardienEquipe(cle, eq) {
-    var id = gardiensTirs().parEquipe[cle] || "alan", g = leGardien(id);
-    return { id: id, sprite: g.sprite, couleur: g.couleur === null ? null : couleurGardien(eq, g.couleur || [74, 108, 212]) };
-  }
-  // gardien choisi à l'entraînement
-  function gardienChoisi(id) { var g = leGardien(id); return { id: id, sprite: g.sprite, couleur: g.couleur }; }
   function couleursNum(eq) { return { maillot: numeros(eq && eq.maillot, [255, 255, 255]), short: numeros(eq && eq.short, [21, 95, 217]) }; }
 
   /* ---------- couleurs des équipes ---------- */
   function equipeNous() { return (root.EQUIPES && root.EQUIPES.nankatsu) || null; }
-  function cleAdv(def) { var r = J.grosplanReglages; return def && r && r.equipeParMatch ? r.equipeParMatch[def.id] : null; }
-  function equipeAdv(def) { var cle = cleAdv(def); return (cle && root.EQUIPES && root.EQUIPES[cle]) || null; }
+  function equipeAdv(def) {
+    var r = J.grosplanReglages, cle = def && r && r.equipeParMatch ? r.equipeParMatch[def.id] : null;
+    return (cle && root.EQUIPES && root.EQUIPES[cle]) || null;
+  }
   function couleursTireur(eq) {
     return { maillot: rgb(eq && eq.maillot, "#ffffff"), short: rgb(eq && eq.short, "#1561d9") };
   }
-  function couleurGardien(eq, defaut) { var m = eq && eq.gardien && eq.gardien.maillot; return (m && m.length === 3) ? m : defaut; }
+  function couleurGardien(eq, defaut) { return rgb(eq && eq.gardien && eq.gardien.maillot, defaut); }
 
   /* ---------- le décor (dessiné en code, 256 × 224 comme les images du jeu) ---------- */
   var NS = "http://www.w3.org/2000/svg";
@@ -268,16 +208,8 @@
     b.style.left = (x - taille / 2) + "%"; b.style.top = (y - h / 2) + "%";
     b.style.width = taille + "%"; b.style.paddingBottom = taille + "%";
   }
-  // gard : le gardien { id, sprite, couleur } (voir gardienEquipe et gardienChoisi)
-  function reinitialiserScene(tireurEq, gard, cheveux) {
-    var g = $("t-gardien"); g.className = ""; g.removeAttribute("style"); vider(g);
-    GARDIEN.sprite = gard.sprite; GARDIEN.c = gard.couleur; GARDIEN.actif = false;
-    if (ATLAS_G[gard.sprite + ".repos"]) {                       // le gardien en image, debout
-      g.className = "t-gs t-sans-transition";
-      var hr = ATLAS_G[gard.sprite + ".repos"].height * ECHELLE_G / 2.24;
-      if (poserGardien("repos", 50, piedsGardien() - hr / 2, false)) { GARDIEN.actif = true; }
-    }
-    if (!GARDIEN.actif) { g.className = ""; g.removeAttribute("style"); g.innerHTML = svgGardien(rgb(gard.couleur || [74, 108, 212])); }
+  function reinitialiserScene(tireurEq, gardienCouleur, cheveux) {
+    var g = $("t-gardien"); g.className = ""; g.innerHTML = svgGardien(gardienCouleur);
     var t = $("t-tireur"), b = $("t-ballon");
     var cn = couleursNum(tireurEq), sp = spriteRecolore((cheveux || "noir") + "Repos", cn);
     vider(t); b.className = "t-sans-transition";
@@ -319,19 +251,6 @@
     return t;
   }
 
-  /* ---------- quelles questions ? ---------- */
-  // Entraînement : celles du gardien choisi (banques et catégories de data/gardiens-tirs.js).
-  // Match : petits mots + vocabulaire, sans homophones (sauf pour les tirs les plus faciles).
-  function reglesQuestions(niveau) {
-    var cat = J.banque.categorie, gt = gardiensTirs();
-    if (E.mode === "match") {
-      var m = gt.match || {}, hom = (m.homophonesJusquAuNiveau != null) ? m.homophonesJusquAuNiveau : 1;
-      return { types: m.types || ["motpetit", "vocabulaire"], filtre: function (q) { return cat(q) !== "hom" || niveau <= hom; } };
-    }
-    var g = leGardien(E.gardienId);
-    return { types: g.types, filtre: function (q) { return !g.cats || g.cats.indexOf(cat(q)) >= 0; } };
-  }
-
   /* ---------- une série (entraînement ou match) : l'état commun ---------- */
   function nouvelleSeance(mode) {
     return { mode: mode, minuteurs: [], exclus: [], reglesRatees: [], dernierRate: null, nbRepondu: 0 };
@@ -360,7 +279,7 @@
     } else {
       ps.appendChild(el("div", "t-ligne-pastille t-actif", pastilles(E.resultats, E.total)));
       $("t-score").textContent = butsDe(E.resultats) + " / " + E.total;
-      $("t-titre").textContent = "Vocabulaire à maîtriser";
+      $("t-titre").textContent = "Entraînement : tirs au but";
     }
   }
   function butsDe(l) { var n = 0, i; for (i = 0; i < l.length; i++) { if (l[i]) { n++; } } return n; }
@@ -392,9 +311,7 @@
     annulerMinuteurs();
     viderBas();
     var niveau = borne(niveauCourant(), 1, 5);
-    var perm = reglesQuestions(niveau);
-    var item = J.banque.choisir(perm.types[0], niveau, {
-      types: perm.types, filtre: perm.filtre,
+    var item = J.banque.choisir("motpetit", niveau, {
       exclus: E.exclus, revoir: J.progression.revoir(), dernierRate: E.dernierRate, base: null
     });
     if (!item) { return quand(false); }
@@ -403,22 +320,21 @@
     Q = { item: item, ordre: ordre, role: role, niveau: niveau, verrou: false, quand: quand };
 
     // équipes et couleurs
-    var eqT, gard, cheveux = "noir";
+    var eqT, eqG, couleurG, cheveux = "noir";
     if (E.mode === "match") {
-      if (role === "tireur") { eqT = E.eqNous; gard = gardienEquipe(E.cleAdv, E.eqAdv); }                               // nous tirons : le gardien de l'adversaire
-      else { eqT = E.eqAdv; gard = gardienEquipe("nankatsu", E.eqNous); cheveux = "brun"; }                              // l'adversaire tire (cheveux bruns) : notre gardien
-    } else { eqT = equipeNous(); gard = gardienChoisi(E.gardienId); }
-    reinitialiserScene(eqT, gard, cheveux);
+      if (role === "tireur") { eqT = E.eqNous; eqG = E.eqAdv; couleurG = couleurGardien(E.eqAdv, "#4a6cd4"); }
+      else { eqT = E.eqAdv; eqG = E.eqNous; couleurG = couleurGardien(E.eqNous, "#ff7800"); cheveux = "brun"; }     // l'adversaire a les cheveux bruns
+    } else { eqT = equipeNous(); couleurG = "#4a6cd4"; }
+    reinitialiserScene(eqT, couleurG, cheveux);
     majHud();
 
     var e = $("t-etiquette");
-    if (E.mode !== "match" && E.gardienId) { e.appendChild(el("span", "t-niveau", leGardien(E.gardienId).nom + " · niveau " + niveau)); }
-    else { e.appendChild(el("span", "t-niveau", "niveau " + niveau)); }
+    e.appendChild(el("span", "t-niveau", "niveau " + niveau));
     e.appendChild(el("span", "puce-unique", "⚠ Une seule chance !"));
     if (role === "tireur") {
-      e.appendChild(doc.createTextNode(" " + (E.mode === "match" ? E.nomNous + " tire : " : "") + "choisis le coin avec le bon mot."));
+      e.appendChild(doc.createTextNode(" " + (E.mode === "match" ? E.nomNous + " tire : " : "") + "choisis le coin avec le bon petit mot."));
     } else {
-      e.appendChild(doc.createTextNode(" " + E.nomEux + " tire ! Ton gardien plonge dans le coin du bon mot."));
+      e.appendChild(doc.createTextNode(" " + E.nomEux + " tire ! Ton gardien plonge dans le coin du bon petit mot."));
     }
     remplirPhrase(item, null);
     $("t-question").textContent = item.question;
@@ -463,17 +379,6 @@
     return autres[Math.floor(alea() * autres.length)];
   }
 
-  function plongerGardien(cg) {
-    if (!GARDIEN.actif) { $("t-gardien").className = "t-plonge-" + cg.id; return; }
-    var g = $("t-gardien"), haut = cg.id.charAt(0) === "h", gauche = cg.id.charAt(1) === "g", pose = haut ? "haut" : "bas";
-    var geo = IMG_BUT ? GEO.image : GEO.dessin;
-    var hr = ATLAS_G[GARDIEN.sprite + ".repos"].height * ECHELLE_G / 2.24;
-    g.className = "t-gs t-sans-transition";
-    if (!poserGardien(pose, 50, piedsGardien() - hr / 2, gauche)) { return; }       // la pose de plongeon, d'abord à la place du gardien debout
-    var cx = gauche ? 30 : 70, cy = haut ? geo.hautY + 8 : geo.basY - 2;
-    root.setTimeout(function () { g.className = "t-gs"; placerGardien(cx, cy, gauche); }, 40);
-  }
-
   function animer(cb, cg, but, ok, kChoisi) {
     var item = Q.item, role = Q.role;
     // élan du tireur, puis frappe
@@ -488,7 +393,7 @@
         root.setTimeout(function () { b.className = ""; placerBallon(cb.x, cb.y, 3.6); }, 40);
       } else { $("t-tireur").className = "t-frappe"; placerBallon(cb.x, cb.y, 3.6); }
       son("tir");
-      plongerGardien(cg);
+      $("t-gardien").className = "t-plonge-" + cg.id;
     });
     attendre(1050, function () {
       var bonCoin = COINS[Q.ordre.indexOf(item.bonne)];
@@ -545,67 +450,36 @@
   /* ============================================================
      1. ENTRAÎNEMENT
      ============================================================ */
-  var DERNIER_GARDIEN = "alan";          // le dernier gardien choisi (jusqu'à la fermeture de la page)
-  function plage(id) { var n = leGardien(id).niveaux || [1, 5]; return [n[0], n[1]]; }
-  function niveauDepart(id) {
-    var pl = plage(id), n = J.progression.niveauTirs ? J.progression.niveauTirs(id) : 0;
-    if (!n) { n = (pl[0] === 1 && pl[1] === 5) ? 2 + (J.progression.calibrage ? J.progression.calibrage() : 0) : pl[0]; }
-    return borne(n, pl[0], pl[1]);
+  function niveauDepart() {
+    var n = J.progression.niveauTirs ? J.progression.niveauTirs() : 0;
+    if (!n) { n = 2 + (J.progression.calibrage ? J.progression.calibrage() : 0); }
+    return borne(n, 1, 5);
   }
   T.entrainement = function () {
     brancherFixes();
     var c = cfg().entrainement || {};
     E = nouvelleSeance("entrainement");
-    E.total = c.tirs || 5; E.resultats = []; E.gardienId = DERNIER_GARDIEN; E.niveau = niveauDepart(E.gardienId); E.niveauChoisi = null;
+    E.total = c.tirs || 5; E.resultats = []; E.niveau = niveauDepart(); E.niveauChoisi = null;
     E.surQuitter = function () { J.match.menu(); };
     musique("match");
     montrerEcran();
-    reinitialiserScene(equipeNous(), gardienChoisi(E.gardienId));
+    reinitialiserScene(equipeNous(), "#4a6cd4");
     majHud();
     introEntrainement();
   };
-  function carteGardien(id, selectionne, surChoix) {
-    var g = leGardien(id), b = el("button", "t-carte-gardien" + (selectionne ? " t-choisi" : ""));
-    b.type = "button"; b.setAttribute("data-gardien", id);
-    var im = el("span", "t-carte-image"), sp = spriteGardien(g.sprite, "repos", g.couleur);
-    if (sp) { im.appendChild(sp); }
-    b.appendChild(im);
-    var tx = el("span", "t-carte-texte"); tx.appendChild(el("strong", "", g.nom)); tx.appendChild(el("span", "", g.sous));
-    b.appendChild(tx);
-    b.onclick = function () { surChoix(id); };
-    return b;
-  }
   function introEntrainement() {
     viderBas();
-    var ex = $("t-extra"), gt = gardiensTirs();
-    ex.appendChild(el("div", "titre-menu", "🥅 Vocabulaire à maîtriser avant de commencer"));
-    ex.appendChild(el("p", "", "Un gardien te pose une phrase à compléter. Il y a quatre mots, un dans chaque coin du but : tire dans le coin du bon mot ! Tu as une seule chance par tir : " + E.total + " tirs."));
-    ex.appendChild(el("p", "t-choix-titre", "Choisis ton gardien :"));
-    var zone = el("div", "t-gardiens"); ex.appendChild(zone);
-    var chNiv = el("p", "t-choix-niveau"), sel = doc.createElement("select"); sel.id = "t-select-niveau";
-    function majNiveaux() {
-      var pl = plage(E.gardienId), k, o;
-      E.niveau = niveauDepart(E.gardienId);
-      vider(sel);
-      o = doc.createElement("option"); o.value = "0"; o.textContent = "Automatique (niveau " + E.niveau + " pour commencer)"; sel.appendChild(o);
-      for (k = pl[0]; k <= pl[1]; k++) { o = doc.createElement("option"); o.value = String(k); o.textContent = "Niveau " + k + ((pl[0] === 1 && pl[1] === 5) ? (k === 1 ? " (très simple)" : (k === 5 ? " (très difficile)" : "")) : ""); sel.appendChild(o); }
-      sel.value = "0";
-    }
-    function dessiner() {
-      vider(zone);
-      zone.appendChild(el("div", "t-groupe", "Par thème"));
-      (gt.ordreTheme || []).forEach(function (id) { zone.appendChild(carteGardien(id, id === E.gardienId, choisir)); });
-      zone.appendChild(el("div", "t-groupe", "Mélange de tout, du plus facile au plus difficile"));
-      (gt.ordreNiveau || []).forEach(function (id) { zone.appendChild(carteGardien(id, id === E.gardienId, choisir)); });
-    }
-    function choisir(id) {
-      E.gardienId = id; DERNIER_GARDIEN = id;
-      dessiner(); majNiveaux();
-      reinitialiserScene(equipeNous(), gardienChoisi(id));
-    }
-    dessiner();
-    chNiv.appendChild(el("label", "", "Niveau : ")); chNiv.appendChild(sel); majNiveaux();
-    ex.appendChild(chNiv);
+    var ex = $("t-extra");
+    ex.appendChild(el("div", "titre-menu", "🥅 Tirs au but : les petits mots"));
+    ex.appendChild(el("p", "", "Une phrase à compléter, quatre petits mots, un dans chaque coin du but. Tire dans le coin du bon mot ! Tu as une seule chance par tir : " + E.total + " tirs."));
+    var ch = el("p", "t-choix-niveau");
+    ch.appendChild(el("label", "", "Niveau : "));
+    var sel = doc.createElement("select"); sel.id = "t-select-niveau";
+    var o0 = doc.createElement("option"); o0.value = "0"; o0.textContent = "Automatique (niveau " + E.niveau + " pour commencer)"; sel.appendChild(o0);
+    var k;
+    for (k = 1; k <= 5; k++) { var o = doc.createElement("option"); o.value = String(k); o.textContent = "Niveau " + k + (k === 1 ? " (très simple)" : (k === 5 ? " (très difficile)" : "")); sel.appendChild(o); }
+    ch.appendChild(sel);
+    ex.appendChild(ch);
     var b = el("button", "gros", "⚽ Aux tirs !"); b.type = "button";
     b.onclick = function () {
       var v = parseInt(sel.value, 10) || 0;
@@ -628,20 +502,18 @@
   }
   function finEntrainement() {
     viderBas(); annulerMinuteurs();
-    reinitialiserScene(equipeNous(), gardienChoisi(E.gardienId));
-    var buts = butsDe(E.resultats), c = cfg().entrainement || {}, ex = $("t-extra"), pl = plage(E.gardienId);
+    reinitialiserScene(equipeNous(), "#4a6cd4");
+    var buts = butsDe(E.resultats), c = cfg().entrainement || {}, ex = $("t-extra");
     var haut = (c.niveauHaut != null) ? c.niveauHaut : 4, bas = (c.niveauBas != null) ? c.niveauBas : 2;
     var msg;
     if (E.niveauChoisi) { msg = "Tu as choisi le niveau " + E.niveauChoisi + " : le niveau automatique n'a pas bougé."; }
     else {
-      var n = E.niveau;
-      if (buts >= haut && n < pl[1]) { n++; msg = "Bravo ! Prochaine série : niveau " + n + " (un peu plus difficile)."; }
-      else if (buts >= haut && pl[1] > pl[0]) { msg = "Bravo ! Tu es au niveau le plus difficile de " + leGardien(E.gardienId).nom + "."; }
-      else if (buts >= haut) { msg = "Bravo ! Tu peux essayer un gardien plus difficile."; }
-      else if (buts <= bas && n > pl[0]) { n--; msg = "On revient au niveau " + n + " pour la prochaine série : un peu plus doux."; }
+      var ancien = E.niveau, n = ancien;
+      if (buts >= haut && n < 5) { n++; msg = "Bravo ! Prochaine série : niveau " + n + " (un peu plus difficile)."; }
+      else if (buts <= bas && n > 1) { n--; msg = "On revient au niveau " + n + " pour la prochaine série : un peu plus doux."; }
       else { msg = "Tu restes au niveau " + n + "."; }
       E.niveau = n;
-      if (J.progression.fixerNiveauTirs) { J.progression.fixerNiveauTirs(n, E.gardienId); }
+      if (J.progression.fixerNiveauTirs) { J.progression.fixerNiveauTirs(n); }
     }
     bulle(buts + " / " + E.total, buts >= haut ? "t-bulle-ok" : "t-bulle-ko");
     majHud();
@@ -655,7 +527,7 @@
       bo.appendChild(ul); ex.appendChild(bo);
     }
     var b = el("button", "gros", "🔁 Une autre série"); b.type = "button";
-    b.onclick = function () { E.resultats = []; E.reglesRatees = []; musique("match"); introEntrainement(); reinitialiserScene(equipeNous(), gardienChoisi(E.gardienId)); majHud(); };
+    b.onclick = function () { E.resultats = []; E.reglesRatees = []; musique("match"); introEntrainement(); reinitialiserScene(equipeNous(), "#4a6cd4"); majHud(); };
     var m = el("button", "petit", "☰ Menu"); m.type = "button";
     m.onclick = function () { arreter(); J.match.menu(); };
     ex.appendChild(b); ex.appendChild(m);
@@ -687,7 +559,7 @@
     E = nouvelleSeance("match");
     E.nous = []; E.eux = []; E.tour = "nous";
     E.nomNous = opts.nomNous; E.nomEux = opts.nomEux;
-    E.eqNous = equipeNous(); E.eqAdv = equipeAdv(opts.def); E.cleAdv = cleAdv(opts.def);
+    E.eqNous = equipeNous(); E.eqAdv = equipeAdv(opts.def);
     E.exclus = opts.exclus || [];
     E.n5 = c.serie || 5; E.plafond = (c.mortSubiteMax != null) ? c.mortSubiteMax : 10;
     E.niveau = function (etat) { return opts.niveau(etat); };
@@ -695,7 +567,7 @@
     E.onFin = opts.onFin;
     musique("match-tension");
     montrerEcran();
-    reinitialiserScene(E.eqNous, gardienEquipe(E.cleAdv, E.eqAdv));
+    reinitialiserScene(E.eqNous, couleurGardien(E.eqAdv, "#4a6cd4"));
     majHud();
     introMatch();
   };
@@ -704,7 +576,7 @@
     var ex = $("t-extra");
     ex.appendChild(el("div", "titre-menu", "🥅 Tirs au but !"));
     ex.appendChild(el("p", "", "Égalité même après la prolongation. " + E.n5 + " tirs chacun, puis un tir de plus chacun jusqu'à ce qu'il y ait un gagnant."));
-    ex.appendChild(el("p", "", "À ton tour de tirer, tu tires dans le coin du bon mot. Quand " + E.nomEux + " tire, tu es le gardien : le bon mot fait plonger ton gardien du bon côté. Une seule chance à chaque fois."));
+    ex.appendChild(el("p", "", "À ton tour de tirer, tu tires dans le coin du bon petit mot. Quand " + E.nomEux + " tire, tu es le gardien : le bon petit mot fait plonger ton gardien du bon côté. Une seule chance à chaque fois."));
     var b = el("button", "gros", "⚽ C'est parti !"); b.type = "button";
     b.onclick = function () { son("sifflet-debut"); prochainMatch(); };
     ex.appendChild(b);
@@ -725,7 +597,7 @@
     viderBas(); annulerMinuteurs();
     var ex = $("t-extra"), gagne = (v === "nous"), bn = butsDe(E.nous), be = butsDe(E.eux);
     majHud();
-    reinitialiserScene(gagne ? E.eqNous : E.eqAdv, gagne ? gardienEquipe(E.cleAdv, E.eqAdv) : gardienEquipe("nankatsu", E.eqNous), gagne ? "noir" : "brun");
+    reinitialiserScene(gagne ? E.eqNous : E.eqAdv, couleurGardien(gagne ? E.eqAdv : E.eqNous, "#4a6cd4"), gagne ? "noir" : "brun");
     bulle(bn + " – " + be, gagne ? "t-bulle-ok" : "t-bulle-ko");
     ex.appendChild(el("div", "titre-menu", gagne ? "🏆 Victoire aux tirs au but !" : "Défaite aux tirs au but"));
     ex.appendChild(el("p", "texte-pause", E.nomNous + " " + bn + " – " + be + " " + E.nomEux + " aux tirs au but"));

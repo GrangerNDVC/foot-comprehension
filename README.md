@@ -97,13 +97,10 @@ Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `rec
 - **Données enregistrées** : numéro, progression (matchs, carnet de règles, « Vu à l'entraînement », choix des noms, date de dernière activité). Pas de nom, pas d'e-mail, pas d'adresse IP côté jeu.
 - Contrôle automatique : `node outils-test/verifier-questions.js` (inchangé). Le test du compte (faux Firebase) est dans le compte rendu 25-CHANTIER13-RESULTATS.md.
 
-## Chantier 15 (25-27/10/2026) : tirs au but, vocabulaire à maîtriser
-- **Séance d'entraînement** (bouton « 🥅 Vocabulaire à maîtriser avant de commencer ») : l'élève choisit son gardien, 5 tirs, le niveau s'adapte tout seul (4 buts ou plus : on monte ; 2 buts ou moins : on descend), ou se fixe à la main. Chaque gardien garde son niveau.
-  - **Le gardien blond** : vocabulaire des consignes (souligner, relever, justifier, déduire, implicite, ci-dessous…).
-  - **Le gardien aux cheveux noirs** : prépositions et conjonctions (chez le dentiste, parce que / car, malgré / bien que…).
-  - **Alan Crocker** (niveau 1, facile), **Ted Warner** (niveau 2), **Thomas Pryce** (niveau 3, difficile) : mélange de tout. Les homophones (a / à, on / ont…) ne sont que dans le mélange facile d'Alan ; Ted et Thomas posent les tournures qui font le plus de mal, sans piège d'orthographe.
-- **Fin de match** : si le match est encore nul après la prolongation, 5 tirs chacun puis mort subite. L'élève tire pour son équipe (bon coin = but) et est gardien sur les tirs adverses (bon mot = arrêt). Chaque équipe a son gardien (`parEquipe` dans data/gardiens-tirs.js), au jogging de ses couleurs.
-- Banques : data/motspetits.js + data/motspetits-prepositions.js (97 questions « petits mots »), data/vocabulaire.js (70 questions) ; règles du carnet : data/regles-motspetits.js (`mp_`), data/regles-vocabulaire.js (`vc_`).
-- Réglages : data/gardiens-tirs.js (gardiens, plages de niveaux, catégories de questions, gardien par équipe) et `tirsAuBut` dans data/config.js (série, mort subite, seuils d'entraînement).
-- Images : assets/tirs/tir-01-but.png (le but), assets/tirs/tirs-atlas.js (4 tireurs recolorables), assets/tirs/gardien-atlas.js (5 gardiens × 3 poses ; le rouge du jogging et de la casquette est recoloré). Pour changer le but, remplacer le PNG (même nom).
+## Chantier 15 (25/10/2026) : tirs au but « petits mots »
+- **Entraînement** : bouton « 🥅 Tirs au but : petits mots » dans le menu. 5 tirs ; le niveau (1 à 5) s'adapte tout seul (4 buts ou plus : on monte ; 2 buts ou moins : on descend) ou se fixe à la main.
+- **Fin de match** : si le match est encore nul après la prolongation, séance de 5 tirs chacun puis mort subite. L'élève tire pour son équipe (il complète une phrase : bon coin = but) et est gardien sur les tirs adverses (bon petit mot = arrêt).
+- Banque : data/motspetits.js (80 questions, 16 par niveau, type `motpetit`) et data/regles-motspetits.js (règles `mp_*` du carnet).
+- Réglages : `tirsAuBut` dans data/config.js (série, mort subite maximale, niveau supplémentaire, seuils d'entraînement).
+- Images : assets/tirs/tir-01-but.png (le but) et assets/tirs/tirs-atlas.js (4 tireurs recolorables). Pour changer le but, remplacer le PNG (même nom).
 - Voir 28-CHANTIER15-RESULTATS.md.
