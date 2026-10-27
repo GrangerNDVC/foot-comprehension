@@ -141,8 +141,17 @@
     },
 
     // Niveau de l'entraînement « tirs au but » (1 à 5 ; 0 = pas encore fixé)
-    niveauTirs: function () { var t = lire().tirs; return (t && typeof t.niveau === "number") ? t.niveau : 0; },
-    fixerNiveauTirs: function (n) { var d = lire(); d.tirs = { niveau: n }; ecrire(); },
+    // id = le gardien choisi (blond, noir, alan, ted, thomas) : chaque gardien garde son niveau (chantier 15)
+    niveauTirs: function (id) {
+      var t = lire().tirs;
+      if (id) { return (t && t.par && typeof t.par[id] === "number") ? t.par[id] : 0; }
+      return (t && typeof t.niveau === "number") ? t.niveau : 0;
+    },
+    fixerNiveauTirs: function (n, id) {
+      var d = lire(), t = d.tirs || {};
+      if (id) { t.par = t.par || {}; t.par[id] = n; } else { t.niveau = n; }
+      d.tirs = t; ecrire();
+    },
 
     calibrage: function () { return lire().calibrage; },
     fixerCalibrage: function (v) { lire().calibrage = v; ecrire(); },

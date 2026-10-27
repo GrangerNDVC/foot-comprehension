@@ -148,7 +148,7 @@
   };
 
   /* Choisit une question et l'écrit avec les noms de l'action en cours.
-     type    : passe | dribble | tir | defense | gardien | motpetit (tirs au but « petits mots »)
+     type    : passe | dribble | tir | defense | gardien | motpetit | vocabulaire (tirs au but : petits mots et vocabulaire des consignes)
      niveau  : 1 à 5
      opts.exclus      : ids déjà posés dans ce match (dans l'ordre)
      opts.revoir      : règles du carnet à revoir
@@ -156,11 +156,29 @@
      opts.base        : l'action en cours (voir B.attribuer)
      opts.special     : "une-deux" pour l'échange de passes des deux spécialistes
      opts.tags        : thèmes du match (facultatif) : les questions de ces thèmes sont préférées
+     opts.types       : liste de types (ex. ["motpetit", "vocabulaire"]) à la place de « type » (tirs au but)
+     opts.filtre      : fonction(question) -> vrai si la question est permise (ex. pas d'homophones) ; ignorée si elle ne laisse rien
      Renvoie la question écrite (copie) avec ._ctx, ou null. */
+  /* Catégorie d'une question de tirs au but : « hom » (homophones : orthographe), « pc » (prépositions, conjonctions,
+     locutions, connecteurs), « autre » (pronoms, négation, adverbes d'ordre) ou « vocab » (vocabulaire des consignes).
+     Une question peut imposer sa catégorie avec un champ « cat ». */
+  var CAT_HOM = ["mp_a", "mp_on_ont", "mp_son_sont", "mp_et_est", "mp_mes_mais", "mp_ce_se", "mp_ces_ses", "mp_la_la", "mp_ou", "mp_plustot", "mp_quand", "mp_dont_donc", "mp_quel"];
+  var CAT_AUTRE = ["mp_relatif", "mp_en_y", "mp_negation", "mp_ordre"];
+  B.categorie = function (q) {
+    if (q.cat) { return q.cat; }
+    if (q.type === "vocabulaire") { return "vocab"; }
+    if (q.type !== "motpetit") { return "autre"; }
+    if (CAT_HOM.indexOf(q.regle) >= 0) { return "hom"; }
+    if (CAT_AUTRE.indexOf(q.regle) >= 0) { return "autre"; }
+    return "pc";
+  };
+
   B.choisir = function (type, niveau, opts) {
     opts = opts || {};
     var exclus = opts.exclus || [], base = opts.base || null;
-    var tous = B.toutes().filter(function (q) { return q.type === type && !q.retire; });
+    var types = opts.types || [type];
+    var tous = B.toutes().filter(function (q) { return types.indexOf(q.type) >= 0 && !q.retire; });
+    if (opts.filtre) { var permis = tous.filter(opts.filtre); if (permis.length) { tous = permis; } }
     if (opts.special) {
       var spe = tous.filter(function (q) { return q.special === opts.special; });
       if (spe.length) { tous = spe; }
@@ -231,7 +249,7 @@
       if (!q.id) { pb.push("une question sans id"); return; }
       if (ids[q.id]) { p("id en double"); }
       ids[q.id] = true;
-      if (["passe", "dribble", "tir", "defense", "gardien", "motpetit"].indexOf(q.type) < 0) { p("type inconnu (" + q.type + ")"); }
+      if (["passe", "dribble", "tir", "defense", "gardien", "motpetit", "vocabulaire"].indexOf(q.type) < 0) { p("type inconnu (" + q.type + ")"); }
       if (!(q.niveau >= 1 && q.niveau <= 5)) { p("niveau hors de 1 à 5"); }
       if (["choix", "barrer", "vrai-faux-nsp"].indexOf(q.format) < 0) { p("format inconnu (" + q.format + ")"); }
       if (!q.question) { p("pas de question"); }
