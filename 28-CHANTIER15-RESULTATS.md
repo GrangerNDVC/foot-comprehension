@@ -1,37 +1,43 @@
-# Chantier 15 : tirs au but « petits mots » (25/10/2026)
+# Chantier 15 : tirs au but et « vocabulaire à maîtriser » (25-27/10/2026)
 
-## Décisions validées
-- L'élève est **gardien** sur les tirs adverses : une question « petit mot » à chaque fois, bonne réponse = arrêt.
-- Niveau d'entraînement **automatique** (4 buts ou plus : +1 ; 2 buts ou moins : −1), ou fixé à la main. Niveau sauvegardé (`tirs`) et fusionné avec le cloud.
-- Tirs au but **après la prolongation**, si le match est encore nul (prolongation inchangée). 5 tirs chacun, arrêt anticipé quand l'écart ne peut plus être rattrapé, puis mort subite par paires (garde-fou : 10 paires).
-- Images du but et des tireurs générées par Julie ; gardien dessiné en SVG par le code.
+## Ce que fait le jeu
+- **Séance d'entraînement** (menu : « 🥅 Vocabulaire à maîtriser avant de commencer ») : l'élève choisit un gardien, puis 5 tirs. Une phrase à compléter sous le but, un mot dans chaque coin, **une seule chance**. Bon coin = but, mauvais coin = arrêt.
+- **Fin de match** : si le score est encore nul après la prolongation, 5 tirs chacun, arrêt anticipé quand l'écart ne peut plus être rattrapé, puis mort subite (garde-fou : 10 paires). L'élève **tire** pour son équipe et est **gardien** sur les tirs adverses (le coin qu'il choisit = là où plonge son gardien ; bon mot = arrêt). Le match enregistre `tab` (ex. « 4–3 »).
+- Remédiation comme ailleurs : 1 ligne si juste ; explication en 3 lignes + règle du carnet si faux. Carnet : règles `mp_` (petits mots) et `vc_` (vocabulaire).
 
-## Fonctionnement
-- Un tir : phrase à compléter sous le but, un petit mot dans chaque coin, **une seule chance**. Tireur : bon mot = but, mauvais = arrêt. Gardien : le coin choisi est le plongeon ; bon mot = arrêt, mauvais = but adverse.
-- Remédiation : 1 ligne si juste ; explication en 3 lignes + règle si faux. Carnet : `noterRegle` (règles `mp_*`) et `noterMot`.
-- Niveau en match : `R.niveauTirs` = niveau du match + calibrage + ajustement, borné 1–5, +1 en mort subite.
-- Le match enregistre `tab` (ex. « 4–3 ») affiché dans le menu et l'écran de fin.
+## Les 5 gardiens (data/gardiens-tirs.js)
+| Gardien | Rôle à l'entraînement | Niveaux de questions |
+|---|---|---|
+| Le gardien blond | Vocabulaire des consignes (banque `vocabulaire`) | 1 à 5, adaptatif |
+| Le gardien aux cheveux noirs | Prépositions et conjonctions (petits mots, catégorie `pc`) | 1 à 5, adaptatif |
+| Alan Crocker (niveau 1, facile) | Mélange de tout, **avec** homophones (a / à, on / ont…) | 1 à 2 |
+| Ted Warner (niveau 2) | Mélange, tournures difficiles, **sans** homophones | 3 à 4 |
+| Thomas Pryce (niveau 3, difficile) | Mélange, tournures les plus difficiles, sans homophones | 4 à 5 |
 
-## Banque
-`data/motspetits.js` : 80 questions (type `motpetit`), 16 par niveau, longueur moyenne 13 / 15 / 18 / 21 / 27 mots. N1 : évidents (donc, mais, où, dans…). N2 : homophones proches (a/à, on/ont, son/sont, ces/ses…). N3 : vrais pièges (car/parce que, or, quant/quand, dont/donc, malgré/bien que…). N4 : locutions et modes (sans que, alors que, de sorte que, à moins que…). N5 : longues phrases (faute de, au fur et à mesure que, de peur que, néanmoins, quel que…). Aucun prénom en dur. Règles : `data/regles-motspetits.js` (≤ 10 mots).
+- Chaque gardien garde son niveau (`progression.tirs.par[id]`) ; en dehors de l'automatique, l'élève peut fixer un niveau de la plage.
+- **En match**, chaque équipe a son gardien (`parEquipe`) : Nankatsu = Alan Crocker (Morisaki, jogging orange) ; Nishikigaoka et Hanawa = gardien aux cheveux noirs ; Azumaichi et Hirado = gardien blond ; Furano = Thomas Pryce ; Toho = Ted Warner (Wakashimazu). Le jogging prend la couleur de gardien de l'équipe (data/equipes/equipe-*.js) ; **Thomas Pryce reste en bleu** (image non recolorable). En match, les questions mélangent petits mots et vocabulaire ; les homophones ne tombent qu'aux tirs de niveau 1.
+- Les poses : repos, plongeon bas, plongeon en diagonale (haut). Les images regardent vers la droite, le jeu les retourne pour la gauche.
 
-## Réglages (`data/config.js`, `tirsAuBut`)
-`serie` 5, `mortSubiteMax` 10, `niveauSupp` 0, `entrainement: {tirs, niveauHaut, niveauBas}`. `tirsAuBut: true` sur les matchs m2 à m6.
+## Banques de questions
+- **Petits mots** (`motpetit`) : `data/motspetits.js` (80) + `data/motspetits-prepositions.js` (17 : chez / à, entre / parmi, dans / en, au / en + pays, pour / par, contre ; verbes qui veulent une préposition : tenir à, dépendre de, compter sur…). Catégories calculées par `J.banque.categorie` : `hom` (homophones), `pc` (prépositions, conjonctions, connecteurs), `autre` (pronoms, négation…).
+- **Vocabulaire des consignes** (`vocabulaire`) : `data/vocabulaire.js`, 70 questions (14 par niveau) : 1 gestes (cocher, souligner, relier…) · 2 comprendre (relever, repérer, justifier, citer, synonyme, strophe…) · 3 raisonner (comparer, déduire, reformuler, résumer, au moins / au plus, chaque / chacun, d'après) · 4 lire de près (explicite / implicite, narrateur / auteur, légende, types de textes) · 5 consignes exigeantes (confronter, nuancer, pertinent, guillemets / parenthèses, ci-dessous / ci-dessus, intention de l'auteur).
+- Règles du carnet : `data/regles-motspetits.js` (`mp_`), `data/regles-vocabulaire.js` (`vc_`), 10 mots au plus.
+- Contrôle : `node outils-test/verifier-questions.js` vérifie les deux banques (12 par niveau au moins, un seul trou, 4 options, règles, explications de 18 mots au plus) et le nombre de questions de chaque gardien à thème par niveau. Résultat : « Contrôle complet : aucun problème ».
 
 ## Fichiers
-Nouveaux : `data/motspetits.js`, `data/regles-motspetits.js`, `js/tirsaubut.js`, `assets/tirs/tir-01-but.png`, `assets/tirs/tirs-atlas.js`, `28-CHANTIER15-RESULTATS.md`.
+Nouveaux : `data/gardiens-tirs.js`, `data/vocabulaire.js`, `data/regles-vocabulaire.js`, `data/motspetits-prepositions.js`, `data/motspetits.js`, `data/regles-motspetits.js`, `js/tirsaubut.js`, `assets/tirs/tir-01-but.png`, `assets/tirs/tirs-atlas.js`, `assets/tirs/gardien-atlas.js`, `28-CHANTIER15-RESULTATS.md`.
 Modifiés : `index.html`, `css/jeu.css`, `js/match.js`, `js/regles.js`, `js/progression.js`, `js/banque.js`, `data/config.js`, `outils-test/verifier-questions.js`, `README.md`, `CREDITS.md`.
 
 ## Tests faits
-- `verifier-questions.js` : « Contrôle complet : aucun problème » (80 questions petits mots incluses).
-- `simuler.js` : équilibre des matchs inchangé.
-- Playwright (Chromium, file://) : entraînement (niveau 4 buts→3, 1 but→2, 5 buts→3, sauvegardé) ; fin de match : victoire en mort subite 4–3, arrêt anticipé 3–0, défaite 0–3 (match enregistré avec `tab`) ; tailles iPad portrait/paysage et téléphone, phrase et 4 coins visibles sans défiler ; aucune erreur JS.
-- Balayage ES5 de `tirsaubut.js` : aucune syntaxe ES6 ; préfixes -webkit- pour les animations.
+- Playwright (Chromium, file://) : entraînement avec chacun des 5 gardiens (bonne banque et bonne catégorie, plongeon vers les 4 coins, jogging recoloré) ; niveau automatique par gardien (4 buts → niveau 3, 1 but → 2, sauvegardé) ; fin de match : victoire en mort subite 4–3, arrêt anticipé 3–0, défaite 0–3 ; gardien de chaque adversaire (m2 à m6) ; iPad portrait / paysage et téléphone ; aucune erreur JS.
+- `simuler.js` : l'équilibre des matchs n'a pas changé. Aucune syntaxe ES6 dans le code ajouté.
 
 ## Non testé / limites
-- **iPad Mini 2 (iOS 12) réel** : à essayer en classe (animations du gardien et du ballon, recoloration des tireurs).
-- Gardien dessiné en code (pas de sprites). Le but pèse ~228 Ko.
-- Sons : réutilisation des sons existants. Panneau enseignant et Firebase inchangés.
+- **iPad Mini 2 (iOS 12) réel** : à essayer en classe (animations, recoloration des images par canvas).
+- Gardiens : pas de pose « arrêt avec ballon » ; sur téléphone, les phrases longues du niveau 5 obligent à défiler un peu.
+- Le jeu garde les sons existants. Panneau enseignant et Firebase inchangés.
 
-## Remplacer les images
-Le but : remplacer `assets/tirs/tir-01-but.png` (même nom, ratio 8:7). Les tireurs sont dans `tirs-atlas.js` (4 poses ; maillot magenta uni recoloré, short blanc).
+## Modifier
+- Changer le gardien d'une équipe, les niveaux ou les catégories d'un gardien : `data/gardiens-tirs.js`.
+- Remplacer une image : refaire `assets/tirs/gardien-atlas.js` (3 poses par gardien, le rouge se recolore) ou remplacer `assets/tirs/tir-01-but.png` (même nom, ratio 8:7).
+- Taille des gardiens : `ECHELLE_G` dans `js/tirsaubut.js`.

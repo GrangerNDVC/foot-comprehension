@@ -5,7 +5,7 @@ var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8");
 var scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien|motspetits)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien|motspetits|vocabulaire)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { window: {}, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } }; ctx.window = ctx; ctx.JEU = undefined; vm.createContext(ctx);
 ctx.JEU = ctx.JEU; scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });
 var J = ctx.JEU, pb = J.banque.verifier();
@@ -106,5 +106,30 @@ mps.forEach(function (q) { if (!/^mp_/.test(q.regle)) { pb.push(q.id + " : règl
 var moy = {}; Object.keys(mpLong).forEach(function (k) { var s = 0; mpLong[k].forEach(function (x) { s += x; }); moy[k] = s / mpLong[k].length; });
 for (var kl = 2; kl <= 5; kl++) { if (!(moy[kl] > moy[kl - 1])) { pb.push("petits mots : la phrase moyenne du niveau " + kl + " n'est pas plus longue que celle du niveau " + (kl - 1)); } }
 console.log("Banque « petits mots » : " + mps.length + " questions ; longueur moyenne des phrases par niveau (mots) " + Object.keys(moy).map(function (k) { return k + ":" + Math.round(moy[k]); }).join(" ") + " ; position de la bonne dans les données " + mpPos.join("/") + " (le jeu mélange les coins)");
+/* Banque « vocabulaire des consignes » (chantier 15) : mêmes exigences (12 par niveau, un seul trou, 4 options, règles vc_ de 10 mots au plus) */
+var vcs = tous.filter(function (q) { return q.type === "vocabulaire"; });
+for (var nv = 1; nv <= 5; nv++) { var nnv = vcs.filter(function (q) { return q.niveau === nv; }).length; if (nnv < 12) { pb.push("niveau " + nv + " vocabulaire : " + nnv + " questions (12 au moins attendues)"); } }
+vcs.forEach(function (q) {
+  if (!/^vc-/.test(q.id)) { pb.push(q.id + " : identifiant vc- attendu"); }
+  if (q.format !== "choix") { pb.push(q.id + " : format choix attendu"); }
+  if (q.options.length !== 4) { pb.push(q.id + " : 4 options attendues"); }
+  if (q.consigne.split("____").length !== 2) { pb.push(q.id + " : un seul trou « ____ » attendu"); }
+  if (/\{[A-Z]/.test(JSON.stringify(q))) { pb.push(q.id + " : pas de place {A}… dans le vocabulaire"); }
+  if (q.consigne.indexOf(q.mot) < 0) { pb.push(q.id + " : le mot indice « " + q.mot + " » n'est pas dans la phrase"); }
+  var dt = /^____/.test(q.consigne); if (dt && !/^[A-ZÀÉÈ]/.test(q.options[q.bonne])) { pb.push(q.id + " : trou en début de phrase, majuscule attendue"); }
+  if (!/^vc_/.test(q.regle) || !J.regles_texte[q.regle]) { pb.push(q.id + " : règle vc_ inconnue (" + q.regle + ")"); }
+  ["bonne", "cle", "piege"].forEach(function (k) { if (!q.explication || !q.explication[k]) { pb.push(q.id + " : explication « " + k + " » manquante"); } else if (q.explication[k].split(/\s+/).length > 18) { pb.push(q.id + " : explication « " + k + " » de plus de 18 mots"); } });
+  q.options.forEach(function (o, i) { if (i !== q.bonne && o.toLowerCase() === q.options[q.bonne].toLowerCase()) { pb.push(q.id + " : option identique à la bonne réponse"); } });
+});
+Object.keys(J.regles_texte).forEach(function (k) { if (/^vc_/.test(k) && J.regles_texte[k].split(/\s+/).length > 10) { pb.push("règle " + k + " > 10 mots"); } });
+var vcm = {}; vcs.forEach(function (q) { (vcm[q.niveau] = vcm[q.niveau] || []).push(q.consigne.split(/\s+/).length); });
+console.log("Banque « vocabulaire » : " + vcs.length + " questions ; longueur moyenne des phrases par niveau (mots) " + Object.keys(vcm).map(function (k) { var s2 = 0; vcm[k].forEach(function (x) { s2 += x; }); return k + ":" + Math.round(s2 / vcm[k].length); }).join(" "));
+/* Les gardiens des tirs au but : chacun doit avoir assez de questions à chaque niveau de sa plage (12 au moins pour les gardiens à thème) */
+var cat = J.banque.categorie;
+function compte(f, niv) { return tous.filter(function (q) { return (q.type === "motpetit" || q.type === "vocabulaire") && q.niveau === niv && f(q); }).length; }
+var gardTest = { "noir (prépositions et conjonctions)": function (q) { return cat(q) === "pc"; }, "blond (vocabulaire)": function (q) { return cat(q) === "vocab"; } };
+Object.keys(gardTest).forEach(function (g) { var cs = []; for (var lv = 1; lv <= 5; lv++) { var c = compte(gardTest[g], lv); cs.push(lv + ":" + c); if (c < 12) { pb.push("gardien " + g + " : niveau " + lv + " n'a que " + c + " questions (12 au moins)"); } } console.log("Gardien " + g + " : " + cs.join(" ")); });
+var sansHom = []; for (var lh = 1; lh <= 5; lh++) { sansHom.push(lh + ":" + compte(function (q) { return cat(q) !== "hom"; }, lh)); }
+console.log("Mélange sans homophones (gardiens Ted et Thomas) : " + sansHom.join(" ") + " ; avec homophones, niveau 1-2 (gardien Alan) : " + compte(function () { return true; }, 1) + " / " + compte(function () { return true; }, 2));
 console.log(pb.length ? "PROBLÈMES FINAUX (" + pb.length + ") :\n- " + pb.join("\n- ") : "Contrôle complet : aucun problème.");
 process.exit(pb.length ? 1 : 0);
