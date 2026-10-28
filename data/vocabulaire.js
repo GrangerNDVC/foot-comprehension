@@ -142,10 +142,10 @@ vc("vc-2-05", 2, "Pour ____ un mot difficile, tu dis ce qu'il veut dire avec des
    "« Ce qu'il veut dire » : on donne sa définition.",
    "« Déduire » : trouver une réponse à partir d'indices."),
 
-vc("vc-2-06", 2, "Quand la consigne dit « ____ le nom du joueur », tu écris seulement son nom, pas une phrase.", "seulement son nom",
+vc("vc-2-06", 2, "Quand la consigne dit « ____ le nom du joueur », tu réponds par une phrase complète qui donne ce nom.", "phrase complète",
    ["indique", "invente", "imite", "interdis"], "vc_indiquer",
    "« Indique » : donner précisément l'information demandée.",
-   "« Seulement son nom » : on indique juste le nom.",
+   "« Phrase complète qui donne ce nom » : on indique l'information.",
    "« Invente » demanderait d'imaginer, alors qu'ici il faut une information vraie."),
 
 vc("vc-2-07", 2, "Pour ____ un passage du texte, tu le recopies entre guillemets, mot pour mot.", "entre guillemets",
@@ -252,10 +252,10 @@ vc("vc-3-09", 3, "Une réponse « au ____ deux lignes » doit faire deux lignes 
    "« Deux lignes ou plus, jamais moins » : c'est un minimum.",
    "« Au plus » donne un maximum, qu'on ne doit pas dépasser."),
 
-vc("vc-3-10", 3, "Une réponse « au ____ trois mots » ne doit jamais dépasser trois mots : elle peut être plus courte.", "dépasser",
+vc("vc-3-10", 3, "Si la consigne demande « au ____ trois phrases », tu n'en écris jamais plus de trois : tu peux en écrire moins.", "jamais plus de trois",
    ["plus", "moins", "mieux", "tout"], "vc_aumoins",
-   "« Au plus » donne un maximum : trois mots, pas davantage.",
-   "« Ne jamais dépasser » : c'est un maximum.",
+   "« Au plus » donne un maximum : trois phrases, pas davantage.",
+   "« Jamais plus de trois » : c'est un maximum.",
    "« Au moins » donne un minimum : on peut en écrire davantage."),
 
 vc("vc-3-11", 3, "Pour ____ étape de la recette, tu écris une phrase : il y aura autant de phrases que d'étapes.", "étape",

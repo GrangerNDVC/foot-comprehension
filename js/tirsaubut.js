@@ -106,13 +106,22 @@
   }
   /* ---------- les sprites des gardiens (images générées, atlas en data-URI) : le rouge du jogging est recoloré ---------- */
   var ATLAS_G = {}, CACHE_G = {}, GARDIEN = { actif: false, sprite: null, c: null };
-  var ECHELLE_G = 0.8;             // unités de l'écran 256 × 224 par pixel du sprite (le gardien debout fait 76 pixels de haut)
+  var ECHELLE_G = 0.4;             // unités de l'écran 256 × 224 par pixel du sprite (le gardien debout fait 160 pixels de haut)
   (function () {
     var src = J.gardienImages, k, p;
     if (!src) { return; }
     function charger(cle, pose) { var im = new root.Image(); im.onload = function () { ATLAS_G[cle + "." + pose] = im; }; im.src = src[cle][pose]; }
     for (k in src) { if (src.hasOwnProperty(k)) { for (p in src[k]) { if (src[k].hasOwnProperty(p)) { charger(k, p); } } } }
   })();
+  // Ancien fichier d'images (clés blond / noir) ou clé inconnue : on prend le gardien en image le plus proche plutôt qu'un dessin du code
+  var ALIAS_G = { rempl1: "blond", rempl2: "noir" };
+  function cleGardien(sprite) {
+    var k;
+    if (ATLAS_G[sprite + ".repos"]) { return sprite; }
+    if (ALIAS_G[sprite] && ATLAS_G[ALIAS_G[sprite] + ".repos"]) { return ALIAS_G[sprite]; }
+    for (k in ATLAS_G) { if (ATLAS_G.hasOwnProperty(k) && k.indexOf(".repos") > 0) { return k.replace(".repos", ""); } }
+    return sprite;
+  }
   // Renvoie un canvas (le sprite, jogging recoloré si c est donné), ou null
   function spriteGardien(sprite, pose, c) {
     var im = ATLAS_G[sprite + "." + pose];
@@ -271,7 +280,13 @@
   // gard : le gardien { id, sprite, couleur } (voir gardienEquipe et gardienChoisi)
   function reinitialiserScene(tireurEq, gard, cheveux) {
     var g = $("t-gardien"); g.className = ""; g.removeAttribute("style"); vider(g);
+    gard = { id: gard.id, sprite: cleGardien(gard.sprite), couleur: gard.couleur };
     GARDIEN.sprite = gard.sprite; GARDIEN.c = gard.couleur; GARDIEN.actif = false;
+    if (!ATLAS_G[gard.sprite + ".repos"] && J.gardienImages && (reinitialiserScene.essais = (reinitialiserScene.essais || 0) + 1) < 25) {
+      // les images ne sont pas encore décodées : on attend un peu au lieu de montrer le dessin de secours
+      var args = arguments; root.setTimeout(function () { reinitialiserScene.apply(null, args); }, 120); return;
+    }
+    reinitialiserScene.essais = 0;
     if (ATLAS_G[gard.sprite + ".repos"]) {                       // le gardien en image, debout
       g.className = "t-gs t-sans-transition";
       var hr = ATLAS_G[gard.sprite + ".repos"].height * ECHELLE_G / 2.24;

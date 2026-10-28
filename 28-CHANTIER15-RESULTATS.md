@@ -8,14 +8,17 @@
 ## Les 5 gardiens (data/gardiens-tirs.js)
 | Gardien | Rôle à l'entraînement | Niveaux de questions |
 |---|---|---|
-| Le gardien blond | Vocabulaire des consignes (banque `vocabulaire`) | 1 à 5, adaptatif |
-| Le gardien aux cheveux noirs | Prépositions et conjonctions (petits mots, catégorie `pc`) | 1 à 5, adaptatif |
-| Alan Crocker (niveau 1, facile) | Mélange de tout, **avec** homophones (a / à, on / ont…) | 1 à 2 |
+| Gardien remplaçant 1 (blond) | Vocabulaire des consignes (banque `vocabulaire`) | 1 à 5, adaptatif |
+| Gardien remplaçant 2 (peau mate, casquette) | Prépositions et conjonctions (petits mots, catégorie `pc`) | 1 à 5, adaptatif |
+| Alan Crocker (cheveux noirs en pointes ; niveau 1, facile) | Mélange de tout, **avec** homophones (a / à, on / ont…) | 1 à 2 |
 | Ted Warner (niveau 2) | Mélange, tournures difficiles, **sans** homophones | 3 à 4 |
 | Thomas Pryce (niveau 3, difficile) | Mélange, tournures les plus difficiles, sans homophones | 4 à 5 |
 
 - Chaque gardien garde son niveau (`progression.tirs.par[id]`) ; en dehors de l'automatique, l'élève peut fixer un niveau de la plage.
-- **En match**, chaque équipe a son gardien (`parEquipe`) : Nankatsu = Alan Crocker (Morisaki, jogging orange) ; Nishikigaoka et Hanawa = gardien aux cheveux noirs ; Azumaichi et Hirado = gardien blond ; Furano = Thomas Pryce ; Toho = Ted Warner (Wakashimazu). Le jogging prend la couleur de gardien de l'équipe (data/equipes/equipe-*.js) ; **Thomas Pryce reste en bleu** (image non recolorable). En match, les questions mélangent petits mots et vocabulaire ; les homophones ne tombent qu'aux tirs de niveau 1.
+- **En match**, chaque équipe a son gardien (`parEquipe`) : Nankatsu = remplaçant 2 (Morisaki, peau mate) ; Nishikigaoka et Hanawa = Alan Crocker ; Azumaichi et Hirado = remplaçant 1 (blond) ; Furano = Thomas Pryce ; Toho = Ted Warner (Wakashimazu). Le jogging prend la couleur de gardien de l'équipe (data/equipes/equipe-*.js) ; **Thomas Pryce reste en bleu** (image non recolorable). En match, les questions mélangent petits mots et vocabulaire ; les homophones ne tombent qu'aux tirs de niveau 1.
+- Noms des deux gardiens sans nom : à remplacer dans `data/gardiens-tirs.js` (champ `nom`) si tu retrouves leurs noms dans le manga.
+- Images : redécoupées en pleine résolution (160 px de haut, réduction lissée) ; `ECHELLE_G = 0.4`.
+- Menu : le mode entraînement est une carte avec image sous les six matchs (plus de petit bouton).
 - Les poses : repos, plongeon bas, plongeon en diagonale (haut). Les images regardent vers la droite, le jeu les retourne pour la gauche.
 
 ## Banques de questions
@@ -41,3 +44,9 @@ Modifiés : `index.html`, `css/jeu.css`, `js/match.js`, `js/regles.js`, `js/prog
 - Changer le gardien d'une équipe, les niveaux ou les catégories d'un gardien : `data/gardiens-tirs.js`.
 - Remplacer une image : refaire `assets/tirs/gardien-atlas.js` (3 poses par gardien, le rouge se recolore) ou remplacer `assets/tirs/tir-01-but.png` (même nom, ratio 8:7).
 - Taille des gardiens : `ECHELLE_G` dans `js/tirsaubut.js`.
+
+## Correction 27/10
+La question « indique le nom du joueur » ne dit plus « pas une phrase » : toutes les réponses restent en phrases complètes. « au plus trois mots » devient « au plus trois phrases ».
+
+## Menu compact (28/10)
+L'accueil tient sans défiler : image à gauche, titre et consignes à droite ; six matchs + carte « Vocabulaire à maîtriser avant de commencer » sur une même rangée (4 + 3 sur petit écran) ; boutons dessous. Fichiers : `index.html`, `css/jeu.css`, `js/match.js` (à envoyer ensemble : l'ancien bouton du menu est remplacé par la carte).

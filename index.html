@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Match de compréhension</title>
-<link rel="stylesheet" href="css/jeu.css">
+<link rel="stylesheet" href="css/jeu.css?v=2810a">
 </head>
 <body>
 <div id="app">
@@ -33,18 +33,21 @@
 
   <!-- MENU : les matchs du championnat -->
   <section id="ecran-menu" class="ecran">
-    <div class="hero">
-      <div id="accueil-image" class="histoire"></div>
-      <h1 class="hero-titre"><span>⚽</span> Le Tournoi National</h1>
+    <div class="menu-entete">
+      <div class="hero">
+        <div id="accueil-image" class="histoire"></div>
+      </div>
+      <div class="menu-entete-texte">
+        <h1 class="menu-titre">⚽ Le Tournoi National</h1>
+        <p class="intro">Lis bien, réfléchis, puis joue ! Gagne chaque match pour ouvrir le suivant.</p>
+        <p id="menu-progres" class="menu-progres"></p>
+        <p id="compte-etat" class="compte-etat"></p>
+      </div>
     </div>
-    <p class="intro">Lis bien, réfléchis, puis joue ! Gagne chaque match pour ouvrir le suivant.</p>
-    <p id="menu-progres" class="menu-progres"></p>
-    <p id="compte-etat" class="compte-etat"></p>
     <div id="cartes"></div>
     <div class="menu-actions">
       <button id="btn-fin-tournoi" class="gros" hidden>🏆 Voir la fin du tournoi</button>
       <button id="btn-changer-eleve" class="petit">👤 Changer d'élève</button>
-      <button id="btn-tirs-menu" class="petit">🥅 Vocabulaire à maîtriser avant de commencer</button>
       <button id="btn-vestiaire-menu" class="petit">🎽 Vestiaire</button>
       <button id="btn-noms" class="petit"></button>
       <button id="btn-son-menu" class="petit" data-son="effets"></button>
@@ -214,12 +217,12 @@
     </div>
   </div>
 
-  <footer id="credits">Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement. <button id="btn-prof" class="prof-cache" type="button" tabindex="-1" aria-label="Espace enseignant">⚙</button></footer>
+  <footer id="credits"><span id="version-jeu">Version du 28/10, 9 h (tirs au but).</span> Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement. <button id="btn-prof" class="prof-cache" type="button" tabindex="-1" aria-label="Espace enseignant">⚙</button></footer>
 </div>
 
 <!-- moteur et données (dans cet ordre) -->
-<script src="js/banque.js"></script>
-<script src="data/config.js"></script>
+<script src="js/banque.js?v=2810a"></script>
+<script src="data/config.js?v=2810a"></script>
 <script src="data/regles.js"></script>
 <script src="data/championnat.js"></script>
 <script src="data/paliers.js"></script>
@@ -230,19 +233,19 @@
 <script src="data/regles-tirs.js"></script>
 <script src="data/tirs.js"></script>
 <script src="data/gardien.js"></script>
-<script src="data/regles-motspetits.js"></script>
-<script src="data/motspetits.js"></script>
-<script src="data/motspetits-prepositions.js"></script>
-<script src="data/regles-vocabulaire.js"></script>
-<script src="data/vocabulaire.js"></script>
+<script src="data/regles-motspetits.js?v=2810a"></script>
+<script src="data/motspetits.js?v=2810a"></script>
+<script src="data/motspetits-prepositions.js?v=2810a"></script>
+<script src="data/regles-vocabulaire.js?v=2810a"></script>
+<script src="data/vocabulaire.js?v=2810a"></script>
 <script src="data/noms.js"></script>
 <script src="js/audio.js"></script>
 <script src="data/sons-reglages.js"></script>
 <script src="js/sons.js"></script>
-<script src="js/progression.js"></script>
+<script src="js/progression.js?v=2810a"></script>
 <script src="js/compte.js"></script>
 <script src="js/noms.js"></script>
-<script src="js/regles.js"></script>
+<script src="js/regles.js?v=2810a"></script>
 <script src="js/terrain.js"></script>
 <!-- gros plans : sprites (atlas des chantiers 1 et 2), équipes, décor, réglages des scènes -->
 <script src="assets/atlas/joueur-01-atlas.js"></script>
@@ -272,11 +275,11 @@
 <script src="data/histoire-reglages.js"></script>
 <script src="js/grosplan.js"></script>
 <script src="js/histoire.js"></script>
-<script src="assets/tirs/tirs-atlas.js"></script>
-<script src="assets/tirs/gardien-atlas.js"></script>
-<script src="data/gardiens-tirs.js"></script>
-<script src="js/tirsaubut.js"></script>
-<script src="js/match.js"></script>
+<script src="assets/tirs/tirs-atlas.js?v=2810a"></script>
+<script src="assets/tirs/gardien-atlas.js?v=2810a"></script>
+<script src="data/gardiens-tirs.js?v=2810a"></script>
+<script src="js/tirsaubut.js?v=2810a"></script>
+<script src="js/match.js?v=2810a"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

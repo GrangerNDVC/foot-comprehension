@@ -5,7 +5,7 @@ var fs = require("fs"), path = require("path"), vm = require("vm");
 var racine = path.join(__dirname, "..");
 var html = fs.readFileSync(path.join(racine, "index.html"), "utf8");
 var scripts = [], re = /<script src="([^"]+)"><\/script>/g, m;
-while ((m = re.exec(html))) { if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien|motspetits|vocabulaire)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
+while ((m = re.exec(html))) { m[1] = m[1].replace(/\?.*$/, ""); if (/^(js\/banque|data\/(regles|palier|essai|attaque|noms|defense|tirs|gardien|motspetits|vocabulaire)|js\/noms)/.test(m[1])) { scripts.push(m[1]); } }
 var ctx = { window: {}, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} } }; ctx.window = ctx; ctx.JEU = undefined; vm.createContext(ctx);
 ctx.JEU = ctx.JEU; scripts.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(racine, f), "utf8"), ctx, { filename: f }); });
 var J = ctx.JEU, pb = J.banque.verifier();

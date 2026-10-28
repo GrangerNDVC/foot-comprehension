@@ -99,8 +99,8 @@ Réglages dans data/config.js : `sansSecondeChance`, `montee`, `tirNiveau`, `rec
 
 ## Chantier 15 (25-27/10/2026) : tirs au but, vocabulaire à maîtriser
 - **Séance d'entraînement** (bouton « 🥅 Vocabulaire à maîtriser avant de commencer ») : l'élève choisit son gardien, 5 tirs, le niveau s'adapte tout seul (4 buts ou plus : on monte ; 2 buts ou moins : on descend), ou se fixe à la main. Chaque gardien garde son niveau.
-  - **Le gardien blond** : vocabulaire des consignes (souligner, relever, justifier, déduire, implicite, ci-dessous…).
-  - **Le gardien aux cheveux noirs** : prépositions et conjonctions (chez le dentiste, parce que / car, malgré / bien que…).
+  - **Gardien remplaçant 1 (blond)** : vocabulaire des consignes (souligner, relever, justifier, déduire, implicite, ci-dessous…).
+  - **Gardien remplaçant 2 (peau mate)** : prépositions et conjonctions (chez le dentiste, parce que / car, malgré / bien que…).
   - **Alan Crocker** (niveau 1, facile), **Ted Warner** (niveau 2), **Thomas Pryce** (niveau 3, difficile) : mélange de tout. Les homophones (a / à, on / ont…) ne sont que dans le mélange facile d'Alan ; Ted et Thomas posent les tournures qui font le plus de mal, sans piège d'orthographe.
 - **Fin de match** : si le match est encore nul après la prolongation, 5 tirs chacun puis mort subite. L'élève tire pour son équipe (bon coin = but) et est gardien sur les tirs adverses (bon mot = arrêt). Chaque équipe a son gardien (`parEquipe` dans data/gardiens-tirs.js), au jogging de ses couleurs.
 - Banques : data/motspetits.js + data/motspetits-prepositions.js (97 questions « petits mots »), data/vocabulaire.js (70 questions) ; règles du carnet : data/regles-motspetits.js (`mp_`), data/regles-vocabulaire.js (`vc_`).

@@ -105,6 +105,20 @@
       carte.appendChild(b);
       zone.appendChild(carte);
     });
+    if (J.tirs) {
+      var ent = el("div", "carte carte-entrainement");
+      var vi = el("div", "vignette"), im = doc.createElement("img");
+      im.src = "assets/tirs/tir-01-but.png"; im.alt = ""; vi.appendChild(im);
+      vi.appendChild(el("div", "entrainement-badge", "🥅 Exercices d'entraînement : tir au but"));
+      ent.appendChild(vi);
+      ent.appendChild(el("h2", "", "Vocabulaire à maîtriser avant de commencer"));
+      var be = el("button", "gros", "▶ S'entraîner");
+      be.onclick = function () { J.tirs.entrainement(); };
+      ent.appendChild(be);
+      ent.onclick = function (e) { if (e.target !== be) { J.tirs.entrainement(); } };
+      zone.appendChild(ent);
+    }
+    var ancien = $("btn-tirs-menu"); if (ancien) { ancien.hidden = true; }
     majBoutonNoms();
     $("btn-fin-tournoi").hidden = !J.progression.termine(matchs());
     ecran("ecran-menu");
@@ -778,7 +792,6 @@
     $("btn-recommencer").onclick = recommencer;
     $("btn-fin-tournoi").onclick = function () { M.finChampionnat(); };
     $("btn-carnet-menu").onclick = ouvrirCarnet;
-    $("btn-tirs-menu").onclick = function () { J.tirs.entrainement(); };
     $("btn-reset").onclick = function () {
       if (root.confirm("Effacer toute ma progression ?")) { J.progression.effacer(); M.menu(); }
     };
