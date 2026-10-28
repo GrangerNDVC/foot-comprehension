@@ -34,9 +34,52 @@
     ["ecran-compte", "ecran-menu", "ecran-avant", "ecran-match", "ecran-tirs", "ecran-fin", "ecran-championnat"].forEach(function (x) { $(x).hidden = (x !== id); });
     if (J.histoire && id !== "ecran-avant" && id !== "ecran-fin" && id !== "ecran-championnat") { J.histoire.arreter(); }
     root.scrollTo(0, 0);
+    majBarreEssai();
   }
   M.ecran = ecran;                 // pour js/tirsaubut.js
-  function tout() { return /[?&]tout\b/.test(root.location.search || ""); }
+  /* ---------- mode essai (enseignante) : ouvert depuis l'écran du numéro, avec le verrou ---------- */
+  var ESSAI = { tout: false, express: false, barre: false }, ORIG = {};
+  (function () {
+    try { var v = root.sessionStorage.getItem("foot-essai"); if (v) { var o = JSON.parse(v); ESSAI.tout = !!o.tout; ESSAI.express = !!o.express; ESSAI.barre = !!o.barre; } } catch (e) {}
+  })();
+  function ecrireEssai() { try { root.sessionStorage.setItem("foot-essai", JSON.stringify(ESSAI)); } catch (e) {} }
+  function appliquerExpress() {
+    var id, c;
+    for (id in J.config.matchs) {
+      if (!J.config.matchs.hasOwnProperty(id)) { continue; }
+      c = J.config.matchs[id];
+      if (!ORIG[id]) { ORIG[id] = { a: c.actionsParMiTemps, p: c.prolongation }; }
+      c.actionsParMiTemps = ESSAI.express ? 2 : ORIG[id].a;
+      c.prolongation = ESSAI.express ? Math.min(ORIG[id].p || 0, 2) : ORIG[id].p;
+    }
+  }
+  M.essai = {
+    etat: function () { return ESSAI; },
+    regler: function (cle, val) { ESSAI[cle] = !!val; ecrireEssai(); appliquerExpress(); majBarreEssai(); },
+    trophee: function () { M.finChampionnat(); },
+    menu: function () { M.menu(); }
+  };
+  if (ESSAI.express) { appliquerExpress(); }
+  function barreBouton(parent, texte, f) {
+    var b = doc.createElement("button"); b.type = "button"; b.className = "petit"; b.appendChild(doc.createTextNode(texte));
+    b.onclick = function () { if (!S) { return; } try { J.grosplan.arreter(); J.audio.stop(); } catch (e) {} f(); };
+    parent.appendChild(b);
+  }
+  function majBarreEssai() {
+    var b = $("barre-essai");
+    if (!b) {
+      b = doc.createElement("div"); b.id = "barre-essai"; b.hidden = true; doc.body.appendChild(b);
+      b.appendChild(el("span", "", "🛠 Essai :"));
+      barreBouton(b, "Mi-temps", function () { if (S.mi === 1) { S.etat = "mitemps"; tour(); } });
+      barreBouton(b, "Égalité → prolongation", function () { S.score.nous = S.score.eux = Math.max(S.score.nous, 1); S.mi = 2; S.etat = "prolongation"; tour(); });
+      barreBouton(b, "Égalité → tirs au but", function () { S.score.nous = S.score.eux = Math.max(S.score.nous, 1); S.mi = 3; S.etat = "tirsaubut"; tour(); });
+      barreBouton(b, "Fin : victoire", function () { R.forcerFin(S, 2, 1); tour(); });
+      barreBouton(b, "Fin : défaite", function () { R.forcerFin(S, 0, 2); tour(); });
+      barreBouton(b, "Fin : nul", function () { R.forcerFin(S, 1, 1); tour(); });
+    }
+    b.hidden = !(ESSAI.barre && !$("ecran-match").hidden);
+  }
+  function tout() { return ESSAI.tout || /[?&]tout\b/.test(root.location.search || ""); }
   function matchs() { return J.championnat.matchs; }
   function nomEquipe() { return R.eq(J.championnat.equipe); }
   function adv() { return R.eq(S.def.adversaire); }

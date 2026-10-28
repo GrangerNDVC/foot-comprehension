@@ -478,6 +478,8 @@
   }
   /* Tirs au but : fin du match une fois la séance jouée (res = { nous, eux } buts de la séance) */
   R.finTirs = function (s, res) { finDeMatch(s, res); };
+  // Mode essai (enseignante) : termine le match tout de suite avec ce score
+  R.forcerFin = function (s, nous, eux) { s.score.nous = nous; s.score.eux = eux; finDeMatch(s); };
   /* Niveau des questions « petits mots » de la séance de tirs au but : niveau du match + calibrage + réglage,
      +1 en mort subite ; toujours entre 1 et 5 */
   R.niveauTirs = function (s, nbTirsChacun) {

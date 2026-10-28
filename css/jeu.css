@@ -407,3 +407,8 @@ button.gros.bleu { background: #7ad0ff; box-shadow: 0 4px 0 #3a86b3; }
   #zone-entrainement { margin: 6px auto 0; display: inline-block; }
   #cartes .carte { width: calc(50% - 10px); }
 }
+
+/* mode essai (enseignante) */
+#barre-essai { position: fixed; left: 6px; bottom: 6px; z-index: 60; max-width: 96%; padding: 4px 6px; background: rgba(0,0,0,.78); border: 2px dashed #ffd23f; border-radius: 10px; font-size: 12px; color: #ffd23f; }
+#barre-essai button.petit { margin: 2px; padding: 3px 7px; font-size: 12px; }
+#prof-essai label { font-size: 16px; }

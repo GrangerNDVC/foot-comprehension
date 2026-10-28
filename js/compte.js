@@ -357,10 +357,10 @@
   };
 
   /* ---------- espace enseignant ---------- */
-  var profOuvert = false;
+  var profOuvert = false, profEssai = false;
   function profMessage(t) { $("prof-msg").textContent = t || ""; }
   function profEtape(nom) {
-    ["prof-verrou", "prof-connexion", "prof-liste"].forEach(function (x) { $(x).hidden = (x !== nom); });
+    ["prof-verrou", "prof-connexion", "prof-liste", "prof-essai"].forEach(function (x) { $(x).hidden = (x !== nom); });
     profMessage("");
   }
   function messageErreur(e) {
@@ -371,8 +371,8 @@
     if (/permission/i.test(c + " " + (e && e.message ? e.message : ""))) { return "Ce compte n'a pas accès à la liste."; }
     return "Échec (" + (c || "inconnu") + ").";
   }
-  C.ouvrirProf = function () {
-    profOuvert = true;
+  C.ouvrirProf = function (essai) {
+    profOuvert = true; profEssai = (essai === true);
     $("prof-mdp1").value = ""; $("prof-email").value = ""; $("prof-mdp2").value = "";
     vider($("prof-lignes"));
     profEtape("prof-verrou");
@@ -394,6 +394,11 @@
     var saisi = $("prof-mdp1").value;
     $("prof-mdp1").value = "";
     if (sha256(SEL + saisi) !== VERROU) { profMessage("Mot de passe incorrect."); return; }
+    if (profEssai) {
+      var et = J.match.essai.etat();
+      $("essai-tout").checked = et.tout; $("essai-express").checked = et.express; $("essai-barre").checked = et.barre;
+      profEtape("prof-essai"); return;
+    }
     profEtape("prof-connexion");
     try { $("prof-email").focus(); } catch (e) {}
   }
@@ -498,7 +503,13 @@
     $("compte-numero").onkeydown = function (ev) { if (ev.keyCode === 13) { jouerAvecNumero("reprendre"); } };
     $("btn-compte-sans").onclick = function () { C.sansCompte(); J.match.menu(); };
     $("btn-changer-eleve").onclick = function () { C.changer(); };
-    $("btn-prof").onclick = C.ouvrirProf;
+    $("btn-prof").onclick = function () { C.ouvrirProf(false); };
+    $("btn-compte-essai").onclick = function () { C.ouvrirProf(true); };
+    $("essai-tout").onchange = function () { J.match.essai.regler("tout", this.checked); };
+    $("essai-express").onchange = function () { J.match.essai.regler("express", this.checked); };
+    $("essai-barre").onchange = function () { J.match.essai.regler("barre", this.checked); };
+    $("essai-trophee").onclick = function () { C.fermerProf(); J.match.essai.trophee(); };
+    $("essai-aller").onclick = function () { C.fermerProf(); C.sansCompte(); J.match.menu(); };
     $("prof-ok1").onclick = verifierVerrou;
     $("prof-mdp1").onkeydown = function (ev) { if (ev.keyCode === 13) { verifierVerrou(); } };
     $("prof-ok2").onclick = connexionProf;
