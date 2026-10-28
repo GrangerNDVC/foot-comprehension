@@ -7,7 +7,7 @@ body {
   font-family: "Trebuchet MS", Verdana, sans-serif; font-size: 18px; line-height: 1.45;
   -webkit-text-size-adjust: 100%;
 }
-#app { max-width: 1100px; margin: 0 auto; padding: 10px; }
+#app { max-width: 1400px; margin: 0 auto; padding: 10px; }
 h1 { text-align: center; margin: 14px 0 6px; font-size: 30px; }
 h2 { margin: 6px 0; font-size: 22px; }
 .intro { text-align: center; opacity: .9; margin: 0 0 14px; }
@@ -371,37 +371,39 @@ button.gros.bleu { background: #7ad0ff; box-shadow: 0 4px 0 #3a86b3; }
 .carte-entrainement h2 { min-height: 3.2em; }
 .entrainement-badge { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 4px; background: rgba(0,0,0,.7); color: #ffd23f; font-size: 13px; font-weight: bold; text-align: center; }
 
-/* ===== menu compact : tout se voit d'un seul coup d'œil (accueil + 6 matchs + entraînement + boutons) ===== */
-.menu-entete { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; max-width: 900px; margin: 0 auto; }
+/* ===== menu : en-tête (image | titre | exercice de tirs au but) puis les 6 affiches sur toute la largeur, boutons dessous ===== */
+.menu-entete { display: -webkit-box; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: justify; justify-content: space-between; max-width: 1360px; margin: 0 auto; }
 #ecran-menu .hero { -webkit-box-flex: 0; flex: 0 0 auto; width: 26vh; min-width: 190px; max-width: 300px; margin: 0 18px 0 0; }
 #ecran-menu .hero .histoire { margin: 0; }
-.menu-entete-texte { text-align: left; min-width: 0; }
-.menu-titre { margin: 0 0 4px; font-size: 34px; letter-spacing: 1px; color: #ffd23f; text-shadow: 0 3px 0 #000; }
-#ecran-menu .intro { margin: 4px 0; font-size: 15px; text-align: left; }
-#ecran-menu .menu-progres { margin: 4px 0; text-align: left; }
-#ecran-menu .compte-etat { margin: 2px 0; text-align: left; }
-#cartes { max-width: 1080px; margin: 6px auto 0; }
-#cartes .carte { width: 144px; margin: 4px; padding: 0 0 8px; border-width: 3px; border-radius: 12px; }
-#cartes .carte > *:not(.vignette) { margin-left: 6px; margin-right: 6px; }
-#cartes .carte h2 { margin: 3px 6px 0; font-size: 14px; line-height: 1.15; }
-#cartes .carte-num { font-size: 11px; }
-#cartes .carte-niveau { font-size: 11px; letter-spacing: 1px; margin: 2px 0; }
-#cartes .carte-score { margin: 2px 0 6px; font-size: 12px; }
-#cartes .carte button.gros { padding: 6px 10px; font-size: 14px; }
-#cartes .vignette { margin-bottom: 3px; border-bottom-width: 3px; }
-#cartes .vignette-cadenas { font-size: 26px; top: 25%; }
-#cartes .vignette-coupe { font-size: 20px; }
-#cartes .carte-entrainement h2 { font-size: 13px; }
-#cartes .entrainement-badge { font-size: 12px; line-height: 1.15; padding: 4px; }
-#ecran-menu .menu-actions { margin: 6px 0; }
+.menu-entete-texte { -webkit-box-flex: 1; flex: 1 1 auto; text-align: center; min-width: 0; padding: 0 10px; }
+.menu-titre { margin: 0 0 4px; font-size: 36px; letter-spacing: 1px; color: #ffd23f; text-shadow: 0 3px 0 #000; }
+#ecran-menu .intro, #ecran-menu .menu-progres, #ecran-menu .compte-etat { margin: 4px 0; text-align: center; }
+#ecran-menu .intro { font-size: 16px; }
+#zone-entrainement { -webkit-box-flex: 0; flex: 0 0 auto; margin-left: 18px; }
+#zone-entrainement .carte { width: 144px; margin: 4px; padding: 0 0 8px; border-width: 3px; border-radius: 12px; }
+#zone-entrainement .carte > *:not(.vignette) { margin-left: 6px; margin-right: 6px; }
+#zone-entrainement .carte h2 { margin: 3px 6px 0; font-size: 13px; line-height: 1.15; min-height: 3.4em; }
+#zone-entrainement .carte button.gros { padding: 6px 10px; font-size: 14px; }
+#zone-entrainement .vignette { margin-bottom: 3px; border-bottom-width: 3px; }
+#zone-entrainement .entrainement-badge { font-size: 12px; line-height: 1.15; padding: 4px; }
+#cartes { max-width: 1360px; margin: 8px auto 0; }
+#cartes .carte { width: calc(16.666% - 10px); margin: 5px; padding: 0 0 10px; border-width: 4px; border-radius: 14px; }
+#cartes .carte > *:not(.vignette) { margin-left: 8px; margin-right: 8px; }
+#cartes .carte h2 { margin: 4px 8px 0; font-size: 17px; line-height: 1.15; }
+#cartes .carte-num { font-size: 12px; }
+#cartes .carte-niveau { font-size: 12px; letter-spacing: 1px; margin: 3px 0; }
+#cartes .carte-score { margin: 3px 0 8px; font-size: 13px; }
+#cartes .carte button.gros { padding: 8px 14px; font-size: 16px; }
+#cartes .vignette { margin-bottom: 4px; border-bottom-width: 3px; }
+#cartes .vignette-cadenas { font-size: 34px; top: 25%; }
+#cartes .vignette-coupe { font-size: 24px; }
+#ecran-menu .menu-actions { margin: 8px 0; }
 #ecran-menu .menu-actions button.petit { margin: 2px; padding: 6px 10px; font-size: 13px; }
-@media (max-width: 1119px) { #cartes .carte { width: 132px; margin: 4px; } #cartes { max-width: 1000px; } #cartes .carte h2 { font-size: 13px; } }
-@media (max-width: 999px) { #cartes { max-width: 560px; } }
+@media (max-width: 1000px) { #cartes .carte { width: calc(33.333% - 10px); } .menu-titre { font-size: 28px; } }
 @media (max-width: 700px) {
-  .menu-entete { display: block; }
-  #ecran-menu .hero { margin: 0 auto; width: 60%; max-width: 300px; }
-  .menu-entete-texte { text-align: center; }
-  .menu-titre { font-size: 26px; text-align: center; margin-top: 6px; }
-  #ecran-menu .intro, #ecran-menu .menu-progres, #ecran-menu .compte-etat { text-align: center; }
-  #cartes { max-width: 420px; }
+  .menu-entete { display: block; text-align: center; }
+  #ecran-menu .hero { margin: 0 auto; width: 55%; max-width: 280px; }
+  .menu-titre { font-size: 24px; margin-top: 6px; }
+  #zone-entrainement { margin: 6px auto 0; display: inline-block; }
+  #cartes .carte { width: calc(50% - 10px); }
 }

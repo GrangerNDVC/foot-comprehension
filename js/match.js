@@ -72,7 +72,7 @@
   M.menu = function () {
     if (J.sons) { J.sons.annulerAttentes(); } musique("menu");
     J.audio.stop(); if (J.grosplan) { J.grosplan.arreter(); } if (J.tirs) { J.tirs.arreter(); }
-    var zone = $("cartes"); vider(zone);
+    var zone = $("cartes"); vider(zone); var zoneEnt = $("zone-entrainement") || zone; vider(zoneEnt);
     if (J.histoire) { J.histoire.afficher($("accueil-image"), "accueil", "avant", "histoire-accueil"); }
     var gagnes = matchs().filter(function (m) { var r = J.progression.match(m.id); return r && r.gagne; }).length;
     $("menu-progres").textContent = gagnes ? ("🏆 " + gagnes + " match" + (gagnes > 1 ? "s" : "") + " gagné" + (gagnes > 1 ? "s" : "") + " sur " + matchs().length) : "Six matchs t'attendent. Prêt ?";
@@ -116,7 +116,7 @@
       be.onclick = function () { J.tirs.entrainement(); };
       ent.appendChild(be);
       ent.onclick = function (e) { if (e.target !== be) { J.tirs.entrainement(); } };
-      zone.appendChild(ent);
+      zoneEnt.appendChild(ent);
     }
     var ancien = $("btn-tirs-menu"); if (ancien) { ancien.hidden = true; }
     majBoutonNoms();
