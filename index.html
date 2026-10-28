@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Match de compréhension</title>
-<link rel="stylesheet" href="css/jeu.css?v=2810c">
+<link rel="stylesheet" href="css/jeu.css?v=2810d">
 </head>
 <body>
 <div id="app">
@@ -26,7 +26,6 @@
         </div>
         <p id="compte-indispo" class="intro" hidden>Les numéros ne marchent qu'en ligne : la page doit être ouverte depuis le site.</p>
         <p><button id="btn-compte-sans" class="petit discret" type="button">Jouer sans compte</button></p>
-        <p><button id="btn-compte-essai" class="petit discret" type="button">🛠 Mode essai (enseignante)</button></p>
         <p class="compte-note">Seuls ton numéro et ta progression sont enregistrés. Pas de nom, pas d'e-mail.</p>
       </div>
     </div>
@@ -158,12 +157,7 @@
   <div class="modal" id="modal-prof" hidden>
     <div class="carte-modal carte-prof">
       <h2>🔧 Espace enseignant</h2>
-      <div id="prof-verrou">
-        <p>Mot de passe :</p>
-        <p><input id="prof-mdp1" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Mot de passe"></p>
-        <button id="prof-ok1" class="gros" type="button">Valider</button>
-      </div>
-      <div id="prof-connexion" hidden>
+      <div id="prof-connexion">
         <p>Connexion avec ton compte enseignant :</p>
         <p><input id="prof-email" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="e-mail" aria-label="E-mail"></p>
         <p><input id="prof-mdp2" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="mot de passe" aria-label="Mot de passe du compte"></p>
@@ -176,9 +170,11 @@
         <p><label><input type="checkbox" id="essai-express"> Matchs express (2 actions par mi-temps)</label></p>
         <p><label><input type="checkbox" id="essai-barre"> Barre d'essai pendant le match (mi-temps, prolongation, tirs au but, fin victoire / défaite / nul)</label></p>
         <p><button id="essai-trophee" class="petit" type="button">🏆 Voir la fin du tournoi (remise du trophée)</button>
-           <button id="essai-aller" class="gros" type="button">▶ Aller au menu</button></p>
+           <button id="essai-aller" class="gros" type="button">▶ Aller au menu</button>
+           <button id="essai-retour" class="petit" type="button">← Retour à la liste</button></p>
       </div>
       <div id="prof-liste" hidden>
+        <p><button id="btn-prof-essai" class="petit" type="button">🛠 Mode essai (tester le jeu sans jouer chaque match)</button></p>
         <p class="prof-outils">
           <label>Trier : <select id="prof-tri"><option value="numero">par numéro</option><option value="progression">par progression</option><option value="activite">par activité (anciens d'abord)</option></select></label>
           <label>Numéro : <input id="prof-filtre" type="text" inputmode="numeric" maxlength="4" placeholder="début du numéro" autocomplete="off" size="8"></label>
@@ -228,12 +224,12 @@
     </div>
   </div>
 
-  <footer id="credits"><span id="version-jeu">Version du 28/10, 11 h (mode essai).</span> Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement. <button id="btn-prof" class="prof-cache" type="button" tabindex="-1" aria-label="Espace enseignant">⚙</button></footer>
+  <footer id="credits"><span id="version-jeu">Version du 28/10, 12 h (accès prof).</span> Images : sprites de Captain Tsubasa Vol. II (Tecmo / Y. Takahashi), extraits par Morhamms357 sur The Spriters Resource. Usage pédagogique en classe uniquement. <button id="btn-prof" class="prof-cache" type="button" tabindex="-1" aria-label="Espace enseignant">⚙</button></footer>
 </div>
 
 <!-- moteur et données (dans cet ordre) -->
-<script src="js/banque.js?v=2810c"></script>
-<script src="data/config.js?v=2810c"></script>
+<script src="js/banque.js?v=2810d"></script>
+<script src="data/config.js?v=2810d"></script>
 <script src="data/regles.js"></script>
 <script src="data/championnat.js"></script>
 <script src="data/paliers.js"></script>
@@ -244,19 +240,19 @@
 <script src="data/regles-tirs.js"></script>
 <script src="data/tirs.js"></script>
 <script src="data/gardien.js"></script>
-<script src="data/regles-motspetits.js?v=2810c"></script>
-<script src="data/motspetits.js?v=2810c"></script>
-<script src="data/motspetits-prepositions.js?v=2810c"></script>
-<script src="data/regles-vocabulaire.js?v=2810c"></script>
-<script src="data/vocabulaire.js?v=2810c"></script>
+<script src="data/regles-motspetits.js?v=2810d"></script>
+<script src="data/motspetits.js?v=2810d"></script>
+<script src="data/motspetits-prepositions.js?v=2810d"></script>
+<script src="data/regles-vocabulaire.js?v=2810d"></script>
+<script src="data/vocabulaire.js?v=2810d"></script>
 <script src="data/noms.js"></script>
 <script src="js/audio.js"></script>
 <script src="data/sons-reglages.js"></script>
 <script src="js/sons.js"></script>
-<script src="js/progression.js?v=2810c"></script>
+<script src="js/progression.js?v=2810d"></script>
 <script src="js/compte.js"></script>
 <script src="js/noms.js"></script>
-<script src="js/regles.js?v=2810c"></script>
+<script src="js/regles.js?v=2810d"></script>
 <script src="js/terrain.js"></script>
 <!-- gros plans : sprites (atlas des chantiers 1 et 2), équipes, décor, réglages des scènes -->
 <script src="assets/atlas/joueur-01-atlas.js"></script>
@@ -286,11 +282,11 @@
 <script src="data/histoire-reglages.js"></script>
 <script src="js/grosplan.js"></script>
 <script src="js/histoire.js"></script>
-<script src="assets/tirs/tirs-atlas.js?v=2810c"></script>
-<script src="assets/tirs/gardien-atlas.js?v=2810c"></script>
-<script src="data/gardiens-tirs.js?v=2810c"></script>
-<script src="js/tirsaubut.js?v=2810c"></script>
-<script src="js/match.js?v=2810c"></script>
+<script src="assets/tirs/tirs-atlas.js?v=2810d"></script>
+<script src="assets/tirs/gardien-atlas.js?v=2810d"></script>
+<script src="data/gardiens-tirs.js?v=2810d"></script>
+<script src="js/tirsaubut.js?v=2810d"></script>
+<script src="js/match.js?v=2810d"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

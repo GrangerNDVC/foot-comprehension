@@ -6,6 +6,7 @@ Un championnat de 6 matchs (Nankatsu). Le jeu tourne dans le navigateur ; un num
 ## Lancer
 - Ouvrir `index.html` (double-clic) ou, dans VS Code, « Live Server ». Sur Netlify : publier le dossier tel quel.
 - Pour tout débloquer pendant tes essais : ajouter `?tout` à l'adresse (ex. `index.html?tout`).
+- **Mode essai (enseignante)** : ouvre le ⚙ discret en bas de page, connecte-toi (e-mail + mot de passe enseignante), puis bouton « 🛠 Mode essai ». Cases : tout débloquer, matchs express (2 actions par mi-temps), barre d'essai pendant le match (mi-temps, égalité → prolongation, égalité → tirs au but, fin victoire / défaite / nul). Bouton pour voir tout de suite la fin du tournoi. Dure jusqu'à la fermeture de l'onglet.
 
 ## Comment se joue un match (chantiers 3 et 4)
 - Mini-carte du terrain, joueurs numérotés (Nankatsu en bleu, l'adversaire en blanc), ballon chez un joueur.

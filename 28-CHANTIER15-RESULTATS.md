@@ -52,4 +52,4 @@ La question « indique le nom du joueur » ne dit plus « pas une phrase » : to
 L'accueil tient sans défiler : image à gauche, titre et consignes à droite ; six matchs + carte « Vocabulaire à maîtriser avant de commencer » sur une même rangée (4 + 3 sur petit écran) ; boutons dessous. Fichiers : `index.html`, `css/jeu.css`, `js/match.js` (à envoyer ensemble : l'ancien bouton du menu est remplacé par la carte).
 
 ## Mode essai (28/10)
-Écran du numéro → « 🛠 Mode essai » (mot de passe enseignante) : tout débloquer, matchs express, barre d'essai en match, accès direct à la fin du tournoi. Fichiers : `index.html`, `css/jeu.css`, `js/match.js`, `js/compte.js`, `js/regles.js` (`R.forcerFin`). Réglages gardés dans `sessionStorage` (jusqu'à la fermeture de l'onglet).
+⚙ discret → connexion Firebase enseignante (plus de premier mot de passe) → « 🛠 Mode essai » : tout débloquer, matchs express, barre d'essai en match, accès direct à la fin du tournoi. Fichiers : `index.html`, `css/jeu.css`, `js/match.js`, `js/compte.js`, `js/regles.js` (`R.forcerFin`). Réglages gardés dans `sessionStorage` (jusqu'à la fermeture de l'onglet).

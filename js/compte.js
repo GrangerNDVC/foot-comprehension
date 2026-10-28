@@ -13,9 +13,9 @@
      La connexion est coupée entre deux envois (l'offre gratuite limite à 100 connexions simultanées).
    - Rien dans ce fichier n'écrit dans la console du navigateur.
 
-   Espace enseignant : bouton discret en bas à droite. Verrou (empreinte seulement, jamais le mot de passe
-   en clair), puis vraie connexion Firebase de l'enseignante : ce sont les RÈGLES FIREBASE qui réservent la
-   liste et la suppression à son compte, pas ce verrou.
+   Espace enseignant : bouton discret (⚙) en bas de page. Connexion Firebase de l'enseignante (e-mail + mot de passe) :
+   ce sont les RÈGLES FIREBASE qui réservent la liste et la suppression à son compte. Une fois connectée, elle trouve
+   aussi le « Mode essai » (tout débloquer, matchs express, barre d'essai).
    ============================================================ */
 (function (root) {
   var J = root.JEU = root.JEU || {};
@@ -37,8 +37,6 @@
   var SDK = "https://www.gstatic.com/firebasejs/8.10.1/";
   var CHEMIN = "jeux/foot";                       // un futur jeu : jeux/<son-nom>
   var CLE_LOCALE = "foot-comprehension-v2-c";     // + numéro
-  var VERROU = "0cf5528810cedb60df632119333b85a5100c856ce9c7e52562349e29f30dd399";                        // empreinte du verrou (SHA-256), pas le mot de passe
-  var SEL = "foot-prof-v1:";
 
   /* ---------- petits outils ---------- */
   function el(tag, classe, texte) {
@@ -357,10 +355,10 @@
   };
 
   /* ---------- espace enseignant ---------- */
-  var profOuvert = false, profEssai = false;
+  var profOuvert = false;
   function profMessage(t) { $("prof-msg").textContent = t || ""; }
   function profEtape(nom) {
-    ["prof-verrou", "prof-connexion", "prof-liste", "prof-essai"].forEach(function (x) { $(x).hidden = (x !== nom); });
+    ["prof-connexion", "prof-liste", "prof-essai"].forEach(function (x) { $(x).hidden = (x !== nom); });
     profMessage("");
   }
   function messageErreur(e) {
@@ -371,18 +369,18 @@
     if (/permission/i.test(c + " " + (e && e.message ? e.message : ""))) { return "Ce compte n'a pas accès à la liste."; }
     return "Échec (" + (c || "inconnu") + ").";
   }
-  C.ouvrirProf = function (essai) {
-    profOuvert = true; profEssai = (essai === true);
-    $("prof-mdp1").value = ""; $("prof-email").value = ""; $("prof-mdp2").value = "";
+  C.ouvrirProf = function () {
+    profOuvert = true;
+    $("prof-email").value = ""; $("prof-mdp2").value = "";
     vider($("prof-lignes"));
-    profEtape("prof-verrou");
+    profEtape("prof-connexion");
     $("modal-prof").hidden = false;
-    try { $("prof-mdp1").focus(); } catch (e) {}
+    try { $("prof-email").focus(); } catch (e) {}
   };
   C.fermerProf = function () {
     profOuvert = false;
     $("modal-prof").hidden = true;
-    $("prof-mdp1").value = ""; $("prof-email").value = ""; $("prof-mdp2").value = "";
+    $("prof-email").value = ""; $("prof-mdp2").value = "";
     vider($("prof-lignes")); donneesProf = [];
     if (auth) {
       try {
@@ -390,18 +388,6 @@
       } catch (e) {}
     }
   };
-  function verifierVerrou() {
-    var saisi = $("prof-mdp1").value;
-    $("prof-mdp1").value = "";
-    if (sha256(SEL + saisi) !== VERROU) { profMessage("Mot de passe incorrect."); return; }
-    if (profEssai) {
-      var et = J.match.essai.etat();
-      $("essai-tout").checked = et.tout; $("essai-express").checked = et.express; $("essai-barre").checked = et.barre;
-      profEtape("prof-essai"); return;
-    }
-    profEtape("prof-connexion");
-    try { $("prof-email").focus(); } catch (e) {}
-  }
   function connexionProf() {
     var email = String($("prof-email").value || "").replace(/^\s+|\s+$/g, ""), mdp = $("prof-mdp2").value;
     $("prof-mdp2").value = "";
@@ -503,15 +489,18 @@
     $("compte-numero").onkeydown = function (ev) { if (ev.keyCode === 13) { jouerAvecNumero("reprendre"); } };
     $("btn-compte-sans").onclick = function () { C.sansCompte(); J.match.menu(); };
     $("btn-changer-eleve").onclick = function () { C.changer(); };
-    $("btn-prof").onclick = function () { C.ouvrirProf(false); };
-    $("btn-compte-essai").onclick = function () { C.ouvrirProf(true); };
+    $("btn-prof").onclick = function () { C.ouvrirProf(); };
+    $("btn-prof-essai").onclick = function () {
+      var et = J.match.essai.etat();
+      $("essai-tout").checked = et.tout; $("essai-express").checked = et.express; $("essai-barre").checked = et.barre;
+      profEtape("prof-essai");
+    };
+    $("essai-retour").onclick = function () { profEtape("prof-liste"); };
     $("essai-tout").onchange = function () { J.match.essai.regler("tout", this.checked); };
     $("essai-express").onchange = function () { J.match.essai.regler("express", this.checked); };
     $("essai-barre").onchange = function () { J.match.essai.regler("barre", this.checked); };
     $("essai-trophee").onclick = function () { C.fermerProf(); J.match.essai.trophee(); };
     $("essai-aller").onclick = function () { C.fermerProf(); C.sansCompte(); J.match.menu(); };
-    $("prof-ok1").onclick = verifierVerrou;
-    $("prof-mdp1").onkeydown = function (ev) { if (ev.keyCode === 13) { verifierVerrou(); } };
     $("prof-ok2").onclick = connexionProf;
     $("prof-mdp2").onkeydown = function (ev) { if (ev.keyCode === 13) { connexionProf(); } };
     $("prof-fermer").onclick = C.fermerProf;
